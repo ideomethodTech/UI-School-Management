@@ -42,7 +42,7 @@ export default function Dashboard() {
                 <span className={styles.notificationBadge}>3</span>
               </div>
               <div className={styles.userProfile}>
-                <Image src={null} alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%' }} />
+                <Image src="https://i.pravatar.cc/40" alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%' }} />
                 <div className={styles.userInfo}>
                   <div>Name</div>
                   <div>Admin</div>
