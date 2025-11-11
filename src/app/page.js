@@ -17,42 +17,6 @@ export default function Dashboard() {
     <main className={styles.main}>
       <div className={styles.container}>
 
-        <header className={styles.header}>
-          <div className={styles.navLeft}>
-            <div className={styles.logo}>
-              <FaStar color="#7c3aed" size="1.5em" />
-              <span>CampusFlow</span>
-            </div>
-            <nav className={styles.navLinks}>
-              <a href="#" className={styles.active}>Home</a>
-              <a href="#">Announcements</a>
-            </nav>
-          </div>
-          <div className={styles.navRight}>
-            <div className={styles.searchBar}>
-              <FaSearch color="#6b7280" />
-              <input type="text" placeholder="Search announcements" />
-            </div>
-            <div className={styles.headerActions}>
-              <button className={styles.announcementsBtn}>
-                <FaBullhorn /> Announcements
-              </button>
-              <div className={styles.notificationIcon}>
-                <FaBell />
-                <span className={styles.notificationBadge}>3</span>
-              </div>
-              <div className={styles.userProfile}>
-                <Image src="https://i.pravatar.cc/40" alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%' }} />
-                <div className={styles.userInfo}>
-                  <div>Name</div>
-                  <div>Admin</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-
         <div className={styles.dashboardGrid}>                                 {/* Main Dashboard Content */}
           <div className={styles.mainContent}>
             <section className={styles.hero}>
