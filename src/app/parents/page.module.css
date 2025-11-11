@@ -1,0 +1,240 @@
+/* Main Page Layout */
+.mainContent {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+/* Toolbar Section */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.toolbar h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.toolbarActions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.searchIcon {
+    color: #6b7280;
+}
+
+.searchBar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    margin-left: 0.5rem;
+    width: 200px;
+}
+
+.newParentBtn {
+    background-color: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Table Section */
+.tableContainer {
+    overflow-x: auto;
+}
+
+.parentsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.parentsTable th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.parentsTable td {
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    font-weight: 500;
+    vertical-align: top;
+    /* Align content to the top */
+}
+
+.parentsTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.infoCell {
+    padding-top: 0.25rem;
+}
+
+.parentName {
+    font-weight: 600;
+    color: #111827;
+}
+
+.parentEmail {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.studentsCell {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow pills to wrap */
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.studentPill {
+    background-color: #e0f2fe;
+    color: #0ea5e9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+/* Action Buttons */
+.actionButtons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.editBtn,
+.deleteBtn {
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.editBtn {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+
+.deleteBtn {
+    background-color: #fee2e2;
+    color: #ef4444;
+}
+
+
+/* ========== MODAL STYLES (REUSABLE) ========== */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #111827;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.formInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+.formInput:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 2px #c4b5fd;
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancelBtn,
+.createBtn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.cancelBtn {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    color: #374151;
+}
+
+.createBtn {
+    background-color: #7c3aed;
+    color: white;
+}
