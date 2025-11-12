@@ -5,13 +5,48 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
 import { studentsData } from '@/lib/data';
-import { FaCheckCircle, FaBookOpen, FaSchool, FaMapMarkerAlt, FaArrowLeft } from 'react-icons/fa';
+import {
+    FaCheckCircle, FaBookOpen, FaSchool, FaMapMarkerAlt, FaArrowLeft, FaPen, FaTint, FaBirthdayCake, FaEnvelope, FaPhone,
+    FaTimes, FaUpload
+} from 'react-icons/fa';
 
 export default function StudentDetailPage({ params }) {
 
 
     const resolvedParams = React.use(params);
     const student = studentsData.find(s => String(s.id) === resolvedParams.id);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    // In a real app, you would fetch the full student details here.
+    // For now, we'll use the basic info and add placeholders.
+    const [formState, setFormState] = useState({
+        username: student?.name.toLowerCase().replace(' ', '') || '',
+        email: `user@gmail.com`,
+        password: '••••••••',
+        firstName: student?.name.split(' ')[0] || '',
+        lastName: student?.name.split(' ')[1] || '',
+        phone: student?.phone || '',
+        address: student?.address || '',
+        bloodType: 'A+',
+        birthday: 'dd-mm-yyyy',
+        sex: 'Male',
+    });
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState(prevState => ({ ...prevState, [name]: value }));
+    };
+
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        // In a real application, you would send this updated data to your backend API.
+        console.log("Updated data:", formState);
+        closeModal();
+    };
+
 
     const [activeTab, setActiveTab] = useState('workWeek'); // 'workWeek' or 'day'
 
@@ -33,6 +68,8 @@ export default function StudentDetailPage({ params }) {
             { time: '11:00 AM', events: [null] },
             { time: '12:00 PM', events: [{ name: 'Lunch Break' }] },
         ]
+
+
     };
 
     // Handle case where student is not found
@@ -59,13 +96,20 @@ export default function StudentDetailPage({ params }) {
             <div className={styles.dashboardGrid}>
                 {/* -- ROW 1 -- */}
                 <div className={`${styles.card} ${styles.profileCard}`}>
+                    <div className={styles.profileHeader}>
+                        <h2>{student.name}</h2>
+                        {/* This is the new edit button */}
+                        <button onClick={openModal} className={styles.editButton}><FaPen /></button>
+                    </div>
                     <Image src={student.avatar} alt={student.name} width={80} height={80} className={styles.profileAvatar} />
-                    <h2>{student.name}</h2>
                     <p>Grade {student.grade}</p>
                     <p className={styles.address}>{student.address}</p>
-                    <div className={styles.profileDetails}>
-                        <div><span>Student ID</span><span>{student.id}</span></div>
-                        <div><span>Phone</span><span>{student.phone}</span></div>
+                    {/* Simplified details for this new design */}
+                    <div className={styles.profileContactGrid}>
+                        <span><FaTint /> A+</span>
+                        <span><FaBirthdayCake /> January 2025</span>
+                        <span><FaEnvelope /> user@gmail.com</span>
+                        <span><FaPhone /> +1 234 567</span>
                     </div>
                 </div>
 
@@ -142,6 +186,41 @@ export default function StudentDetailPage({ params }) {
                         </div>
                     </div>
                 </div>
+
+                {isModalOpen && (
+                    <div className={styles.overlay} onClick={closeModal}>
+                        <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                            <div className={styles.modalHeader}>
+                                <h2>Create a new teacher</h2> {/* Title from screenshot */}
+                                <button onClick={closeModal} className={styles.closeButton}><FaTimes /></button>
+                            </div>
+                            <form onSubmit={handleUpdate}>
+                                <div className={styles.formSection}>
+                                    <p className={styles.sectionTitle}>Authentication Information</p>
+                                    <div className={styles.formGrid}>
+                                        <div className={styles.formGroup}><label>Username</label><input type="text" name="username" value={formState.username} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Email</label><input type="email" name="email" value={formState.email} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Password</label><input type="password" name="password" value={formState.password} onChange={handleInputChange} /></div>
+                                    </div>
+                                </div>
+                                <div className={styles.formSection}>
+                                    <p className={styles.sectionTitle}>Personal Information</p>
+                                    <div className={styles.formGrid}>
+                                        <div className={styles.formGroup}><label>First Name</label><input type="text" name="firstName" value={formState.firstName} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Last Name</label><input type="text" name="lastName" value={formState.lastName} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Phone</label><input type="tel" name="phone" value={formState.phone} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}><label>Address</label><input type="text" name="address" value={formState.address} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Blood Type</label><input type="text" name="bloodType" value={formState.bloodType} onChange={handleInputChange} /></div>
+                                        <div className={styles.formGroup}><label>Birthday</label><div className={styles.dateInputWrapper}><input type="text" name="birthday" value={formState.birthday} onChange={handleInputChange} /><FaBirthdayCake /></div></div>
+                                        <div className={styles.formGroup}><label>Sex</label><select name="sex" value={formState.sex} onChange={handleInputChange}><option>Male</option><option>Female</option></select></div>
+                                        <div className={styles.formGroup}><label>&nbsp;</label><button type="button" className={styles.uploadBtn}><FaUpload /> Upload a photo</button></div>
+                                    </div>
+                                </div>
+                                <button type="submit" className={styles.updateBtn}>Update</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
 
 

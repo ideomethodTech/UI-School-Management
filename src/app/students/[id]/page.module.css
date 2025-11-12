@@ -24,7 +24,7 @@
     /* Light grey card background */
     border-radius: 1rem;
     padding: 1.5rem;
-    border: 1px solid #eef2f7;
+    border: 1px solid #dcdcde;
     /* Subtle border */
     /* Remove shadow for a flatter design */
     /* box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); */
@@ -73,67 +73,230 @@
 
 /* Profile Card Specifics */
 .profileCard {
-    text-align: center;
+    background-color: #f1e8f8;
+    /* Light blue background */
+    border: none;
+    box-shadow: none;
+    text-align: left;
+    /* Align text to the left */
 }
 
-.profileAvatar {
-    border-radius: 50%;
-    margin: 0 auto 1rem auto;
-}
-
-.profileCard h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #111827;
-}
-
-.profileCard p {
-    color: #6b7280;
+.profileHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
 }
 
-.profileCard .address {
-    font-size: 0.875rem;
+.profileHeader h2 {
+    font-size: 1.5rem;
 }
 
-.profileDetails {
-    border-top: 1px solid #e5e7eb;
-    padding-top: 1rem;
-    text-align: left;
-}
-
-.profileDetails div {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-}
-
-.profileDetails span:first-child {
+.editButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
     color: #6b7280;
 }
 
-.profileDetails span:last-child {
+.profileAvatar {
+    margin: 0;
+    /* Remove auto margin */
+}
+
+.profileCard p {
+    margin: 1.5rem 0;
+    color: #4b5563;
+}
+
+.profileContactGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    font-size: 0.875rem;
+}
+
+.profileContactGrid span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+/*Modal */
+.modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modalHeader h2 {
+    font-size: 1.5rem;
     font-weight: 600;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.formSection {
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.formGroup input,
+.formGroup select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+}
+
+.dateInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dateInputWrapper input {
+    padding-right: 2.5rem;
+    /* Make space for icon */
+}
+
+.dateInputWrapper svg {
+    position: absolute;
+    right: 1rem;
+    color: #6b7280;
+}
+
+.uploadBtn {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.updateBtn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #7236fe;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+
+/* Overview Card Specifics */
+
+
+.statItem span {
+    font-size: 10px;
     color: #111827;
 }
 
-/* Overview Card Specifics */
 .statsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem 1.5rem;
+    display: flex;
+    /* Use flexbox instead of grid */
+    flex-direction: column;
+    /* Stack items vertically */
+    gap: 1.5rem;
+    /* Space between each row */
 }
 
 .statItem {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    color: #6b7280;
+    gap: 1rem;
+    /* Adjust gap for the new layout */
+    font-size: 1rem;
+    color: #374151;
 }
 
 .statItem svg {
     font-size: 1.25rem;
+    color: #8b5cf6;
+    /* Purple icon color */
+    background-color: #f5f3ff;
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 40px;
+    /* Explicit width */
+    height: 40px;
+    /* Explicit height */
+}
+
+
+.statItem strong {
+    margin-left: 10px;
+    /* Push the number to the far right */
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
 }
 
 .statItem span {
