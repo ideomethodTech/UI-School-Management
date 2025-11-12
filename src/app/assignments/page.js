@@ -47,7 +47,7 @@ export default function AssignmentsPage() {
                                     <td>{assignment.class}</td>
                                     <td>{assignment.teacher}</td>
                                     <td>{assignment.dueDate}</td>
-                                    <td>{/* Action buttons would go here */}</td>
+                                    <td></td>
                                 </tr>
                             ))}
                         </tbody>

@@ -33,7 +33,7 @@ export default function StudentsPage() {
 
     const closeModal = () => setIsModalOpen(false);
 
-    // --- CRUD Function Handlers ---
+    // Function Handlers
 
     const handleCreateStudent = (event) => {
         event.preventDefault();
@@ -48,7 +48,7 @@ export default function StudentsPage() {
             grade: formState.grade,
             phone: formState.phone,
             address: formState.address,
-            // Use a default avatar if none is provided
+
             avatar: formState.avatar || `https://i.pravatar.cc/40?u=${formState.id}`,
         };
 

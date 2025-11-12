@@ -47,7 +47,7 @@ export default function ExamsPage() {
                                     <td>{exam.class}</td>
                                     <td>{exam.teacher}</td>
                                     <td>{exam.date}</td>
-                                    <td>{/* Action buttons would go here */}</td>
+                                    <td></td>
                                 </tr>
                             ))}
                         </tbody>

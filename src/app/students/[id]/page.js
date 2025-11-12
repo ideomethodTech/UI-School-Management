@@ -17,8 +17,8 @@ export default function StudentDetailPage({ params }) {
     const student = studentsData.find(s => String(s.id) === resolvedParams.id);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // In a real app, you would fetch the full student details here.
-    // For now, we'll use the basic info and add placeholders.
+
+    //  we'll use the basic info and add placeholders.
     const [formState, setFormState] = useState({
         username: student?.name.toLowerCase().replace(' ', '') || '',
         email: `user@gmail.com`,
@@ -42,7 +42,6 @@ export default function StudentDetailPage({ params }) {
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        // In a real application, you would send this updated data to your backend API.
         console.log("Updated data:", formState);
         closeModal();
     };
@@ -98,13 +97,13 @@ export default function StudentDetailPage({ params }) {
                 <div className={`${styles.card} ${styles.profileCard}`}>
                     <div className={styles.profileHeader}>
                         <h2>{student.name}</h2>
-                        {/* This is the new edit button */}
+
                         <button onClick={openModal} className={styles.editButton}><FaPen /></button>
                     </div>
                     <Image src={student.avatar} alt={student.name} width={80} height={80} className={styles.profileAvatar} />
                     <p>Grade {student.grade}</p>
                     <p className={styles.address}>{student.address}</p>
-                    {/* Simplified details for this new design */}
+
                     <div className={styles.profileContactGrid}>
                         <span><FaTint /> A+</span>
                         <span><FaBirthdayCake /> January 2025</span>
@@ -160,11 +159,11 @@ export default function StudentDetailPage({ params }) {
                             ))}
                         </div>
                         <div className={styles.daysContainer}>
-                            {/* This creates the vertical lines */}
+
                             {Array.from({ length: scheduleData[activeTab][0].events.length }).map((_, i) => (
                                 <div key={i} className={styles.dayColumn}></div>
                             ))}
-                            {/* This is where the green dot for current time would go */}
+
                             <div className={styles.currentTimeIndicator}></div>
                         </div>
                     </div>
@@ -191,7 +190,7 @@ export default function StudentDetailPage({ params }) {
                     <div className={styles.overlay} onClick={closeModal}>
                         <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                             <div className={styles.modalHeader}>
-                                <h2>Create a new teacher</h2> {/* Title from screenshot */}
+                                <h2>Create a new teacher</h2>
                                 <button onClick={closeModal} className={styles.closeButton}><FaTimes /></button>
                             </div>
                             <form onSubmit={handleUpdate}>
