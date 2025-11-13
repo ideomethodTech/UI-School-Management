@@ -1,4 +1,4 @@
-'use client'; // This component needs state, so it must be a Client Component
+'use client';
 
 import { useState } from 'react';
 import styles from './page.module.css';

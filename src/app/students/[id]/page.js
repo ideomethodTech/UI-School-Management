@@ -4,11 +4,20 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.css';
-import { studentsData } from '@/lib/data';
 import {
     FaCheckCircle, FaBookOpen, FaSchool, FaMapMarkerAlt, FaArrowLeft, FaPen, FaTint, FaBirthdayCake, FaEnvelope, FaPhone,
     FaTimes, FaUpload
 } from 'react-icons/fa';
+
+export const studentsData = [
+    { id: '1234567890', name: 'John Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=11' },
+    { id: '1234567891', name: 'Jane Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=12' },
+    { id: '1234567892', name: 'Mike Geller', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=13' },
+    { id: '1234567893', name: 'Jay French', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=14' },
+    { id: '1234567894', name: 'Jane Smith', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=15' },
+    { id: '1234567895', name: 'Anna Santiago', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=16' },
+    { id: '1234567896', name: 'Allen Black', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=17' },
+];
 
 export default function StudentDetailPage({ params }) {
 
