@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+<<<<<<< HEAD
   images: {
     remotePatterns: [
       {
@@ -12,3 +13,10 @@ const nextConfig = {
   },
 };
 export default nextConfig;
+=======
+  /* config options here */
+  reactCompiler: true,
+};
+
+export default nextConfig;
+>>>>>>> origin/vedang
