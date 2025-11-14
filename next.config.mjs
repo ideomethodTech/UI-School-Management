@@ -10,9 +10,8 @@ const nextConfig = {
       },
     ],
   },
-};
-export default nextConfig;
-  /* config options here */
+
+  // This was part of the incoming change
   reactCompiler: true,
 };
 
