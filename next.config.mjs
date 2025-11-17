@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-<<<<<<< HEAD
+  // Property from your (Current) change
   images: {
     remotePatterns: [
       {
@@ -11,12 +11,9 @@ const nextConfig = {
       },
     ],
   },
-};
-export default nextConfig;
-=======
-  /* config options here */
+
+  // Property from Vedang's (Incoming) change
   reactCompiler: true,
 };
 
 export default nextConfig;
->>>>>>> origin/vedang
