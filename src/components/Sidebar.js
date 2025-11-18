@@ -18,7 +18,8 @@ import {
   MessageSquare,
   PieChart,
   School,
-  User // Import the User icon for Profile
+  User,
+  Settings // <--- ADDED: Import the Settings icon
 } from 'lucide-react'
 
 export default function Sidebar() {
@@ -37,8 +38,9 @@ export default function Sidebar() {
     { href: '/dashboard/results', icon: BarChart3, label: 'Results' },
     { href: '/dashboard/attendance', icon: PieChart, label: 'Attendance' },
     { href: '/dashboard/events', icon: Calendar, label: 'Events' },
-    { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
-    { href: '/dashboard/profile', icon: User, label: 'Profile' } // Add Profile link here
+    { href: '/dashboard/messages', icon: MessageSquare, 'label': 'Messages' },
+    { href: '/dashboard/profile', icon: User, label: 'Profile' },
+    { href: '/dashboard/settings', icon: Settings, label: 'Settings' } // <--- ADDED: Settings link
   ]
 
   return (
