@@ -259,53 +259,68 @@
 }
 
 .statsGrid {
-    display: flex;
-    /* Use flexbox instead of grid */
-    flex-direction: column;
-    /* Stack items vertically */
-    gap: 1.5rem;
-    /* Space between each row */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Creates the 2x2 grid */
+    gap: 2rem;
+    /* Space between the stat items */
 }
 
 .statItem {
     display: flex;
     align-items: center;
     gap: 1rem;
-    /* Adjust gap for the new layout */
-    font-size: 1rem;
-    color: #374151;
 }
 
-.statItem svg {
-    font-size: 1.25rem;
+.statIconWrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-size: 1.5rem;
+}
+
+
+.attendance {
+    background-color: #eff6ff;
+    color: #8b5cf6
+}
+
+.lessons {
+    background-color: #fdf2f8;
     color: #8b5cf6;
-    /* Purple icon color */
+
+}
+
+.classes {
     background-color: #f5f3ff;
-    border-radius: 50%;
-    padding: 0.5rem;
-    width: 40px;
-    /* Explicit width */
-    height: 40px;
-    /* Explicit height */
+    color: #8b5cf6;
+
+}
+
+.branches {
+    background-color: #ecfdf5;
+    color: #8b5cf6;
+
 }
 
 
-.statItem strong {
-    margin-left: 10px;
-    /* Push the number to the far right */
-    font-size: 1.125rem;
+.statText {
+    display: flex;
+    flex-direction: column;
+}
+
+.statText strong {
+    font-size: 1.5rem;
     font-weight: 700;
     color: #111827;
 }
 
-.statItem span {
+.statText span {
     font-size: 0.875rem;
-}
-
-.statItem strong {
-    font-size: 1.25rem;
-    color: #111827;
-    font-weight: 700;
+    color: #6b7280;
 }
 
 /* Performance Card Specifics */

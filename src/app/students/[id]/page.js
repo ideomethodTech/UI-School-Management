@@ -6,7 +6,7 @@ import Image from 'next/image';
 import styles from './page.module.css';
 import {
     FaCheckCircle, FaBookOpen, FaSchool, FaMapMarkerAlt, FaArrowLeft, FaPen, FaTint, FaBirthdayCake, FaEnvelope, FaPhone,
-    FaTimes, FaUpload
+    FaTimes, FaUpload, FaCalendarCheck, FaCodeBranch
 } from 'react-icons/fa';
 
 export const studentsData = [
@@ -121,13 +121,50 @@ export default function StudentDetailPage({ params }) {
                     </div>
                 </div>
 
+
                 <div className={`${styles.card} ${styles.overviewCard}`}>
                     <h4 className={styles.cardTitle}>Overview</h4>
                     <div className={styles.statsGrid}>
-                        <div className={styles.statItem}><FaCheckCircle /><div><span>Attendance</span><strong>90%</strong></div></div>
-                        <div className={styles.statItem}><FaBookOpen /><div><span>Lessons</span><strong>6</strong></div></div>
-                        <div className={styles.statItem}><FaSchool /><div><span>Classes</span><strong>6</strong></div></div>
-                        <div className={styles.statItem}><FaMapMarkerAlt /><div><span>Branches</span><strong>2</strong></div></div>
+                        {/* Item 1: Attendance */}
+                        <div className={styles.statItem}>
+                            <div className={`${styles.statIconWrapper} ${styles.attendance}`}>
+                                <FaCalendarCheck />
+                            </div>
+                            <div className={styles.statText}>
+                                <strong>90%</strong>
+                                <span>Attendance</span>
+                            </div>
+                        </div>
+                        {/* Item 2: Lessons */}
+                        <div className={styles.statItem}>
+                            <div className={`${styles.statIconWrapper} ${styles.lessons}`}>
+                                <FaBookOpen />
+                            </div>
+                            <div className={styles.statText}>
+                                <strong>6</strong>
+                                <span>Lessons</span>
+                            </div>
+                        </div>
+                        {/* Item 3: Classes */}
+                        <div className={styles.statItem}>
+                            <div className={`${styles.statIconWrapper} ${styles.classes}`}>
+                                <FaSchool />
+                            </div>
+                            <div className={styles.statText}>
+                                <strong>6</strong>
+                                <span>Classes</span>
+                            </div>
+                        </div>
+                        {/* Item 4: Branches */}
+                        <div className={styles.statItem}>
+                            <div className={`${styles.statIconWrapper} ${styles.branches}`}>
+                                <FaCodeBranch /> {/* Using FaCodeBranch as a stand-in */}
+                            </div>
+                            <div className={styles.statText}>
+                                <strong>2</strong>
+                                <span>Branches</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

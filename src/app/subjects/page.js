@@ -84,9 +84,7 @@ export default function SubjectsPage() {
         setIsModalOpen(false);
     };
 
-    // ======================================================
-    // ^^^^^^^^^^^^^^^^  END OF NEW LOGIC ^^^^^^^^^^^^^^^^^^^^^
-    // ======================================================
+
 
     return (
         <div className={styles.pageContainer}>
@@ -146,9 +144,7 @@ export default function SubjectsPage() {
                 {/* ... footer JSX ... */}
             </footer>
 
-            {/* ====================================================== */}
-            {/* VVVVVVVVVVVVVVVVVV  START OF MODAL JSX VVVVVVVVVVVVVVVVV */}
-            {/* ====================================================== */}
+
             {isModalOpen && (
                 <div className={styles.overlay} onClick={() => setIsModalOpen(false)}>
                     <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -189,9 +185,7 @@ export default function SubjectsPage() {
                     </div>
                 </div>
             )}
-            {/* ====================================================== */}
-            {/* ^^^^^^^^^^^^^^^^  END OF MODAL JSX ^^^^^^^^^^^^^^^^^^^^^ */}
-            {/* ====================================================== */}
+
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import styles from './page.module.css';
 import { FaSearch } from 'react-icons/fa';
 
-// Mock data for the exams list
 const examsData = [
     { subject: 'Math', class: '1A', teacher: 'Martha Morris', date: '2025-01-01' },
     { subject: 'English', class: '2A', teacher: 'Randall Garcia', date: '2025-01-01' },
