@@ -1,26 +1,27 @@
-'use client'; // This is now a client component because we need useState
+// src/app/dashboard/subjects/page.js
+'use client';
 
-import { useState } from 'react'; // <-- ADD THIS IMPORT
-import styles from './page.module.css';
-import { FaSearch, FaPlus, FaPen, FaTrashAlt } from 'react-icons/fa';
+import { useState } from 'react';
+import styles from './page.module.css'; // Make sure this path is correct
+import { FaSearch, FaPlus, FaPencilAlt, FaTrashAlt } from 'react-icons/fa'; // Changed FaPen to FaPencilAlt for a slightly different icon
 
-// We rename the mock data so we can use it as the initial state
+// Initial mock data for subjects
 const initialSubjectsData = [
-    { name: 'Math', teachers: ['Alice Phelps', 'Russell Davidson', 'John Doe', 'Jane Smith'] },
-    { name: 'English', teachers: ['Martha B. English', 'William T. Shakespeare'] },
-    { name: 'Physics', teachers: ['Louis de Broglie'] },
-    { name: 'Chemistry', teachers: ['Nathan Kelly', 'Benjamin Snyder'] },
-    { name: 'Biology', teachers: ['Alma Benson', 'Lina Collier'] },
-    { name: 'History', teachers: ['Hannah Bowman', 'Betty Obrien'] },
-    { name: 'Geography', teachers: ['Lora French', 'Sue Brady'] },
-    { name: 'Art', teachers: ['Harriet Alvarado', 'Mayme Keller'] },
-    { name: 'Music', teachers: ['Gertrude Roy', 'Rosa Singleton'] },
-    { name: 'Literature', teachers: ['Effie Lynch', 'Brett Flowers'] },
+    { id: 'sub001', name: 'Math', teachers: ['Alice Phelps', 'Russell Davidson', 'John Doe', 'Jane Smith'] },
+    { id: 'sub002', name: 'English', teachers: ['Martha B. English', 'William T. Shakespeare'] },
+    { id: 'sub003', name: 'Physics', teachers: ['Louis de Broglie'] },
+    { id: 'sub004', name: 'Chemistry', teachers: ['Nathan Kelly', 'Benjamin Snyder'] },
+    { id: 'sub005', name: 'Biology', teachers: ['Alma Benson', 'Lina Collier'] },
+    { id: 'sub006', name: 'History', teachers: ['Hannah Bowman', 'Betty Obrien'] },
+    { id: 'sub007', name: 'Geography', teachers: ['Lora French', 'Sue Brady'] },
+    { id: 'sub008', name: 'Art', teachers: ['Harriet Alvarado', 'Mayme Keller'] },
+    { id: 'sub009', name: 'Music', teachers: ['Gertrude Roy', 'Rosa Singleton'] },
+    { id: 'sub010', name: 'Literature', teachers: ['Effie Lynch', 'Brett Flowers'] },
 ];
 
-// This helper component remains unchanged
+// Helper component for displaying teachers with a "popup" for more
 const TeachersList = ({ teachers }) => {
-    const maxVisible = 2;
+    const maxVisible = 2; // Maximum teachers to show before '+X more'
     const visibleTeachers = teachers.slice(0, maxVisible);
     const hiddenCount = teachers.length - maxVisible;
 
@@ -37,9 +38,10 @@ const TeachersList = ({ teachers }) => {
                         {teachers.map(name => (
                             <div key={name} className={styles.popupItem}>
                                 <span>{name}</span>
+                                {/* You might link these to teacher profiles or message functions */}
                                 <div className={styles.popupActions}>
-                                    <a href="#">View</a>
-                                    <a href="#">Message</a>
+                                    <a href="#" className={styles.popupActionLink}>View</a>
+                                    <a href="#" className={styles.popupActionLink}>Message</a>
                                 </div>
                             </div>
                         ))}
@@ -51,20 +53,14 @@ const TeachersList = ({ teachers }) => {
 };
 
 export default function SubjectsPage() {
-    // ======================================================
-    // VVVVVVVVVVVVVVVVVV  START OF NEW LOGIC VVVVVVVVVVVVVVVVV
-    // ======================================================
-
-    // State to hold the list of subjects so we can update it
     const [subjects, setSubjects] = useState(initialSubjectsData);
-    // State to control the modal's visibility
+    const [searchTerm, setSearchTerm] = useState(''); // State for search input
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // State for the form input fields
     const [newSubjectName, setNewSubjectName] = useState('');
-    const [newTeachers, setNewTeachers] = useState('');
+    const [newTeachers, setNewTeachers] = useState(''); // Comma-separated teacher names
 
     const handleCreateSubject = (e) => {
-        e.preventDefault(); // Prevent page reload on form submit
+        e.preventDefault();
 
         if (!newSubjectName.trim()) {
             alert('Please enter a subject name.');
@@ -72,24 +68,30 @@ export default function SubjectsPage() {
         }
 
         const newSubject = {
-            name: newSubjectName,
+            id: `sub${Date.now()}`, // Simple unique ID
+            name: newSubjectName.trim(),
             teachers: newTeachers.split(',').map(name => name.trim()).filter(Boolean),
         };
 
-        setSubjects([...subjects, newSubject]);
-
-        // Clear form and close modal after submission
+        setSubjects(prevSubjects => [...prevSubjects, newSubject]);
         setNewSubjectName('');
         setNewTeachers('');
         setIsModalOpen(false);
     };
 
-    // ======================================================
-    // ^^^^^^^^^^^^^^^^  END OF NEW LOGIC ^^^^^^^^^^^^^^^^^^^^^
-    // ======================================================
+    const handleDeleteSubject = (subjectIdToDelete) => {
+        if (window.confirm('Are you sure you want to delete this subject?')) {
+            setSubjects(prevSubjects => prevSubjects.filter(subject => subject.id !== subjectIdToDelete));
+        }
+    };
+
+    const filteredSubjects = subjects.filter(subject =>
+        subject.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        subject.teachers.some(teacher => teacher.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
 
     return (
-        <div className={styles.pageContainer}>
+        <div className={styles.pageWrapper}> {/* Using pageWrapper for overall padding */}
             <main className={styles.mainContent}>
                 {/* Toolbar */}
                 <div className={styles.toolbar}>
@@ -97,10 +99,14 @@ export default function SubjectsPage() {
                     <div className={styles.toolbarActions}>
                         <div className={styles.searchBar}>
                             <FaSearch className={styles.searchIcon} />
-                            <input type="text" placeholder="Search..." />
+                            <input
+                                type="text"
+                                placeholder="Search subjects..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
-                        {/* This button now opens the modal */}
-                        <button className={styles.newSubjectBtn} onClick={() => setIsModalOpen(true)}>
+                        <button className={styles.newBtn} onClick={() => setIsModalOpen(true)}>
                             <FaPlus />
                             <span>New Subject</span>
                         </button>
@@ -114,21 +120,27 @@ export default function SubjectsPage() {
                             <tr>
                                 <th>Subject Name</th>
                                 <th>Teachers</th>
-                                <th>Actions</th>
+                                <th className={styles.actionsHeader}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {/* Map over the state variable 'subjects' instead of the constant data */}
-                            {subjects.map((subject) => (
-                                <tr key={subject.name}>
+                            {filteredSubjects.map((subject) => (
+                                <tr key={subject.id}>
                                     <td>{subject.name}</td>
                                     <td>
                                         <TeachersList teachers={subject.teachers} />
                                     </td>
                                     <td>
                                         <div className={styles.actionButtons}>
-                                            <button className={styles.editBtn}><FaPen /></button>
-                                            <button className={styles.deleteBtn}><FaTrashAlt /></button>
+                                            <button className={styles.editBtn}>
+                                                <FaPencilAlt /> {/* Using FaPencilAlt */}
+                                            </button>
+                                            <button
+                                                className={styles.deleteBtn}
+                                                onClick={() => handleDeleteSubject(subject.id)}
+                                            >
+                                                <FaTrashAlt />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -137,43 +149,40 @@ export default function SubjectsPage() {
                     </table>
                 </div>
 
-                {/* Pagination and Footer remain the same */}
-                <div className={styles.paginationContainer}>
-                    {/* ... pagination JSX ... */}
-                </div>
+                {/* Pagination and Footer - simplified for now */}
+                {/* <div className={styles.paginationContainer}>
+                    <p className={styles.footerText}>Showing 1 to {filteredSubjects.length} of {subjects.length} entries</p>
+                </div> */}
             </main>
-            <footer className={styles.footer}>
-                {/* ... footer JSX ... */}
-            </footer>
 
-            {/* ====================================================== */}
-            {/* VVVVVVVVVVVVVVVVVV  START OF MODAL JSX VVVVVVVVVVVVVVVVV */}
-            {/* ====================================================== */}
+            {/* Modal for creating a new subject */}
             {isModalOpen && (
                 <div className={styles.overlay} onClick={() => setIsModalOpen(false)}>
                     <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                         <form onSubmit={handleCreateSubject}>
-                            <h2 className={styles.modalTitle}>Create Subject</h2>
+                            <h2 className={styles.modalTitle}>Create New Subject</h2>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="subjectName">Subject name</label>
+                                <label htmlFor="subjectName">Subject Name</label>
                                 <input
                                     type="text"
                                     id="subjectName"
                                     value={newSubjectName}
                                     onChange={(e) => setNewSubjectName(e.target.value)}
                                     className={styles.formInput}
+                                    required
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="teachers">Teachers (comma separated)</label>
+                                <label htmlFor="teachers">Teachers (comma-separated names)</label>
                                 <input
                                     type="text"
                                     id="teachers"
                                     value={newTeachers}
                                     onChange={(e) => setNewTeachers(e.target.value)}
                                     className={styles.formInput}
+                                    placeholder="e.g., John Doe, Jane Smith"
                                 />
                             </div>
 
@@ -182,16 +191,13 @@ export default function SubjectsPage() {
                                     Cancel
                                 </button>
                                 <button type="submit" className={styles.createBtn}>
-                                    Create
+                                    Create Subject
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
-            {/* ====================================================== */}
-            {/* ^^^^^^^^^^^^^^^^  END OF MODAL JSX ^^^^^^^^^^^^^^^^^^^^^ */}
-            {/* ====================================================== */}
         </div>
     );
 }
