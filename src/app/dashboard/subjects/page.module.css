@@ -1,15 +1,290 @@
-/* ================================== */
-/*          Modal Form Styles         */
-/* ================================== */
+/* src/app/dashboard/subjects/page.module.css */
 
+/* --- General Layout --- */
+.pageWrapper {
+    padding: 1.5rem; /* Equivalent to Tailwind's p-6 */
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    background-color: #f9fafb; /* Light background for the page */
+}
+
+.mainContent {
+    max-width: 1200px; /* Limit content width */
+    margin: 0 auto; /* Center content */
+}
+
+/* --- Toolbar Styles (Consistent with Students/Teachers) --- */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem; /* Equivalent to mb-6 */
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.toolbar h1 {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #1f2937; /* text-gray-900 */
+}
+
+.toolbarActions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.searchBar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb; /* border-gray-200 */
+    border-radius: 0.5rem; /* rounded-lg */
+    padding: 0.5rem 0.75rem; /* px-3 py-2 */
+    background-color: #ffffff; /* bg-white */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    flex-grow: 1;
+    max-width: 300px; /* Consistent search bar width */
+}
+
+.searchIcon {
+    color: #9ca3af; /* text-gray-400 */
+    margin-right: 0.5rem;
+}
+
+.searchBar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.875rem; /* text-sm */
+    color: #1f2937; /* text-gray-900 */
+    background: transparent;
+}
+
+.searchBar input::placeholder {
+    color: #9ca3af; /* text-gray-400 */
+}
+
+.newBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #8b5cf6; /* bg-purple-600 */
+    color: #ffffff; /* text-white */
+    padding: 0.625rem 1.25rem; /* px-5 py-2.5 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-weight: 500; /* font-medium */
+    font-size: 0.875rem; /* text-sm */
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.newBtn:hover {
+    background-color: #7c3aed; /* hover:bg-purple-700 */
+}
+
+/* --- Table Styles --- */
+.tableContainer {
+    background-color: #ffffff; /* bg-white */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 6px 18px rgba(10,10,10,0.06); /* card shadow from globals.css */
+    overflow-x: auto; /* For responsive tables */
+    margin-bottom: 1.5rem; /* Space before pagination/footer */
+}
+
+.subjectsTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem; /* text-sm */
+    color: #374151; /* text-gray-700 */
+}
+
+.subjectsTable thead th {
+    text-align: left;
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 500; /* font-medium */
+    color: #6b7280; /* text-gray-500 */
+    text-transform: uppercase;
+    letter-spacing: 0.05em; /* tracking-wider */
+    background-color: #f9fafb; /* bg-gray-50 */
+    border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+}
+
+.subjectsTable tbody td {
+    padding: 1rem 1.5rem; /* px-6 py-4 */
+    white-space: nowrap; /* Prevent wrapping in cells */
+    border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+}
+
+.subjectsTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.subjectsTable tbody tr:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+/* --- Teachers List within Table Cell --- */
+.teachersCell {
+    display: flex;
+    flex-wrap: wrap; /* Allow teachers to wrap */
+    gap: 0.5rem; /* Space between pills */
+    align-items: center;
+}
+
+.teacherPill {
+    background-color: #ede9fe; /* bg-purple-50 */
+    color: #7c3aed; /* text-purple-600 */
+    padding: 0.25rem 0.75rem; /* px-3 py-1 */
+    border-radius: 9999px; /* rounded-full */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 500;
+    white-space: nowrap; /* Keep pill text on one line */
+}
+
+.plusPillContainer {
+    position: relative;
+    display: inline-block; /* Essential for popup positioning */
+    cursor: pointer;
+}
+
+.plusPill {
+    background-color: #dbeafe; /* bg-blue-50 */
+    color: #2563eb; /* text-blue-600 */
+}
+
+/* Popup for hidden teachers */
+.popup {
+    position: absolute;
+    top: 100%; /* Position below the '+X' pill */
+    left: 50%; /* Center relative to the pill */
+    transform: translateX(-50%); /* Adjust for perfect centering */
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 50; /* Ensure it's above other content */
+    min-width: 200px;
+    padding: 0.75rem;
+    display: none; /* Hidden by default */
+    white-space: normal; /* Allow text inside popup to wrap */
+    animation: fadeIn 0.1s ease-out forwards; /* Simple fade-in animation */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px) translateX(-50%); }
+    to { opacity: 1; transform: translateY(0) translateX(-50%); }
+}
+
+.plusPillContainer:hover .popup {
+    display: block; /* Show popup on hover */
+}
+
+.popupHeader {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.popupItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px dotted #e5e7eb; /* Dotted line between items */
+}
+.popupItem:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.popupActions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.popupActionLink {
+    color: #8b5cf6; /* text-purple-600 */
+    text-decoration: none;
+    font-size: 0.75rem;
+    transition: color 0.2s;
+}
+
+.popupActionLink:hover {
+    color: #7c3aed; /* hover:text-purple-700 */
+    text-decoration: underline;
+}
+
+/* --- Action Buttons (Edit/Delete) --- */
+.actionButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.editBtn, .deleteBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem; /* w-8 */
+    height: 2rem; /* h-8 */
+    border-radius: 9999px; /* rounded-full */
+    transition: background-color 0.2s, color 0.2s;
+    border: 1px solid;
+    cursor: pointer;
+    font-size: 0.875rem; /* To make icons appear correct size */
+}
+
+.editBtn {
+    background-color: #ede9fe; /* bg-purple-50 */
+    color: #7c3aed; /* text-purple-600 */
+    border-color: #ddd6fe; /* border-purple-200 */
+}
+.editBtn:hover {
+    background-color: #ddd6fe; /* hover:bg-purple-100 */
+}
+
+.deleteBtn {
+    background-color: #fee2e2; /* bg-red-50 */
+    color: #dc2626; /* text-red-600 */
+    border-color: #fecaca; /* border-red-200 */
+}
+.deleteBtn:hover {
+    background-color: #fecaca; /* hover:bg-red-100 */
+}
+
+/* Align actions header to the right */
+.subjectsTable .actionsHeader {
+    text-align: right;
+}
+.subjectsTable tbody td:last-child {
+    text-align: right; /* Align buttons to the right */
+}
+
+
+/* --- Pagination/Footer (Minimal styles as they are placeholders) --- */
+.paginationContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* --- Modal Form Styles (from your original CSS, added a few more) --- */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,9 +296,9 @@
     padding: 2rem;
     border-radius: 0.75rem;
     width: 100%;
-    max-width: 500px;
-    /* Adjust width as needed */
+    max-width: 500px; /* Adjust width as needed */
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    z-index: 1001; /* Ensure modal is above overlay */
 }
 
 .modalTitle {
@@ -51,11 +326,12 @@
     border-radius: 0.5rem;
     font-size: 1rem;
     outline: none;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); /* subtle shadow */
 }
 
 .formInput:focus {
-    border-color: #7c3aed;
-    box-shadow: 0 0 0 2px #c4b5fd;
+    border-color: #7c3aed; /* focus:border-purple-500 */
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25); /* focus:ring-purple-200 */
 }
 
 .formActions {
@@ -73,15 +349,46 @@
     font-weight: 500;
     cursor: pointer;
     font-size: 1rem;
+    transition: background-color 0.2s;
 }
 
 .cancelBtn {
-    background-color: #f3f4f6;
-    border: 1px solid #d1d5db;
-    color: #374151;
+    background-color: #f3f4f6; /* bg-gray-100 */
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    color: #374151; /* text-gray-700 */
+}
+.cancelBtn:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
 }
 
+
 .createBtn {
-    background-color: #7c3aed;
+    background-color: #8b5cf6; /* bg-purple-600 */
     color: white;
+}
+.createBtn:hover {
+    background-color: #7c3aed; /* hover:bg-purple-700 */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .toolbarActions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .searchBar {
+        max-width: 100%;
+    }
+    .newBtn {
+        width: 100%;
+        justify-content: center;
+    }
+    .subjectsTable tbody td {
+        white-space: normal; /* Allow text to wrap in cells on small screens */
+    }
 }
