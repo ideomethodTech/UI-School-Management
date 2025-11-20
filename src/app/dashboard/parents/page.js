@@ -1,193 +1,197 @@
+// src/app/dashboard/parents/page.js
 'use client';
 
 import { useState } from 'react';
-import styles from './page.module.css';
-import { FaSearch, FaPlus, FaPen, FaTrashAlt } from 'react-icons/fa';
+import { Search, SlidersHorizontal, Plus, Pencil, Trash2 } from 'lucide-react';
 
 // Mock data for the initial list of parents
 const initialParentsData = [
-    { name: 'John Doe', email: 'john@doe.com', students: ['Sarah Brewer'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Jane Doe', email: 'jane@doe.com', students: ['Cecilia Bradley'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Mike Geller', email: 'mike@geller.com', students: ['Fanny Caldwell'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Jay French', email: 'jay@geller.com', students: ['Mollie Fitzgerald', 'Ian Bryant'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Jane Smith', email: 'mable@geller.com', students: ['Mable Harvey'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Anna Santiago', email: 'anna@gmail.com', students: ['Joel Lambert'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
-    { name: 'Allen Black', email: 'allen@black.com', students: ['Carrie', 'Lilly'], phone: '1234567890', address: '123 Main St, Anytown, USA' },
+    { id: 'par001', name: 'John Doe', email: 'john@doe.com', students: ['Sarah Brewer'], phone: '123-456-7890', address: '123 Main St, Anytown, USA' },
+    { id: 'par002', name: 'Jane Doe', email: 'jane@doe.com', students: ['Cecilia Bradley'], phone: '234-567-8901', address: '456 Oak Ave, Anytown, USA' },
+    { id: 'par003', name: 'Mike Geller', email: 'mike@geller.com', students: ['Fanny Caldwell'], phone: '345-678-9012', address: '789 Pine Ln, Anytown, USA' },
+    { id: 'par004', name: 'Jay French', email: 'jay@french.com', students: ['Mollie Fitzgerald', 'Ian Bryant'], phone: '456-789-0123', address: '101 Maple Rd, Anytown, USA' },
+    { id: 'par005', name: 'Mable Smith', email: 'mable@smith.com', students: ['Mable Harvey'], phone: '567-890-1234', address: '212 Birch Ct, Anytown, USA' },
+    { id: 'par006', name: 'Anna Santiago', email: 'anna@gmail.com', students: ['Joel Lambert'], phone: '678-901-2345', address: '333 Cedar Blvd, Anytown, USA' },
+    { id: 'par007', name: 'Allen Black', email: 'allen@black.com', students: ['Carrie Black', 'Lilly Black'], phone: '789-012-3456', address: '444 Elm St, Anytown, USA' },
 ];
 
 // Main page component
 export default function ParentsPage() {
-    // State for managing the list of parents
     const [parents, setParents] = useState(initialParentsData);
-
-    // State for Create/Edit modals
+    const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState('create'); // 'create' or 'edit'
+    const [modalType, setModalType] = useState('create');
+    const [currentParent, setCurrentParent] = useState(null);
+    const [formState, setFormState] = useState({
+        name: '', email: '', students: '', phone: '', address: ''
+    });
 
-    // State for form inputs
-    const [currentParent, setCurrentParent] = useState(null); // Used for editing
-    const [parentName, setParentName] = useState('');
-    const [parentEmail, setParentEmail] = useState('');
-    const [studentNames, setStudentNames] = useState('');
-    const [parentPhone, setParentPhone] = useState('');
-    const [parentAddress, setParentAddress] = useState('');
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState(prevState => ({ ...prevState, [name]: value }));
+    };
 
-    // --- Modal Control Functions ---
     const openModal = (type, parent = null) => {
         setModalType(type);
         if (type === 'edit' && parent) {
             setCurrentParent(parent);
-            setParentName(parent.name);
-            setParentEmail(parent.email);
-            setStudentNames(parent.students.join(', '));
-            setParentPhone(parent.phone);
-            setParentAddress(parent.address);
+            setFormState({
+                name: parent.name,
+                email: parent.email,
+                students: parent.students.join(', '), // Convert array to string for input
+                phone: parent.phone,
+                address: parent.address
+            });
         } else {
             setCurrentParent(null);
-            setParentName('');
-            setParentEmail('');
-            setStudentNames('');
-            setParentPhone('');
-            setParentAddress('');
+            setFormState({ name: '', email: '', students: '', phone: '', address: '' });
         }
         setIsModalOpen(true);
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+    const closeModal = () => setIsModalOpen(false);
 
-    // --- CRUD Function Handlers ---
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!parentName.trim() || !parentEmail.trim()) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formState.name.trim() || !formState.email.trim()) {
             alert('Parent name and email are required.');
             return;
         }
 
-        const studentArray = studentNames.split(',').map(name => name.trim()).filter(Boolean);
+        const studentArray = formState.students.split(',').map(name => name.trim()).filter(Boolean);
+        const parentData = { ...formState, students: studentArray };
 
         if (modalType === 'create') {
-            const newParent = { name: parentName, email: parentEmail, students: studentArray, phone: parentPhone, address: parentAddress };
-            setParents(currentParents => [...currentParents, newParent]);
-        } else if (modalType === 'edit') {
-            setParents(currentParents =>
-                currentParents.map(p =>
-                    p.email === currentParent.email ? { ...p, name: parentName, email: parentEmail, students: studentArray, phone: parentPhone, address: parentAddress } : p
-                )
-            );
+            setParents(prev => [...prev, { id: `par${Date.now()}`, ...parentData }]);
+        } else {
+            setParents(prev => prev.map(p => (p.id === currentParent.id ? { ...p, ...parentData } : p)));
         }
         closeModal();
     };
 
-    const handleDelete = (parentEmailToDelete) => {
+    const handleDelete = (parentIdToDelete) => {
         if (window.confirm('Are you sure you want to delete this parent?')) {
-            setParents(currentParents => currentParents.filter(p => p.email !== parentEmailToDelete));
+            setParents(prev => prev.filter(p => p.id !== parentIdToDelete));
         }
     };
 
-    return (
-        <>
-            <main className={styles.mainContent}>
-                {/* Toolbar */}
-                <div className={styles.toolbar}>
-                    <h1>All Parents</h1>
-                    <div className={styles.toolbarActions}>
-                        <div className={styles.searchBar}>
-                            <FaSearch className={styles.searchIcon} />
-                            <input type="text" placeholder="Search..." />
-                        </div>
-                        <button className={styles.newParentBtn} onClick={() => openModal('create')}>
-                            <FaPlus />
-                            <span>New Parent</span>
-                        </button>
-                    </div>
-                </div>
+    const filteredParents = parents.filter(parent =>
+        parent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        parent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        parent.students.some(student => student.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
 
-                {/* Parents Table */}
-                <div className={styles.tableContainer}>
-                    <table className={styles.parentsTable}>
-                        <thead>
-                            <tr>
-                                <th>Info</th>
-                                <th>Student Names</th>
-                                <th>Phone</th>
-                                <th>Address</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {parents.map((parent) => (
-                                <tr key={parent.email}>
-                                    <td>
-                                        <div className={styles.infoCell}>
-                                            <div className={styles.parentName}>{parent.name}</div>
-                                            <div className={styles.parentEmail}>{parent.email}</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className={styles.studentsCell}>
-                                            {parent.students.map(student => (
-                                                <span key={student} className={styles.studentPill}>{student}</span>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td>{parent.phone}</td>
-                                    <td>{parent.address}</td>
-                                    <td>
-                                        <div className={styles.actionButtons}>
-                                            <button className={styles.editBtn} onClick={() => openModal('edit', parent)}><FaPen /></button>
-                                            <button className={styles.deleteBtn} onClick={() => handleDelete(parent.email)}><FaTrashAlt /></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+    return (
+        <div className='p-6 space-y-6'>
+            {/* Header */}
+            <div className='flex items-center justify-between'>
+                <div>
+                    <h2 className='text-2xl font-semibold text-gray-800'>All Parents</h2>
                 </div>
-            </main>
+                <div className='flex items-center gap-3'>
+                    <div className='relative'>
+                        <Search size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                        <input
+                            placeholder='Search parents...'
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className='rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400'
+                        />
+                    </div>
+                    <button className='p-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'>
+                        <SlidersHorizontal size={20} />
+                    </button>
+                    <button onClick={() => openModal('create')} className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'>
+                        <Plus size={20} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Table Container */}
+            <div className='bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm'>
+                <table className='w-full text-sm text-left text-gray-600'>
+                    <thead className='bg-gray-50 text-xs text-gray-500 uppercase'>
+                        <tr>
+                            <th scope='col' className='px-6 py-3'>Name</th>
+                            <th scope='col' className='px-6 py-3'>Student(s)</th>
+                            <th scope='col' className='px-6 py-3'>Contact</th>
+                            <th scope='col' className='px-10 py-3 text-right'>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredParents.map((parent) => (
+                            <tr key={parent.id} className='bg-white border-b hover:bg-gray-50'>
+                                <td className='px-6 py-4'>
+                                    <div className='font-medium text-gray-900'>{parent.name}</div>
+                                    <div className='text-xs text-gray-500'>{parent.email}</div>
+                                </td>
+                                <td className='px-6 py-4'>{parent.students.join(', ')}</td>
+                                <td className='px-6 py-4'>
+                                    <div className='font-medium text-gray-800'>{parent.phone}</div>
+                                    <div className='text-xs text-gray-500'>{parent.address}</div>
+                                </td>
+                                <td className='px-6 py-4'>
+                                    <div className='flex items-center justify-end gap-2'>
+                                        <button onClick={() => openModal('edit', parent)} className='p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200'>
+                                            <Pencil size={16} />
+                                        </button>
+                                        <button onClick={() => handleDelete(parent.id)} className='p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200'>
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Modal for creating/editing a parent */}
             {isModalOpen && (
-                <div className={styles.overlay} onClick={closeModal}>
-                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50' onClick={closeModal}>
+                    <div className='bg-white rounded-lg shadow-xl p-8 w-full max-w-lg' onClick={(e) => e.stopPropagation()}>
                         <form onSubmit={handleSubmit}>
-                            <h2 className={styles.modalTitle}>{modalType === 'create' ? 'Create Parent' : 'Edit Parent'}</h2>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="parentName">Parent Name</label>
-                                <input id="parentName" type="text" value={parentName} onChange={(e) => setParentName(e.target.value)} className={styles.formInput} />
+                            <h2 className='text-2xl font-semibold text-gray-800 mb-6'>
+                                {modalType === 'create' ? 'Create New Parent' : 'Edit Parent'}
+                            </h2>
+                            <div className='space-y-4'>
+                                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                    <div>
+                                        <label htmlFor='name' className='block mb-2 text-sm font-medium text-gray-700'>Parent Name</label>
+                                        <input id='name' name='name' type='text' value={formState.name} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='email' className='block mb-2 text-sm font-medium text-gray-700'>Email Address</label>
+                                        <input id='email' name='email' type='email' value={formState.email} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' required />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor='students' className='block mb-2 text-sm font-medium text-gray-700'>Student Names (comma-separated)</label>
+                                    <input id='students' name='students' type='text' value={formState.students} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                </div>
+                                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                    <div>
+                                        <label htmlFor='phone' className='block mb-2 text-sm font-medium text-gray-700'>Phone</label>
+                                        <input id='phone' name='phone' type='tel' value={formState.phone} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor='address' className='block mb-2 text-sm font-medium text-gray-700'>Address</label>
+                                    <input id='address' name='address' type='text' value={formState.address} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                </div>
                             </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="parentEmail">Email</label>
-                                <input id="parentEmail" type="email" value={parentEmail} onChange={(e) => setParentEmail(e.target.value)} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="studentNames">Student Names (comma separated)</label>
-                                <input id="studentNames" type="text" value={studentNames} onChange={(e) => setStudentNames(e.target.value)} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="parentPhone">Phone</label>
-                                <input id="parentPhone" type="tel" value={parentPhone} onChange={(e) => setParentPhone(e.target.value)} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="parentAddress">Address</label>
-                                <input id="parentAddress" type="text" value={parentAddress} onChange={(e) => setParentAddress(e.target.value)} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formActions}>
-                                <button type="button" className={styles.cancelBtn} onClick={closeModal}>Cancel</button>
-                                <button type="submit" className={styles.createBtn}>{modalType === 'create' ? 'Create' : 'Update'}</button>
+                            <div className='flex justify-end gap-4 mt-8'>
+                                <button type='button' onClick={closeModal} className='px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border'>
+                                    Cancel
+                                </button>
+                                <button type='submit' className='px-5 py-2.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 shadow-sm'>
+                                    {modalType === 'create' ? 'Create Parent' : 'Save Changes'}
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

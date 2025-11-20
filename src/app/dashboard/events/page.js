@@ -1,8 +1,8 @@
+// src/app/dashboard/events/page.js
 'use client';
 
 import { useState } from 'react';
-import styles from './page.module.css';
-import { FaSearch, FaPlus, FaPen, FaTrashAlt, FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { Search, SlidersHorizontal, Plus, Pencil, Trash2, CalendarDays, Clock } from 'lucide-react';
 
 // Mock data for the initial list of events
 const initialEventsData = [
@@ -18,17 +18,13 @@ const initialEventsData = [
 
 // Main page component
 export default function EventsPage() {
-    // State for managing the list of events
     const [events, setEvents] = useState(initialEventsData);
-
-    // State for Create/Edit modals
+    const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalType, setModalType] = useState('create'); // 'create' or 'edit'
-
-    // State for form inputs
-    const [currentEvent, setCurrentEvent] = useState(null); // Used for editing
+    const [modalType, setModalType] = useState('create');
+    const [currentEvent, setCurrentEvent] = useState(null);
     const [formState, setFormState] = useState({
-        title: '', class: '', date: '13-11-2025', startTime: '10:00', endTime: '11:00'
+        title: '', class: '', date: '', startTime: '10:00', endTime: '11:00'
     });
 
     const handleInputChange = (e) => {
@@ -36,162 +32,168 @@ export default function EventsPage() {
         setFormState(prevState => ({ ...prevState, [name]: value }));
     };
 
-    // --- Modal Control Functions ---
     const openModal = (type, event = null) => {
         setModalType(type);
         if (type === 'edit' && event) {
             setCurrentEvent(event);
-            setFormState({
-                title: event.title,
-                class: event.class,
-                date: event.date,
-                startTime: event.startTime,
-                endTime: event.endTime
-            });
+            setFormState({ ...event });
         } else {
             setCurrentEvent(null);
-            setFormState({ title: '', class: '', date: '13-11-2025', startTime: '10:00', endTime: '11:00' });
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            setFormState({ title: '', class: '', date: today, startTime: '10:00', endTime: '11:00' });
         }
         setIsModalOpen(true);
     };
 
     const closeModal = () => setIsModalOpen(false);
 
-    // --- CRUD Function Handlers ---
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if (!formState.title.trim()) {
             alert('Event Title is required.');
             return;
         }
 
         if (modalType === 'create') {
-            const newEvent = { id: Date.now(), ...formState }; // Use timestamp for unique ID
-            setEvents(currentEvents => [...currentEvents, newEvent]);
-        } else if (modalType === 'edit') {
-            setEvents(currentEvents =>
-                currentEvents.map(e =>
-                    e.id === currentEvent.id ? { ...e, ...formState } : e
-                )
-            );
+            setEvents(prev => [...prev, { id: Date.now(), ...formState }]);
+        } else {
+            setEvents(prev => prev.map(evt => (evt.id === currentEvent.id ? { ...evt, ...formState } : evt)));
         }
         closeModal();
     };
 
     const handleDelete = (eventIdToDelete) => {
         if (window.confirm('Are you sure you want to delete this event?')) {
-            setEvents(currentEvents => currentEvents.filter(e => e.id !== eventIdToDelete));
+            setEvents(prev => prev.filter(e => e.id !== eventIdToDelete));
         }
     };
 
+    const filteredEvents = events.filter(event =>
+        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.class.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
-        <div className={styles.container}>
-            {/* Toolbar */}
-            <div className={styles.toolbar}>
-                <h1>All Events</h1>
-                <div className={styles.toolbarActions}>
-                    <div className={styles.searchBar}>
-                        <FaSearch className={styles.searchIcon} />
-                        <input type="text" placeholder="Search..." />
+        <div className='p-6 space-y-6'>
+            {/* Header */}
+            <div className='flex items-center justify-between'>
+                <div>
+                    <h2 className='text-2xl font-semibold text-gray-800'>All Events</h2>
+                </div>
+                <div className='flex items-center gap-3'>
+                    <div className='relative'>
+                        <Search size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                        <input
+                            placeholder='Search events...'
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className='rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400'
+                        />
                     </div>
-                    <button className={styles.newEventBtn} onClick={() => openModal('create')}>
-                        <FaPlus />
-                        <span>New Event</span>
+                    <button className='p-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'>
+                        <SlidersHorizontal size={20} />
+                    </button>
+                    <button onClick={() => openModal('create')} className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'>
+                        <Plus size={20} />
                     </button>
                 </div>
             </div>
 
-            {/* Main Content Card */}
-            <div className={styles.contentCard}>
-                <div className={styles.tableContainer}>
-                    <table className={styles.eventsTable}>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Class</th>
-                                <th>Date</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Actions</th>
+            {/* Table Container */}
+            <div className='bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm'>
+                <table className='w-full text-sm text-left text-gray-600'>
+                    <thead className='bg-gray-50 text-xs text-gray-700 uppercase'>
+                        <tr>
+                            <th scope='col' className='px-6 py-3'>Title</th>
+                            <th scope='col' className='px-6 py-3'>Class</th>
+                            <th scope='col' className='px-6 py-3'>Date</th>
+                            <th scope='col' className='px-6 py-3'>Start Time</th>
+                            <th scope='col' className='px-6 py-3'>End Time</th>
+                            <th scope='col' className='px-10 py-3 text-right'>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredEvents.map((event) => (
+                            <tr key={event.id} className='bg-white border-b hover:bg-gray-50'>
+                                <td className='px-6 py-4 font-medium text-gray-900'>{event.title}</td>
+                                <td className='px-6 py-4'>{event.class}</td>
+                                <td className='px-6 py-4'>{event.date}</td>
+                                <td className='px-6 py-4'>{event.startTime}</td>
+                                <td className='px-6 py-4'>{event.endTime}</td>
+                                <td className='px-6 py-4'>
+                                    <div className='flex items-center justify-end gap-2'>
+                                        <button onClick={() => openModal('edit', event)} className='p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200'>
+                                            <Pencil size={16} />
+                                        </button>
+                                        <button onClick={() => handleDelete(event.id)} className='p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200'>
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {events.map((event) => (
-                                <tr key={event.id}>
-                                    <td>{event.title}</td>
-                                    <td>{event.class}</td>
-                                    <td>{event.date}</td>
-                                    <td>{event.startTime}</td>
-                                    <td>{event.endTime}</td>
-                                    <td>
-                                        <div className={styles.actionButtons}>
-                                            <button className={styles.editBtn} onClick={() => openModal('edit', event)}><FaPen /></button>
-                                            <button className={styles.deleteBtn} onClick={() => handleDelete(event.id)}><FaTrashAlt /></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Pagination Footer */}
-                <div className={styles.paginationContainer}>
-                    <span className={styles.paginationInfo}>Showing 1–{events.length} of {events.length}</span>
-                    <div className={styles.paginationControls}>
-                        <button disabled>Prev</button>
-                        <button className={styles.activePage}>1</button>
-                        <button>Next</button>
-                    </div>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             {/* Modal for creating/editing an event */}
             {isModalOpen && (
-                <div className={styles.overlay} onClick={closeModal}>
-                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50' onClick={closeModal}>
+                    <div className='bg-white rounded-lg shadow-xl p-8 w-full max-w-lg' onClick={(e) => e.stopPropagation()}>
                         <form onSubmit={handleSubmit}>
-                            <h2 className={styles.modalTitle}>{modalType === 'create' ? 'Create Event' : 'Edit Event'}</h2>
+                            <h2 className='text-2xl font-semibold text-gray-800 mb-6'>
+                                {modalType === 'create' ? 'Create New Event' : 'Edit Event'}
+                            </h2>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="title">Title</label>
-                                <input id="title" name="title" type="text" value={formState.title} onChange={handleInputChange} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="class">Class</label>
-                                <input id="class" name="class" type="text" value={formState.class} onChange={handleInputChange} className={styles.formInput} />
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label htmlFor="date">Date</label>
-                                <div className={styles.inputWithIcon}>
-                                    <input id="date" name="date" type="text" value={formState.date} onChange={handleInputChange} className={styles.formInput} />
-                                    <FaCalendarAlt className={styles.inputIcon} />
-                                </div>
-                            </div>
-
-                            <div className={styles.timeInputsGrid}>
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="startTime">Start Time</label>
-                                    <div className={styles.inputWithIcon}>
-                                        <input id="startTime" name="startTime" type="text" value={formState.startTime} onChange={handleInputChange} className={styles.formInput} />
-                                        <FaClock className={styles.inputIcon} />
+                            <div className='space-y-4'>
+                                {/* Event Title and Class */}
+                                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                    <div>
+                                        <label htmlFor='title' className='block mb-2 text-sm font-medium text-gray-700'>Title</label>
+                                        <input id='title' name='title' type='text' value={formState.title} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' required />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='class' className='block mb-2 text-sm font-medium text-gray-700'>Class</label>
+                                        <input id='class' name='class' type='text' value={formState.class} onChange={handleInputChange} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
                                     </div>
                                 </div>
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="endTime">End Time</label>
-                                    <div className={styles.inputWithIcon}>
-                                        <input id="endTime" name="endTime" type="text" value={formState.endTime} onChange={handleInputChange} className={styles.formInput} />
-                                        <FaClock className={styles.inputIcon} />
+
+                                {/* Date Input */}
+                                <div>
+                                    <label htmlFor='date' className='block mb-2 text-sm font-medium text-gray-700'>Date</label>
+                                    <div className='relative'>
+                                        <CalendarDays size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                                        <input id='date' name='date' type='date' value={formState.date} onChange={handleInputChange} className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                    </div>
+                                </div>
+
+                                {/* Time Inputs */}
+                                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                    <div>
+                                        <label htmlFor='startTime' className='block mb-2 text-sm font-medium text-gray-700'>Start Time</label>
+                                        <div className='relative'>
+                                            <Clock size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                                            <input id='startTime' name='startTime' type='time' value={formState.startTime} onChange={handleInputChange} className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label htmlFor='endTime' className='block mb-2 text-sm font-medium text-gray-700'>End Time</label>
+                                        <div className='relative'>
+                                            <Clock size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+                                            <input id='endTime' name='endTime' type='time' value={formState.endTime} onChange={handleInputChange} className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300' />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className={styles.formActions}>
-                                <button type="button" className={styles.cancelBtn} onClick={closeModal}>Cancel</button>
-                                <button type="submit" className={styles.createBtn}>{modalType === 'create' ? 'Create' : 'Save'}</button>
+                            {/* Form Actions */}
+                            <div className='flex justify-end gap-4 mt-8'>
+                                <button type='button' onClick={closeModal} className='px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border'>
+                                    Cancel
+                                </button>
+                                <button type='submit' className='px-5 py-2.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 shadow-sm'>
+                                    {modalType === 'create' ? 'Create Event' : 'Save Changes'}
+                                </button>
                             </div>
                         </form>
                     </div>
