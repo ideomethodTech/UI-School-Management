@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Property from your (Current) change
   images: {
     remotePatterns: [
       {
@@ -12,7 +11,7 @@ const nextConfig = {
     ],
   },
 
-  // Property from Vedang's (Incoming) change
+  // This was part of the incoming change
   reactCompiler: true,
 };
 
