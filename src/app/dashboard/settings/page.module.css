@@ -117,8 +117,6 @@
     margin-top: 1rem;
 }
 
-/* Add this at the end of your settings/page.module.css file */
-
 .logoutSection {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -136,4 +134,194 @@
     padding: 0.75rem 1.5rem;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* Styles for Manage Admins section */
+.adminCard {
+    margin-top: 2rem;
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    border: 1px solid #eef2f7;
+}
+
+.adminHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    /* Adjust as needed */
+}
+
+.addAdminButton {
+    background-color: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.addAdminButton:hover {
+    background-color: #6d28d9;
+}
+
+
+.adminList {
+    display: flex;
+    flex-direction: column;
+}
+
+.adminItem {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.adminItem:last-child {
+    border-bottom: none;
+}
+
+.adminInfo {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    gap: 1rem;
+}
+
+.adminAvatar {
+    background-color: #e0e7ff;
+    color: #8b5cf6;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.adminDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.adminName {
+    font-weight: 600;
+    color: #111827;
+}
+
+.adminEmail {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.adminMeta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-right: 1.5rem;
+    min-width: 150px;
+}
+
+.adminRole {
+    color: #374151;
+    font-weight: 500;
+}
+
+.adminStatus {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.statusActive {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.statusInactive {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.adminActions {
+    display: flex;
+    gap: 1rem;
+}
+
+.actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #b188f9;
+    font-size: 1.1rem;
+}
+
+.actionButton:hover {
+    color: #374151;
+}
+
+/* Modal for Add/Edit Admin */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.modalHeader {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modalButton {
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancelButton {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.saveModalButton {
+    background-color: #7c3aed;
+    color: white;
 }
