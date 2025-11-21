@@ -6,12 +6,18 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
         port: '',
-        pathname: '/**', // This allows any path on that hostname
+        pathname: '/**', 
+      },
+      // Add this new block below
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
 
-  // This was part of the incoming change
   reactCompiler: true,
 };
 

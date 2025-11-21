@@ -3,23 +3,34 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation'; // <--- ADDED
 import styles from './page.module.css';
 import { FaSearch, FaPlus, FaEye, FaTrashAlt } from 'react-icons/fa';
 
 export const studentsData = [
-    { id: '1234567890', name: 'John Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=11' },
-    { id: '1234567891', name: 'Jane Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=12' },
-    { id: '1234567892', name: 'Mike Geller', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=13' },
-    { id: '1234567893', name: 'Jay French', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=14' },
-    { id: '1234567894', name: 'Jane Smith', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=15' },
-    { id: '1234567895', name: 'Anna Santiago', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=16' },
-    { id: '1234567896', name: 'Allen Black', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=17' },
+    // Added 'teacherId' to mock data for filtering demonstration
+    { id: '1234567890', teacherId: '2', name: 'John Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=11' },
+    { id: '1234567891', teacherId: '2', name: 'Jane Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=12' },
+    { id: '1234567892', teacherId: '1', name: 'Mike Geller', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=13' },
+    { id: '1234567893', teacherId: '2', name: 'Jay French', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=14' },
+    { id: '1234567894', teacherId: '1', name: 'Jane Smith', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=15' },
+    { id: '1234567895', teacherId: '2', name: 'Anna Santiago', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=16' },
+    { id: '1234567896', teacherId: '1', name: 'Allen Black', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=17' },
 ];
 
 // Main page component
 export default function StudentsPage() {
+    // Hook to get URL parameters
+    const searchParams = useSearchParams(); // <--- ADDED
+    const teacherIdFilter = searchParams.get('teacherId'); // <--- ADDED
+
     // State for managing the list of students
     const [students, setStudents] = useState(studentsData);
+
+    // Filter logic: if teacherIdFilter exists, show only those students
+    const displayedStudents = teacherIdFilter 
+        ? students.filter(s => s.teacherId === teacherIdFilter)
+        : students;
 
     // State for modal visibility
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,7 +68,8 @@ export default function StudentsPage() {
             grade: formState.grade,
             phone: formState.phone,
             address: formState.address,
-
+            // Assign a default teacherId for new students (logic depends on your backend)
+            teacherId: '2', 
             avatar: formState.avatar || `https://i.pravatar.cc/40?u=${formState.id}`,
         };
 
@@ -89,6 +101,14 @@ export default function StudentsPage() {
                     </div>
                 </div>
 
+                {/* Optional: Filter Notification */}
+                {teacherIdFilter && (
+                     <div className="mb-4 p-2 bg-purple-50 text-purple-700 text-sm rounded flex items-center gap-2 mx-5">
+                        <span>Filtering by Teacher ID: <b>{teacherIdFilter}</b></span>
+                        <Link href="/dashboard/students" className="underline text-xs ml-2">Clear Filter</Link>
+                    </div>
+                )}
+
                 {/* Students Table */}
                 <div className={styles.tableContainer}>
                     <table className={styles.studentsTable}>
@@ -102,33 +122,51 @@ export default function StudentsPage() {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {students.map((student) => (
-                                <tr key={student.id}>
-                                    <td>
-                                        <div className={styles.infoCell}>
-                                            <Image src={student.avatar} alt={student.name} width={40} height={40} className={styles.avatar} />
-                                            <div>
-                                                <div className={styles.studentName}>{student.name}</div>
-                                                <div className={styles.studentGrade}>Grade {student.grade}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{student.id}</td>
-                                    <td>{student.grade}</td>
-                                    <td>{student.phone}</td>
-                                    <td>{student.address}</td>
-                                    <td>
-                                        <div className={styles.actionButtons}>
-                                            <Link href={`/students/${student.id}`}>
-                                                <button className={styles.viewBtn}><FaEye /></button>
-                                            </Link>
-                                            <button className={styles.deleteBtn} onClick={() => handleDeleteStudent(student.id)}><FaTrashAlt /></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                        
+<tbody>
+    {displayedStudents.length > 0 ? (
+        displayedStudents.map((student) => (
+            <tr key={student.id}>
+                <td>
+                    <div className={styles.infoCell}>
+                        <Image src={student.avatar} alt={student.name} width={40} height={40} className={styles.avatar} />
+                        <div>
+                            <div className={styles.studentName}>{student.name}</div>
+                            <div className={styles.studentGrade}>Grade {student.grade}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>{student.id}</td>
+                <td>{student.grade}</td>
+                <td>{student.phone}</td>
+                <td>{student.address}</td>
+                <td>
+                    {/* --- UPDATED ACTIONS SECTION START --- */}
+                    <div className="flex items-center gap-2">
+                        <Link href={`/dashboard/students/${student.id}`}>
+                            {/* View Button: Transparent background, Blue Icon */}
+                            <button className="p-2 text-blue-500 hover:text-blue-700 transition-colors">
+                                <FaEye size={18} />
+                            </button>
+                        </Link>
+                        {/* Delete Button: Transparent background, Red/Pink Icon */}
+                        <button 
+                            className="p-2 text-red-500 hover:text-red-700 transition-colors" 
+                            onClick={() => handleDeleteStudent(student.id)}
+                        >
+                            <FaTrashAlt size={18} />
+                        </button>
+                    </div>
+                    {/* --- UPDATED ACTIONS SECTION END --- */}
+                </td>
+            </tr>
+        ))
+    ) : (
+        <tr>
+            <td colSpan="6" style={{textAlign: 'center', padding: '20px'}}>No students found.</td>
+        </tr>
+    )}
+</tbody>
                     </table>
                 </div>
             </main>

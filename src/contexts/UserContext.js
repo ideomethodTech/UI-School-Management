@@ -10,7 +10,7 @@ export const UserContext = createContext(null);
 export function UserProvider({ children }) {
   // Simulate user role. In a real app, this would come from auth.
   // Possible values: 'admin', 'teacher', 'student', 'parent'
-  const [currentUserRole, setCurrentUserRole] = useState('student'); // Change 'admin' to 'student', 'teacher', etc.
+  const [currentUserRole, setCurrentUserRole] = useState('admin'); // Change 'admin' to 'student', 'teacher', etc.
 
   const value = {
     currentUserRole,

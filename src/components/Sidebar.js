@@ -19,7 +19,7 @@ import {
   PieChart,
   School,
   User,
-  Settings // <--- ADDED: Import the Settings icon
+  Settings
 } from 'lucide-react'
 
 export default function Sidebar() {
@@ -40,7 +40,7 @@ export default function Sidebar() {
     { href: '/dashboard/events', icon: Calendar, label: 'Events' },
     { href: '/dashboard/messages', icon: MessageSquare, 'label': 'Messages' },
     { href: '/dashboard/profile', icon: User, label: 'Profile' },
-    { href: '/dashboard/settings', icon: Settings, label: 'Settings' } // <--- ADDED: Settings link
+    { href: '/dashboard/settings', icon: Settings, label: 'Settings' }
   ]
 
   return (
@@ -56,19 +56,19 @@ export default function Sidebar() {
         {items.map((it) => {
           const isActive = pathname === it.href || pathname.startsWith(it.href + '/')
           return (
-            <Link key={it.href} href={it.href} legacyBehavior>
-              <a
-                className={
-                  'flex items-center gap-3 px-3 py-2 rounded-md transition-colors ' +
-                  (isActive
-                    ? 'bg-purple-50 text-purple-700 font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')
-                }
-              >
-                <it.icon size={18}
-                  className={isActive ? 'text-purple-600' : 'text-gray-500'} />
-                <span className="text-sm">{it.label}</span>
-              </a>
+            <Link 
+              key={it.href} 
+              href={it.href} 
+              className={
+                'flex items-center gap-3 px-3 py-2 rounded-md transition-colors ' +
+                (isActive
+                  ? 'bg-purple-50 text-purple-700 font-medium'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')
+              }
+            >
+              <it.icon size={18}
+                className={isActive ? 'text-purple-600' : 'text-gray-500'} />
+              <span className="text-sm">{it.label}</span>
             </Link>
           )
         })}
