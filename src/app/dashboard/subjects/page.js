@@ -124,7 +124,9 @@ export default function SubjectsPage() {
                 </table>
             </div>
 
-            {/* Modal for creating a new subject */}
+            {/* ====================================================== */}
+            {/* VVVVVVVVVVVVVVVVVV  START OF MODAL JSX VVVVVVVVVVVVVVVVV */}
+            {/* ====================================================== */}
             {isModalOpen && (
                 <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50' onClick={() => setIsModalOpen(false)}>
                     <div className='bg-white rounded-lg shadow-xl p-8 w-full max-w-md' onClick={(e) => e.stopPropagation()}>
@@ -168,6 +170,9 @@ export default function SubjectsPage() {
                     </div>
                 </div>
             )}
+            {/* ====================================================== */}
+            {/* ^^^^^^^^^^^^^^^^  END OF MODAL JSX ^^^^^^^^^^^^^^^^^^^^^ */}
+            {/* ====================================================== */}
         </div>
     );
 }
