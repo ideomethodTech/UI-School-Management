@@ -1,4 +1,3 @@
-// src/components/AdminDashboardHome.js
 
 import { useState } from 'react';
 // Make sure you have react-icons installed: npm install react-icons

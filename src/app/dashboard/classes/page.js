@@ -3,16 +3,7 @@
 
 import { useUser } from '@/contexts/UserContext';
 import StudentClassesPage from '@/components/StudentClassesPage';
-
-// Placeholder for the Admin/Teacher view
-const AdminClassesPage = () => (
-    <div>
-        <h1 className="text-3xl font-bold text-gray-800">Manage Classes</h1>
-        <p className="mt-2 text-gray-600">
-            This is the class management interface for Admins and Teachers.
-        </p>
-    </div>
-);
+import AdminClassesPage from '@/components/AdminClassesPage';
 
 export default function ClassesPage() {
     const { currentUserRole } = useUser();
