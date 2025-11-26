@@ -2,7 +2,7 @@
 "use client";
 
 import Sidebar from '@/components/Sidebar';
-import SimpleSidebar from '@/components/SimpleSidebar'; // <-- 1. Import the new reusable sidebar
+import SimpleSidebar from '@/components/SimpleSidebar';
 import Topbar from '@/components/Topbar';
 import { UserProvider, useUser } from '@/contexts/UserContext';
 
@@ -12,7 +12,7 @@ function DashboardLayoutContent({ children }) {
   return (
     <div className='min-h-screen flex bg-gray-50'>
 
-      {/* 2. Updated logic to render the correct sidebar */}
+      {/* Render the correct sidebar based on role */}
       {currentUserRole === 'admin' && <Sidebar />}
 
       {currentUserRole === 'student' && (
@@ -23,7 +23,7 @@ function DashboardLayoutContent({ children }) {
         <SimpleSidebar userName="Priya Sharma" userRole="Teacher" />
       )}
 
-      <div className='flex-1 flex flex-col'>
+      <div className={`flex-1 flex flex-col ${(currentUserRole === 'student' || currentUserRole === 'teacher') ? 'lg:ml-64' : ''}`}>
         <Topbar />
         <main className='flex-1 overflow-auto p-6'>
           {children}

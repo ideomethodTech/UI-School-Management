@@ -4,6 +4,7 @@
 import { useUser } from '@/contexts/UserContext';
 import StudentClassesPage from '@/components/StudentClassesPage';
 import AdminClassesPage from '@/components/AdminClassesPage';
+import TeachersClassesPage from '@/components/TeachersClassesPage';
 
 export default function ClassesPage() {
     const { currentUserRole } = useUser();
@@ -12,7 +13,9 @@ export default function ClassesPage() {
         <div className="p-6">
             {currentUserRole === 'student'
                 ? <StudentClassesPage />
-                : <AdminClassesPage />
+                : currentUserRole === 'teacher'
+                    ? <TeachersClassesPage />
+                    : <AdminClassesPage />
             }
         </div>
     );

@@ -5,14 +5,14 @@ import { useUser } from '@/contexts/UserContext';
 import AttendanceCourseFilter from '@/components/AttendanceCourseFilter';
 import AttendanceCalendar from '@/components/AttendanceCalendar';
 import MarkAttendanceSection from '@/components/MarkAttendanceSection';
-import StudentAttendanceDetailModal from '@/components/StudentAttendanceDetailModal'; // Import the modal
+import TeacherAttendancePage from '@/components/TeacherAttendancePage';
 
-import { useState } from 'react'; // Import useState for managing selected date and modal
+import { useState } from 'react';
 
 export default function AttendancePage() {
     const { currentUserRole } = useUser();
-    const [selectedDate, setSelectedDate] = useState(new Date()); // State to track selected date
-    const [selectedStudent, setSelectedStudent] = useState(null); // State to manage modal student
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedStudent, setSelectedStudent] = useState(null);
 
     // Only teachers and admins should see this detailed attendance page
     if (!['admin', 'teacher'].includes(currentUserRole)) {
@@ -24,6 +24,16 @@ export default function AttendancePage() {
         );
     }
 
+    // Teachers see the TeacherAttendancePage
+    if (currentUserRole === 'teacher') {
+        return (
+            <div className='p-6 overflow-y-auto h-full'>
+                <TeacherAttendancePage />
+            </div>
+        );
+    }
+
+    // Admins see the original attendance layout
     const handleDateSelect = (date) => {
         setSelectedDate(date);
         // In a real app, you'd fetch attendance data for this date

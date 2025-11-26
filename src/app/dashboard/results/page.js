@@ -1,21 +1,28 @@
 // src/app/dashboard/results/page.js
-"use client"; // Needs to be client component to use `useUser`
+"use client";
 
 import ResultsTable from '@/components/ResultsTable';
+import TeacherResultsPage from '@/components/TeacherResultsPage';
 import { Search, SlidersHorizontal, Plus } from 'lucide-react';
-import { useUser } from '@/contexts/UserContext'; // Import useUser
-
-// REMOVE metadata export from here if it was present
+import { useUser } from '@/contexts/UserContext';
 
 export default function ResultsPage() {
     const { currentUserRole } = useUser();
 
+    // Teachers see the TeacherResultsPage
+    if (currentUserRole === 'teacher') {
+        return (
+            <div className='p-6 overflow-y-auto h-full'>
+                <TeacherResultsPage />
+            </div>
+        );
+    }
+
+    // Admins and students see the original layout
     const getPageTitle = () => {
         switch (currentUserRole) {
             case 'admin':
                 return 'All Student Results';
-            case 'teacher':
-                return 'My Classes Results';
             case 'student':
                 return 'My Results';
             default:
@@ -31,8 +38,8 @@ export default function ResultsPage() {
                 </div>
 
                 <div className='flex items-center gap-3'>
-                    {/* Admin/Teacher specific actions */}
-                    {(currentUserRole === 'admin' || currentUserRole === 'teacher') && (
+                    {/* Admin specific actions */}
+                    {currentUserRole === 'admin' && (
                         <>
                             <div className='relative'>
                                 <Search size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
@@ -54,8 +61,11 @@ export default function ResultsPage() {
 
             <div className='bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm'>
                 {currentUserRole === 'admin' && <ResultsTable role="admin" />}
-                {currentUserRole === 'teacher' && <ResultsTable role="teacher" teacherId="TCH001" />} {/* Example teacher ID */}
-                {currentUserRole === 'student' && <ResultsTable role="student" studentId="STD001" />} {/* Example student ID */}
+                {currentUserRole === 'student' && (
+                    <div className="p-12 text-center text-gray-500">
+                        <p className="text-lg">No results available at this time.</p>
+                    </div>
+                )}
                 {(!['admin', 'teacher', 'student'].includes(currentUserRole)) && (
                     <div className="p-6 text-gray-600">No results data available for this user role.</div>
                 )}
