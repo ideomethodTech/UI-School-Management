@@ -1,4 +1,3 @@
-// src/components/ProfileDetails.js
 "use client";
 
 import { useUser } from '@/contexts/UserContext';
