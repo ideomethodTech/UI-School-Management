@@ -3,6 +3,7 @@
 
 import Sidebar from '@/components/Sidebar';
 import SimpleSidebar from '@/components/SimpleSidebar';
+import ParentSidebar from '@/components/ParentSidebar';
 import Topbar from '@/components/Topbar';
 import { UserProvider, useUser } from '@/contexts/UserContext';
 
@@ -23,7 +24,11 @@ function DashboardLayoutContent({ children }) {
         <SimpleSidebar userName="Priya Sharma" userRole="Teacher" />
       )}
 
-      <div className={`flex-1 flex flex-col ${(currentUserRole === 'student' || currentUserRole === 'teacher') ? 'lg:ml-64' : ''}`}>
+      {currentUserRole === 'parent' && (
+        <ParentSidebar userName="Mr./Mrs. Johnson" userRole="Parent" />
+      )}
+
+      <div className={`flex-1 flex flex-col ${(currentUserRole === 'student' || currentUserRole === 'teacher' || currentUserRole === 'parent') ? 'lg:ml-64' : ''}`}>
         <Topbar />
         <main className='flex-1 overflow-auto p-6'>
           {children}
