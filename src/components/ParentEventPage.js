@@ -80,13 +80,15 @@ export default function ParentEventPage() {
     // Generate calendar for November 2025
     const generateCalendar = () => {
         const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+        // November 2025 starts on Saturday (index 6)
+        // Creating a 6-week (42 cells) calendar grid for proper display
         const dates = [
-            null, null, null, null, null, null, 1,
-            2, 3, 4, 5, 6, 7, 8,
-            9, 10, 11, 12, 13, 14, 15,
-            16, 17, 18, 19, 20, 21, 22,
-            23, 24, 25, 26, 27, 28, 29,
-            30
+            null, null, null, null, null, null, 1,    // Week 1
+            2, 3, 4, 5, 6, 7, 8,                       // Week 2
+            9, 10, 11, 12, 13, 14, 15,                 // Week 3
+            16, 17, 18, 19, 20, 21, 22,                // Week 4
+            23, 24, 25, 26, 27, 28, 29,                // Week 5
+            30, null, null, null, null, null, null     // Week 6
         ];
 
         // Days that have events (for demonstration)
@@ -112,26 +114,26 @@ export default function ParentEventPage() {
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                 {/* Left Column - Calendar */}
                 <div className='lg:col-span-1'>
-                    <div className='card p-6 bg-purple-600 text-white'>
-                        <h2 className='text-xl font-bold mb-6'>Calendar</h2>
+                    <div className='bg-purple-50 text-gray-800 rounded-lg shadow-md p-6 border border-purple-100'>
+                        <h2 className='text-xl font-bold mb-6 text-purple-900'>Calendar</h2>
 
                         {/* Month Navigation */}
                         <div className='flex items-center justify-between mb-6'>
-                            <button className='p-2 rounded-full hover:bg-purple-500 transition-colors'>
+                            <button className='p-2 rounded-full hover:bg-purple-100 transition-colors text-purple-700'>
                                 <ChevronLeft size={20} />
                             </button>
-                            <span className='font-semibold'>{currentMonth}</span>
-                            <button className='p-2 rounded-full hover:bg-purple-500 transition-colors'>
+                            <span className='font-semibold text-lg text-purple-900'>{currentMonth}</span>
+                            <button className='p-2 rounded-full hover:bg-purple-100 transition-colors text-purple-700'>
                                 <ChevronRight size={20} />
                             </button>
                         </div>
 
                         {/* Calendar Grid */}
-                        <div className='space-y-2'>
+                        <div className='w-full'>
                             {/* Days of Week */}
-                            <div className='grid grid-cols-7 gap-1 text-center text-xs font-medium mb-2'>
+                            <div className='grid grid-cols-7 gap-1 text-center text-xs font-medium mb-3'>
                                 {daysOfWeek.map((day, index) => (
-                                    <div key={index} className='p-2'>{day}</div>
+                                    <div key={index} className='p-2 text-purple-600 font-semibold'>{day}</div>
                                 ))}
                             </div>
 
@@ -141,23 +143,23 @@ export default function ParentEventPage() {
                                     <div
                                         key={index}
                                         className={`
-                      p-2 rounded-md transition-colors cursor-pointer
-                      ${!date ? 'invisible' : ''}
-                      ${eventDates.includes(date)
-                                                ? 'bg-white text-purple-600 font-bold hover:bg-purple-50'
-                                                : 'hover:bg-purple-500'}
-                    `}
+                                            p-2 rounded-md transition-colors cursor-pointer min-h-[36px] flex items-center justify-center
+                                            ${!date ? 'invisible' : ''}
+                                            ${eventDates.includes(date)
+                                                ? 'bg-purple-600 text-white font-bold hover:bg-purple-700 shadow-sm'
+                                                : 'text-gray-700 hover:bg-purple-100'}
+                                        `}
                                     >
-                                        {date}
+                                        {date || ''}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* Legend */}
-                        <div className='mt-6 pt-6 border-t border-purple-500 flex items-center gap-2'>
-                            <div className='w-3 h-3 bg-white rounded-sm'></div>
-                            <span className='text-sm'>Days with events</span>
+                        <div className='mt-6 pt-6 border-t border-purple-200 flex items-center gap-2'>
+                            <div className='w-3 h-3 bg-purple-600 rounded-sm'></div>
+                            <span className='text-sm text-purple-700'>Days with events</span>
                         </div>
                     </div>
                 </div>
@@ -165,7 +167,7 @@ export default function ParentEventPage() {
                 {/* Right Column - Events */}
                 <div className='lg:col-span-2 space-y-6'>
                     {/* Selected Date Event */}
-                    <div className='card p-6 bg-purple-50 border-l-4 border-purple-600'>
+                    <div className='bg-white rounded-lg shadow-md p-6 bg-purple-50 border-l-4 border-purple-600'>
                         <div className='flex items-start justify-between mb-4'>
                             <div>
                                 <h3 className='text-lg font-bold text-gray-800 mb-1'>{selectedEvent.displayDate}</h3>
@@ -189,7 +191,7 @@ export default function ParentEventPage() {
                     </div>
 
                     {/* Upcoming Events */}
-                    <div className='card p-6'>
+                    <div className='bg-white rounded-lg shadow-md p-6'>
                         <div className='flex items-center gap-2 mb-6'>
                             <Calendar size={20} className='text-purple-600' />
                             <h2 className='text-xl font-bold text-gray-800'>Upcoming Events</h2>
@@ -231,7 +233,7 @@ export default function ParentEventPage() {
                     </div>
 
                     {/* Event Types Legend */}
-                    <div className='card p-6'>
+                    <div className='bg-white rounded-lg shadow-md p-6'>
                         <h3 className='text-lg font-bold text-gray-800 mb-4'>Event Types</h3>
                         <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
                             {Object.entries(EVENT_CATEGORIES).map(([key, category]) => (
