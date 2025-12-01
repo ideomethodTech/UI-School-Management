@@ -3,6 +3,8 @@
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, CalendarDays, Clock } from 'lucide-react';
+import { useUser } from '@/contexts/UserContext';
+import ParentEventPage from '@/components/ParentEventPage';
 
 // Mock data for the initial list of events
 const initialEventsData = [
@@ -18,6 +20,14 @@ const initialEventsData = [
 
 // Main page component
 export default function EventsPage() {
+    const { currentUserRole } = useUser();
+
+    // Parents see the ParentEventPage
+    if (currentUserRole === 'parent') {
+        return <ParentEventPage />;
+    }
+
+    // Admins and others see the original event management page
     const [events, setEvents] = useState(initialEventsData);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -6,6 +6,7 @@ import AttendanceCourseFilter from '@/components/AttendanceCourseFilter';
 import AttendanceCalendar from '@/components/AttendanceCalendar';
 import MarkAttendanceSection from '@/components/MarkAttendanceSection';
 import TeacherAttendancePage from '@/components/TeacherAttendancePage';
+import ParentAttendancePage from '@/components/ParentAttendancePage';
 
 import { useState } from 'react';
 
@@ -14,8 +15,17 @@ export default function AttendancePage() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedStudent, setSelectedStudent] = useState(null);
 
-    // Only teachers and admins should see this detailed attendance page
-    if (!['admin', 'teacher'].includes(currentUserRole)) {
+    // Parents see the ParentAttendancePage
+    if (currentUserRole === 'parent') {
+        return (
+            <div className='p-6 overflow-y-auto h-full'>
+                <ParentAttendancePage />
+            </div>
+        );
+    }
+
+    // Students don't have access to detailed attendance page
+    if (currentUserRole === 'student') {
         return (
             <div className='p-6 text-center text-gray-600'>
                 <h2 className='text-2xl font-semibold mb-4'>Access Denied</h2>
