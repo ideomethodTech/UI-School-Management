@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, Filter, Download, TrendingUp, TrendingDown, Medal, Users, BookOpen, BarChart3 } from 'lucide-react';
+import { Search, Filter, Download, TrendingUp, TrendingDown, Medal, Users, BookOpen, BarChart3, CheckCircle } from 'lucide-react';
+import GradeSubmissionsModal from './GradeSubmissionsModal';
 
 // Mock class data
 const mockClasses = [
@@ -39,19 +40,17 @@ const StatCard = ({ icon: Icon, label, value, subtext, color, bgColor }) => (
 );
 
 const GradeDistributionBar = ({ grade, count, percentage, color }) => (
-    <div className="flex items-center gap-3">
-        <div className="w-12 text-sm font-semibold text-gray-700">{grade}</div>
-        <div className="flex-1">
-            <div className="h-8 bg-gray-100 rounded-lg overflow-hidden">
-                <div
-                    className={`h-full ${color} flex items-center px-3 text-white text-sm font-medium transition-all duration-300`}
-                    style={{ width: `${percentage}%` }}
-                >
-                    {percentage > 15 && `${count} students`}
-                </div>
-            </div>
+    <div>
+        <div className="flex justify-between items-center mb-2">
+            <span className="font-semibold text-gray-800">{grade}</span>
+            <span className="text-sm text-gray-500">{count} students • {percentage}%</span>
         </div>
-        <div className="w-16 text-sm text-gray-600 text-right">{percentage}%</div>
+        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+            <div
+                className={`h-full ${color} rounded-full transition-all duration-500 ease-out`}
+                style={{ width: `${percentage}%` }}
+            />
+        </div>
     </div>
 );
 
@@ -106,6 +105,7 @@ export default function TeacherResultsPage() {
     const [selectedClass, setSelectedClass] = useState(mockClasses[0].id);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterGrade, setFilterGrade] = useState('all');
+    const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
 
     // Calculate statistics
     const classAverage = Math.round(
@@ -199,39 +199,61 @@ export default function TeacherResultsPage() {
                 />
             </div>
 
-            {/* Grade Distribution */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                    <BookOpen size={20} className="text-purple-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Grade Distribution</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Grade Distribution */}
+                <div className="lg:col-span-2 bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6">Grade Distribution</h3>
+                    <div className="space-y-6">
+                        <GradeDistributionBar
+                            grade="A+"
+                            count={gradeDistribution['A+']}
+                            percentage={Math.round((gradeDistribution['A+'] / mockStudentResults.length) * 100)}
+                            color="bg-green-500"
+                        />
+                        <GradeDistributionBar
+                            grade="A"
+                            count={gradeDistribution['A']}
+                            percentage={Math.round((gradeDistribution['A'] / mockStudentResults.length) * 100)}
+                            color="bg-green-500"
+                        />
+                        <GradeDistributionBar
+                            grade="B"
+                            count={gradeDistribution['B']}
+                            percentage={Math.round((gradeDistribution['B'] / mockStudentResults.length) * 100)}
+                            color="bg-slate-500"
+                        />
+                        <GradeDistributionBar
+                            grade="C"
+                            count={gradeDistribution['C']}
+                            percentage={Math.round((gradeDistribution['C'] / mockStudentResults.length) * 100)}
+                            color="bg-red-500"
+                        />
+                    </div>
                 </div>
-                <div className="space-y-3">
-                    <GradeDistributionBar
-                        grade="A+"
-                        count={gradeDistribution['A+']}
-                        percentage={Math.round((gradeDistribution['A+'] / mockStudentResults.length) * 100)}
-                        color="bg-green-500"
-                    />
-                    <GradeDistributionBar
-                        grade="A"
-                        count={gradeDistribution['A']}
-                        percentage={Math.round((gradeDistribution['A'] / mockStudentResults.length) * 100)}
-                        color="bg-gray-400"
-                    />
-                    <GradeDistributionBar
-                        grade="B"
-                        count={gradeDistribution['B']}
-                        percentage={Math.round((gradeDistribution['B'] / mockStudentResults.length) * 100)}
-                        color="bg-gray-400"
-                    />
-                    <GradeDistributionBar
-                        grade="C"
-                        count={gradeDistribution['C']}
-                        percentage={Math.round((gradeDistribution['C'] / mockStudentResults.length) * 100)}
-                        color="bg-red-500"
-                    />
+
+                {/* Quick Actions */}
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm h-fit">
+                    <h3 className="text-lg font-bold text-gray-900 mb-6">Quick Actions</h3>
+                    <div className="space-y-4">
+                        <button
+                            onClick={() => setIsGradeModalOpen(true)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-sm"
+                        >
+                            <CheckCircle size={20} />
+                            Grade Submissions
+                        </button>
+                        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-gray-700 border border-gray-200 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                            <Download size={20} />
+                            Download Grades
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <GradeSubmissionsModal
+                isOpen={isGradeModalOpen}
+                onClose={() => setIsGradeModalOpen(false)}
+            />
 
             {/* Filters */}
             <div className="bg-white p-4 rounded-lg border border-gray-200 flex flex-wrap gap-3 items-center">

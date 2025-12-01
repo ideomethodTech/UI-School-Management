@@ -92,7 +92,7 @@ export default function StudentAssignmentsPage() {
     const overdueAssignments = assignmentsData.filter(a => a.status === 'Overdue').length;
 
     return (
-        <div className="p-5 space-y-8">
+        <div className="p-1 space-y-8">
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900">My Assignments</h1>

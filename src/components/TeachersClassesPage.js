@@ -4,6 +4,8 @@ import ManageClassModal from './ManageClassModal';
 import AttendanceModal from './AttendanceModal';
 import GradesModal from './GradesModal';
 import StudentsListModal from './StudentsListModal';
+import ScheduleClassModal from './ScheduleClassModal';
+import { Plus } from 'lucide-react';
 
 // Mock Data for Teacher
 const teacherClassesData = [
@@ -62,8 +64,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('manage', classInfo)}
                 className={`flex justify-center items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg shadow-sm transition-colors ${activeButton === 'manage'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <Settings size={16} />
@@ -72,8 +74,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('attendance', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${activeButton === 'attendance'
-                        ? 'bg-purple-600 text-white border-purple-600'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <ClipboardList size={16} />
@@ -82,8 +84,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('grades', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${activeButton === 'grades'
-                        ? 'bg-purple-600 text-white border-purple-600'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <GraduationCap size={16} />
@@ -92,8 +94,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('students', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg ml-auto transition-colors ${activeButton === 'students'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-gray-700 hover:bg-purple-100'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-gray-700 hover:bg-purple-100'
                     }`}
             >
                 <Users size={16} />
@@ -108,6 +110,7 @@ export default function TeachersClassesPage() {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedClass, setSelectedClass] = useState(null);
     const [activeButtons, setActiveButtons] = useState({});
+    const [isScheduleClassModalOpen, setIsScheduleClassModalOpen] = useState(false);
 
     const handleAction = (action, classInfo) => {
         setSelectedClass(classInfo);
@@ -126,9 +129,18 @@ export default function TeachersClassesPage() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
-                <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
+                    <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
+                </div>
+                <button
+                    onClick={() => setIsScheduleClassModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 shadow-sm"
+                >
+                    <Plus size={18} />
+                    Schedule Class
+                </button>
             </div>
 
             {/* Stats Cards */}
@@ -170,6 +182,10 @@ export default function TeachersClassesPage() {
                 isOpen={activeModal === 'students'}
                 onClose={closeModal}
                 classData={selectedClass}
+            />
+            <ScheduleClassModal
+                isOpen={isScheduleClassModalOpen}
+                onClose={() => setIsScheduleClassModalOpen(false)}
             />
         </div>
     );

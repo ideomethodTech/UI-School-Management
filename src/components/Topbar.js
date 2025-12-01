@@ -4,6 +4,7 @@ import { Search, MessageSquare, Bell, ChevronDown, School, X } from 'lucide-reac
 import Avatar from './Avatar';
 import { useUser } from '@/contexts/UserContext';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 // Mock data for announcements
@@ -50,6 +51,7 @@ const AnnouncementsModal = ({ isOpen, onClose }) => {
 
 export default function Topbar() {
   const { currentUserRole, setCurrentUserRole } = useUser();
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [announcementsOpen, setAnnouncementsOpen] = useState(false); // State for announcements modal
   const dropdownRef = useRef(null);
@@ -78,6 +80,8 @@ export default function Topbar() {
   const handleRoleChange = (newRole) => {
     setCurrentUserRole(newRole);
     setDropdownOpen(false);
+    // Navigate to the dashboard home page when role changes
+    router.push('/dashboard/home');
   };
 
   return (

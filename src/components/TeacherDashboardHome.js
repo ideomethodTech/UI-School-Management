@@ -1,7 +1,9 @@
-
 "use client";
-
+import { useState } from 'react';
 import { Users, BookOpen, ClipboardCheck, CalendarClock, PlusSquare, GraduationCap, Calendar, UserCheck } from 'lucide-react';
+import GradeSubmissionsModal from './GradeSubmissionsModal';
+import CreateAssignmentModal from './CreateAssignmentModal';
+import ScheduleClassModal from './ScheduleClassModal';
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, subtext, colorClass = 'text-gray-800' }) => (
@@ -95,9 +97,14 @@ const Assignments = () => (
 );
 
 // Upcoming Classes Card
-const UpcomingClasses = () => (
+const UpcomingClasses = ({ onScheduleClick }) => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-    <h3 className="font-bold text-lg text-gray-800 mb-4">Upcoming Classes</h3>
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="font-bold text-lg text-gray-800">Upcoming Classes</h3>
+      <button onClick={onScheduleClick} className="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
+        <PlusSquare size={16} /> Schedule Class
+      </button>
+    </div>
     <div className="space-y-3">
       {/* Class Item */}
       <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
@@ -131,14 +138,14 @@ const UpcomingClasses = () => (
 );
 
 // Quick Actions Card
-const QuickActions = () => (
+const QuickActions = ({ onGradeClick, onCreateAssignmentClick, onScheduleClick }) => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
     <h3 className="font-bold text-lg text-gray-800 mb-4">Quick Actions</h3>
     <div className="space-y-3">
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><PlusSquare size={16} /> Create Assignment</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><GraduationCap size={16} /> Grade Submissions</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><Calendar size={16} /> Schedule Class</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><UserCheck size={16} /> Take Attendance</button>
+      <button onClick={onCreateAssignmentClick} className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><PlusSquare size={16} /> Create Assignment</button>
+      <button onClick={onGradeClick} className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><GraduationCap size={16} /> Grade Submissions</button>
+      <button onClick={onScheduleClick} className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><Calendar size={16} /> Schedule Class</button>
+
     </div>
   </div>
 );
@@ -157,6 +164,10 @@ const PerformanceInsights = () => (
 
 
 export default function TeacherDashboardHome() {
+  const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
+  const [isCreateAssignmentModalOpen, setIsCreateAssignmentModalOpen] = useState(false);
+  const [isScheduleClassModalOpen, setIsScheduleClassModalOpen] = useState(false);
+
   return (
     <div className='space-y-6'>
       {/* Header */}
@@ -179,15 +190,32 @@ export default function TeacherDashboardHome() {
         <div className="lg:col-span-2 space-y-6">
           <MyClasses />
           <Assignments />
-          <UpcomingClasses />
+          <UpcomingClasses onScheduleClick={() => setIsScheduleClassModalOpen(true)} />
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-          <QuickActions />
+          <QuickActions
+            onGradeClick={() => setIsGradeModalOpen(true)}
+            onCreateAssignmentClick={() => setIsCreateAssignmentModalOpen(true)}
+            onScheduleClick={() => setIsScheduleClassModalOpen(true)}
+          />
           <PerformanceInsights />
         </div>
       </div>
+
+      <GradeSubmissionsModal
+        isOpen={isGradeModalOpen}
+        onClose={() => setIsGradeModalOpen(false)}
+      />
+      <CreateAssignmentModal
+        isOpen={isCreateAssignmentModalOpen}
+        onClose={() => setIsCreateAssignmentModalOpen(false)}
+      />
+      <ScheduleClassModal
+        isOpen={isScheduleClassModalOpen}
+        onClose={() => setIsScheduleClassModalOpen(false)}
+      />
     </div>
   );
 }
