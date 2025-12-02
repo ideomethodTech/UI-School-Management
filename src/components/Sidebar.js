@@ -38,13 +38,13 @@ export default function Sidebar() {
     { href: '/dashboard/results', icon: BarChart3, label: 'Results' },
     { href: '/dashboard/attendance', icon: PieChart, label: 'Attendance' },
     { href: '/dashboard/events', icon: Calendar, label: 'Events' },
-    { href: '/dashboard/messages', icon: MessageSquare, 'label': 'Messages' },
+    { href: '/dashboard/messages', icon: MessageSquare, label: 'Messages' },
     { href: '/dashboard/profile', icon: User, label: 'Profile' },
     { href: '/dashboard/settings', icon: Settings, label: 'Settings' }
   ]
 
   return (
-    <aside className="w-72 bg-white border-r border-gray-200 h-screen p-4 hidden lg:flex flex-col shadow-sm">
+    <aside className="w-72 bg-white border-r border-gray-200 h-screen p-4 hidden lg:flex flex-col shadow-sm fixed top-0 left-0 overflow-y-auto">
       <div className="flex items-center gap-3 mb-8 px-2">
         <School size={28} className="text-purple-600" />
         <div className="font-semibold text-xl text-gray-800">School</div>
@@ -52,7 +52,7 @@ export default function Sidebar() {
 
       <div className="text-xs font-medium text-gray-400 uppercase tracking-wider px-2 mb-3">MENU</div>
 
-      <nav className="flex-1 overflow-auto space-y-1">
+      <nav className="flex-1 space-y-1">
         {items.map((it) => {
           const isActive = pathname === it.href || pathname.startsWith(it.href + '/')
           return (

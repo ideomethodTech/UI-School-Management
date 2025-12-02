@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { studentsData } from './data.js';
 import { Search, Plus, Eye, Trash2, X, Upload } from 'lucide-react';
+import { useData } from '../../../contexts/DataContext';
 
 export default function StudentsPage() {
-    const [students, setStudents] = useState(studentsData);
+    const { students, addStudent, deleteStudent } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', address: '', avatar: '' });
     const [photoPreview, setPhotoPreview] = useState('');
@@ -41,12 +41,12 @@ export default function StudentsPage() {
         event.preventDefault();
         if (!formState.name.trim() || !formState.id.trim()) return alert('Student Name and Student ID are required.');
         const newStudent = { ...formState, avatar: formState.avatar || `https://i.pravatar.cc/40?u=${formState.id}` };
-        setStudents(currentStudents => [newStudent, ...currentStudents]);
+        addStudent(newStudent);
         closeModal();
     };
 
     const handleDeleteStudent = (id) => {
-        if (window.confirm('Are you sure?')) setStudents(current => current.filter(s => s.id !== id));
+        if (window.confirm('Are you sure?')) deleteStudent(id);
     };
 
     return (

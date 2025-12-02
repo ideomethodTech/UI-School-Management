@@ -29,7 +29,7 @@ function DashboardLayoutContent({ children }) {
         <ParentSidebar userName="Mr./Mrs. Johnson" userRole="Parent" />
       )}
 
-      <div className={`flex-1 flex flex-col ${(currentUserRole === 'student' || currentUserRole === 'teacher' || currentUserRole === 'parent') ? 'lg:ml-64' : ''}`}>
+      <div className={`flex-1 flex flex-col ${currentUserRole === 'admin' ? 'lg:ml-72' : (currentUserRole === 'student' || currentUserRole === 'teacher' || currentUserRole === 'parent') ? 'lg:ml-64' : ''}`}>
         <Topbar />
         <main className='flex-1 overflow-auto p-6'>
           {children}

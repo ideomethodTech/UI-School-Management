@@ -3,11 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { teachersData } from "./data";
 import { Search, Plus, Eye, Trash2, X, Upload } from "lucide-react";
+import { useData } from "../../../contexts/DataContext";
 
 export default function TeachersPage() {
-    const [teachers, setTeachers] = useState(teachersData);
+    const { teachers, addTeacher, deleteTeacher } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [photoPreview, setPhotoPreview] = useState("");
     const [formState, setFormState] = useState({
@@ -70,13 +70,13 @@ export default function TeachersPage() {
                 formState.avatar || `https://i.pravatar.cc/150?u=${formState.id}`,
         };
 
-        setTeachers((currentTeachers) => [newTeacher, ...currentTeachers]);
+        addTeacher(newTeacher);
         closeModal();
     };
 
     const handleDeleteTeacher = (id) => {
         if (window.confirm("Are you sure?"))
-            setTeachers((current) => current.filter((t) => t.id !== id));
+            deleteTeacher(id);
     };
 
     return (

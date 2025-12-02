@@ -8,7 +8,6 @@ import {
     Mail,
     Phone,
     Droplets,
-    // New Icons added for the stat cards
     CalendarCheck,
     Building2,
     BookOpen,
@@ -19,13 +18,14 @@ import {
 import BigCalendar from "@/components/EventCalendar";
 import Announcements from "@/components/Announcements";
 import Performance from "@/components/Performance";
-import { teachersData } from "../data";
+import { useData } from "@/contexts/DataContext";
 
 const SingleTeacherPage = ({ params }) => {
     const { id } = use(params);
+    const { teachers } = useData();
 
     // Find the specific teacher by ID
-    const teacher = teachersData.find(t => t.id === id);
+    const teacher = teachers.find(t => t.id === id);
 
     // If teacher not found, show error message
     if (!teacher) {
@@ -51,11 +51,11 @@ const SingleTeacherPage = ({ params }) => {
                 {/* TOP SECTION: Teacher Info Card + Small Stats */}
                 <div className="flex flex-col lg:flex-row gap-4">
 
-                    {/* TEACHER INFO CARD (Blue) */}
+                    {/* TEACHER INFO CARD (Purple) */}
                     <div className="bg-purple-100 py-6 px-4 rounded-md flex-1 flex gap-4">
                         <div className="w-1/3">
                             <Image
-                                src={teacher.avatar}
+                                src={teacher.avatar || `https://i.pravatar.cc/150?u=${teacher.id}`}
                                 alt={teacher.name}
                                 width={144}
                                 height={144}
@@ -71,31 +71,30 @@ const SingleTeacherPage = ({ params }) => {
                                 </Link>
                             </div>
                             <p className="text-sm text-gray-500">
-                                {teacher.subjects.join(" & ")} Teacher
+                                {teacher.subjects?.join(" & ")} Teacher
                             </p>
                             <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium">
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <BookOpen size={14} />
-                                    <span>{teacher.subjects.join(", ")}</span>
+                                    <span>{teacher.subjects?.join(", ")}</span>
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <Users size={14} />
-                                    <span>Classes: {teacher.classes.join(", ")}</span>
+                                    <span>Classes: {teacher.classes?.join(", ")}</span>
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <Phone size={14} />
-                                    <span>{teacher.phone}</span>
+                                    <span>{teacher.phone || 'N/A'}</span>
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <Mail size={14} />
-                                    <span>{teacher.address}</span>
+                                    <span>{teacher.address || 'N/A'}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* SMALL STAT CARDS (FIXED) */}
-                    {/* Switched to Grid for better layout and replaced Images with Icons */}
+                    {/* SMALL STAT CARDS */}
                     <div className="flex-1 grid grid-cols-2 gap-4 mt-4 lg:mt-0">
 
                         {/* Card 1: Attendance */}
@@ -115,7 +114,7 @@ const SingleTeacherPage = ({ params }) => {
                                 <BookOpen size={24} className="text-purple-500" />
                             </div>
                             <div className="">
-                                <h1 className="text-xl font-semibold">{teacher.subjects.length}</h1>
+                                <h1 className="text-xl font-semibold">{teacher.subjects?.length || 0}</h1>
                                 <span className="text-sm text-gray-500">Subjects</span>
                             </div>
                         </div>
@@ -126,7 +125,7 @@ const SingleTeacherPage = ({ params }) => {
                                 <Users size={24} className="text-pink-500" />
                             </div>
                             <div className="">
-                                <h1 className="text-xl font-semibold">{teacher.classes.length}</h1>
+                                <h1 className="text-xl font-semibold">{teacher.classes?.length || 0}</h1>
                                 <span className="text-sm text-gray-500">Classes</span>
                             </div>
                         </div>

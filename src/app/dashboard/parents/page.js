@@ -4,11 +4,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
-import { parentsData } from './data';
+import { useData } from '../../../contexts/DataContext';
 
 // Main page component
 export default function ParentsPage() {
-    const [parents, setParents] = useState(parentsData);
+    const { parents, addParent, updateParent, deleteParent } = useData();
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState('create');
@@ -53,16 +53,16 @@ export default function ParentsPage() {
         const parentData = { ...formState, students: studentArray };
 
         if (modalType === 'create') {
-            setParents(prev => [...prev, { id: `par${Date.now()}`, ...parentData }]);
+            addParent({ id: `par${Date.now()}`, ...parentData });
         } else {
-            setParents(prev => prev.map(p => (p.id === currentParent.id ? { ...p, ...parentData } : p)));
+            updateParent(currentParent.id, parentData);
         }
         closeModal();
     };
 
     const handleDelete = (parentIdToDelete) => {
         if (window.confirm('Are you sure you want to delete this parent?')) {
-            setParents(prev => prev.filter(p => p.id !== parentIdToDelete));
+            deleteParent(parentIdToDelete);
         }
     };
 
