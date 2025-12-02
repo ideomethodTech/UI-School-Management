@@ -4,11 +4,19 @@
 import { Users, BookOpen, ClipboardCheck, CalendarClock, PlusSquare, GraduationCap, Calendar, UserCheck } from 'lucide-react';
 
 // Reusable Stat Card Component
-const StatCard = ({ label, value, subtext, colorClass = 'text-gray-800' }) => (
-  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
-    <p className="text-sm text-gray-500">{label}</p>
-    <p className={`text-4xl font-bold mt-1 ${colorClass}`}>{value}</p>
-    <p className="text-xs text-gray-500 mt-1">{subtext}</p>
+const StatCard = ({ label, value, subtext, icon: Icon, iconBgColor, iconColor, decorColor }) => (
+  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+    <div className={`absolute top-0 right-0 w-24 h-24 ${decorColor} rounded-bl-full opacity-50`}></div>
+    <div className="relative z-10">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-sm font-medium text-gray-600">{label}</p>
+        <div className={`p-2 ${iconBgColor} rounded-lg`}>
+          <Icon className={`h-5 w-5 ${iconColor}`} size={18} />
+        </div>
+      </div>
+      <p className="text-4xl font-bold text-gray-800 mb-1">{value}</p>
+      <p className="text-xs text-gray-500">{subtext}</p>
+    </div>
   </div>
 );
 
@@ -167,10 +175,10 @@ export default function TeacherDashboardHome() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Total Students" value="135" subtext="Across all classes" />
-        <StatCard label="Classes" value="3" subtext="This semester" colorClass="text-green-600" />
-        <StatCard label="Pending Evaluations" value="12" subtext="To review" colorClass="text-yellow-600" />
-        <StatCard label="Upcoming Classes" value="3" subtext="This week" colorClass="text-blue-600" />
+        <StatCard label="Total Students" value="135" subtext="Across all classes" icon={Users} iconBgColor="bg-blue-100" iconColor="text-blue-600" decorColor="bg-blue-50" />
+        <StatCard label="Classes" value="3" subtext="This semester" icon={BookOpen} iconBgColor="bg-green-100" iconColor="text-green-600" decorColor="bg-green-50" />
+        <StatCard label="Pending Evaluations" value="12" subtext="To review" icon={ClipboardCheck} iconBgColor="bg-yellow-100" iconColor="text-yellow-600" decorColor="bg-yellow-50" />
+        <StatCard label="Upcoming Classes" value="3" subtext="This week" icon={CalendarClock} iconBgColor="bg-purple-100" iconColor="text-purple-600" decorColor="bg-purple-50" />
       </div>
 
       {/* Main Content Grid */}

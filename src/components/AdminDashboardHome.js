@@ -1,11 +1,13 @@
+'use client';
 
 import { useState } from 'react';
-// Make sure you have react-icons installed: npm install react-icons
+import Image from 'next/image';
 import {
   FiUsers, FiActivity, FiGrid, FiTrendingUp,
   FiPlus, FiCalendar, FiFileText, FiAlertCircle, FiUsers as FiUserGroup,
-  FiX, FiClock
+  FiX, FiClock, FiUpload
 } from 'react-icons/fi';
+import { useData } from '../contexts/DataContext';
 
 // --- Reusable Generic Modal Component ---
 const Modal = ({ children, onClose, size = 'lg' }) => {
@@ -20,70 +22,191 @@ const Modal = ({ children, onClose, size = 'lg' }) => {
   );
 };
 
-// --- Form and Detail Modal Components ---
+// --- Form Components ---
+const AddStudentForm = ({ onClose, onAddStudent }) => {
+  const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', address: '', avatar: '' });
+  const [photoPreview, setPhotoPreview] = useState('');
 
-// (Forms for Quick Actions remain the same)
-const AddStudentForm = ({ onClose }) => { /* ... Form JSX ... */ return (<form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6"><div><h2 className="text-2xl font-bold text-gray-800">Add New Student</h2><p className="text-gray-500 mt-1">Enter the details of the new student to register them in the system.</p></div><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label className="block text-sm font-medium text-gray-700">First Name</label><input type="text" placeholder="John" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Last Name</label><input type="text" placeholder="Doe" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email</label><input type="email" placeholder="john@example.com" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Roll Number</label><input type="text" placeholder="101" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Class</label><input type="text" placeholder="10-A" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2 relative"><label className="block text-sm font-medium text-gray-700">Date of Birth</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div></div><div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">Add Student</button></div></form>); };
-const AddTeacherForm = ({ onClose }) => { /* ... Form JSX ... */ return (<form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6"><div><h2 className="text-2xl font-bold text-gray-800">Add New Teacher</h2><p className="text-gray-500 mt-1">Enter the details of the new teacher to add them to the system.</p></div><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label className="block text-sm font-medium text-gray-700">First Name</label><input type="text" placeholder="Jane" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Last Name</label><input type="text" placeholder="Smith" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Email</label><input type="email" placeholder="jane@example.com" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Subject</label><input type="text" placeholder="Mathematics" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Employee ID</label><input type="text" placeholder="EMP001" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Qualifications</label><input type="text" placeholder="B.Sc, B.Ed" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div></div><div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Add Teacher</button></div></form>); };
-const ScheduleEventForm = ({ onClose }) => { /* ... Form JSX ... */ return (<form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6"><div><h2 className="text-2xl font-bold text-gray-800">Schedule Event</h2><p className="text-gray-500 mt-1">Create a new event for your school.</p></div><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Event Name</label><input type="text" placeholder="Annual Sports Day" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Brief description of the event" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div><div className="relative"><label className="block text-sm font-medium text-gray-700">Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div><div className="relative"><label className="block text-sm font-medium text-gray-700">Time</label><input type="text" placeholder="--:--" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiClock className="absolute right-3 top-9 text-gray-400" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Location</label><input type="text" placeholder="Main ground" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div></div><div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Schedule Event</button></div></form>); };
-const CreateAssignmentForm = ({ onClose }) => { /* ... Form JSX ... */ return (<form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6"><div><h2 className="text-2xl font-bold text-gray-800">Create Assignment</h2><p className="text-gray-500 mt-1">Create a new assignment for your students.</p></div><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Assignment Title</label><input type="text" placeholder="Chapter 5: Practice Problems" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Assignment details" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div><div><label className="block text-sm font-medium text-gray-700">Class</label><input type="text" placeholder="10-A" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div><label className="block text-sm font-medium text-gray-700">Subject</label><input type="text" placeholder="Mathematics" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div><div className="relative"><label className="block text-sm font-medium text-gray-700">Due Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div><div><label className="block text-sm font-medium text-gray-700">Total Marks</label><input type="number" placeholder="100" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div></div><div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create Assignment</button></div></form>); };
+  const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
 
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+        setFormState(prevState => ({ ...prevState, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formState.name.trim() || !formState.id.trim()) return alert('Student Name and Student ID are required.');
+    const newStudent = { ...formState, avatar: formState.avatar || `https://i.pravatar.cc/40?u=${formState.id}` };
+    onAddStudent(newStudent);
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div><h2 className="text-2xl font-bold text-gray-800">Create New Student</h2></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Student Name</label><input name="name" type="text" value={formState.name} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label><input name="id" type="text" value={formState.id} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Grade</label><input name="grade" type="text" value={formState.grade} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Phone</label><input name="phone" type="tel" value={formState.phone} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="address" type="text" value={formState.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photo (optional)</label>
+        <div className="flex items-center gap-4">
+          {photoPreview && (<Image src={photoPreview} alt="Preview" width={60} height={60} className="rounded-full object-cover" />)}
+          <label className="flex-1 cursor-pointer">
+            <div className="w-full p-2 border border-dashed border-gray-300 rounded-md hover:border-purple-400 flex items-center justify-center gap-2 text-gray-600 hover:text-purple-600">
+              <FiUpload size={18} />
+              <span className="text-sm">{photoPreview ? 'Change Photo' : 'Choose Photo'}</span>
+            </div>
+            <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+          </label>
+        </div>
+      </div>
+      <div className="flex justify-end gap-4 pt-4"><button type="button" onClick={onClose} className="px-6 py-2 border rounded-lg text-gray-700 font-semibold hover:bg-gray-100">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create</button></div>
+    </form>
+  );
+};
+
+const AddTeacherForm = ({ onClose, onAddTeacher }) => {
+  const [formState, setFormState] = useState({ name: '', id: '', subjects: '', classes: '', phone: '', address: '', avatar: '' });
+  const [photoPreview, setPhotoPreview] = useState('');
+
+  const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+        setFormState(prevState => ({ ...prevState, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formState.name.trim() || !formState.id.trim()) return alert('Teacher Name and Teacher ID are required.');
+    const newTeacher = {
+      ...formState,
+      subjects: formState.subjects.split(',').map(s => s.trim()),
+      classes: formState.classes.split(',').map(c => c.trim()),
+      avatar: formState.avatar || `https://i.pravatar.cc/150?u=${formState.id}`,
+    };
+    onAddTeacher(newTeacher);
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div><h2 className="text-2xl font-bold text-gray-800">Create New Teacher</h2></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Teacher Name</label><input name="name" type="text" value={formState.name} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Teacher ID</label><input name="id" type="text" value={formState.id} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Subjects (comma separated)</label><input name="subjects" type="text" value={formState.subjects} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Classes (comma separated)</label><input name="classes" type="text" value={formState.classes} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Phone</label><input name="phone" type="tel" value={formState.phone} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="address" type="text" value={formState.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photo (optional)</label>
+        <div className="flex items-center gap-4">
+          {photoPreview && (<Image src={photoPreview} alt="Preview" width={60} height={60} className="rounded-full object-cover" />)}
+          <label className="flex-1 cursor-pointer">
+            <div className="w-full p-2 border border-dashed border-gray-300 rounded-md hover:border-purple-400 flex items-center justify-center gap-2 text-gray-600 hover:text-purple-600">
+              <FiUpload size={18} />
+              <span className="text-sm">{photoPreview ? 'Change Photo' : 'Choose Photo'}</span>
+            </div>
+            <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+          </label>
+        </div>
+      </div>
+      <div className="flex justify-end gap-4 pt-4"><button type="button" onClick={onClose} className="px-6 py-2 border rounded-lg text-gray-700 font-semibold hover:bg-gray-100">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create</button></div>
+    </form>
+  );
+};
+
+const ScheduleEventForm = ({ onClose }) => (
+  <form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6">
+    <div><h2 className="text-2xl font-bold text-gray-800">Schedule Event</h2><p className="text-gray-500 mt-1">Create a new event for your school.</p></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Event Name</label><input type="text" placeholder="Annual Sports Day" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Brief description of the event" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
+      <div className="relative"><label className="block text-sm font-medium text-gray-700">Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div>
+      <div className="relative"><label className="block text-sm font-medium text-gray-700">Time</label><input type="text" placeholder="--:--" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiClock className="absolute right-3 top-9 text-gray-400" /></div>
+      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Location</label><input type="text" placeholder="Main ground" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+    </div>
+    <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Schedule Event</button></div>
+  </form>
+);
+
+const CreateAssignmentForm = ({ onClose }) => (
+  <form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6">
+    <div><h2 className="text-2xl font-bold text-gray-800">Create Assignment</h2><p className="text-gray-500 mt-1">Create a new assignment for your students.</p></div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Assignment Title</label><input type="text" placeholder="Chapter 5: Practice Problems" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Assignment details" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
+      <div><label className="block text-sm font-medium text-gray-700">Class</label><input type="text" placeholder="10-A" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      <div><label className="block text-sm font-medium text-gray-700">Subject</label><input type="text" placeholder="Mathematics" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      <div className="relative"><label className="block text-sm font-medium text-gray-700">Due Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div>
+      <div><label className="block text-sm font-medium text-gray-700">Total Marks</label><input type="number" placeholder="100" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+    </div>
+    <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create Assignment</button></div>
+  </form>
+);
 
 // --- Modal Content Components ---
-
-const AllTasksModal = ({ tasks, priorityStyles }) => {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800">All Pending Tasks</h2>
-      {/* ADDED pr-4 for scrollbar spacing */}
-      <div className="space-y-4 pt-2 max-h-96 overflow-y-auto pr-4">
-        {tasks.map((task, index) => (
-          <div key={index} className="flex justify-between items-center border-t pt-4">
-            <div>
-              <h4 className="font-semibold text-gray-700 flex items-center">{task.title}<span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${priorityStyles[task.priority]}`}>{task.priority}</span></h4>
-              <p className="text-sm text-gray-500">{task.description}</p>
-            </div>
-            <p className="text-sm text-gray-500 text-right shrink-0 ml-4">{task.dueDate}</p>
+const AllTasksModal = ({ tasks, priorityStyles }) => (
+  <div className="space-y-4">
+    <h2 className="text-2xl font-bold text-gray-800">All Pending Tasks</h2>
+    <div className="space-y-4 pt-2 max-h-96 overflow-y-auto pr-4">
+      {tasks.map((task, index) => (
+        <div key={index} className="flex justify-between items-center border-t pt-4">
+          <div>
+            <h4 className="font-semibold text-gray-700 flex items-center">{task.title}<span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${priorityStyles[task.priority]}`}>{task.priority}</span></h4>
+            <p className="text-sm text-gray-500">{task.description}</p>
           </div>
-        ))}
-      </div>
-      {/* REMOVED Close button from bottom */}
+          <p className="text-sm text-gray-500 text-right shrink-0 ml-4">{task.dueDate}</p>
+        </div>
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
-const ClassPerformanceDetailsModal = ({ performanceData, statusStyles }) => {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800">Detailed Class Performance</h2>
-      <div className="overflow-x-auto max-h-96">
-        <table className="w-full text-left">
-          <thead><tr className="text-sm text-gray-500 font-medium border-b"><th className="py-2 px-4">Class</th><th className="py-2 px-4">Students</th><th className="py-2 px-4">Avg Score</th><th className="py-2 px-4">Teacher</th><th className="py-2 px-4">Attendance</th><th className="py-2 px-4">Status</th></tr></thead>
-          <tbody>
-            {performanceData.map((cls, index) => (
-              <tr key={index} className="border-b last:border-none">
-                <td className="py-4 px-4 font-medium text-gray-800">{cls.name}</td><td className="py-4 px-4 text-gray-600">{cls.students}</td><td className="py-4 px-4 font-semibold text-gray-800">{cls.avgScore}</td><td className="py-4 px-4 text-gray-600">{cls.teacher}</td><td className="py-4 px-4 text-gray-600">{cls.attendance}</td><td className="py-4 px-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[cls.status]}`}>{cls.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* REMOVED Close button from bottom */}
+const ClassPerformanceDetailsModal = ({ performanceData, statusStyles }) => (
+  <div className="space-y-4">
+    <h2 className="text-2xl font-bold text-gray-800">Detailed Class Performance</h2>
+    <div className="overflow-x-auto max-h-96">
+      <table className="w-full text-left">
+        <thead><tr className="text-sm text-gray-500 font-medium border-b"><th className="py-2 px-4">Class</th><th className="py-2 px-4">Students</th><th className="py-2 px-4">Avg Score</th><th className="py-2 px-4">Teacher</th><th className="py-2 px-4">Attendance</th><th className="py-2 px-4">Status</th></tr></thead>
+        <tbody>
+          {performanceData.map((cls, index) => (
+            <tr key={index} className="border-b last:border-none">
+              <td className="py-4 px-4 font-medium text-gray-800">{cls.name}</td><td className="py-4 px-4 text-gray-600">{cls.students}</td><td className="py-4 px-4 font-semibold text-gray-800">{cls.avgScore}</td><td className="py-4 px-4 text-gray-600">{cls.teacher}</td><td className="py-4 px-4 text-gray-600">{cls.attendance}</td><td className="py-4 px-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[cls.status]}`}>{cls.status}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  );
-};
-
+  </div>
+);
 
 // --- Main Admin Dashboard Component ---
-
-function StatCard({ title, value, change, icon: Icon, iconBgColor }) {
-  return (<div className="bg-white p-6 rounded-lg shadow flex justify-between items-center"><div><p className="text-sm font-medium text-gray-500">{title}</p><p className="text-3xl font-bold text-gray-800 mt-1">{value}</p><p className="text-sm text-gray-500 mt-2">{change}</p></div><div className={`p-4 rounded-lg ${iconBgColor}`}><Icon className="h-6 w-6 text-white" /></div></div>);
+function StatCard({ title, value, change, icon: Icon, iconBgColor, iconColor, decorColor }) {
+  return (<div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"><div className={`absolute top-0 right-0 w-24 h-24 ${decorColor} rounded-bl-full opacity-50`}></div><div className="relative z-10"><div className="flex items-center justify-between mb-2"><p className="text-sm font-medium text-gray-600">{title}</p><div className={`p-2 ${iconBgColor} rounded-lg`}><Icon className={`h-5 w-5 ${iconColor}`} /></div></div><p className="text-4xl font-bold text-gray-800 mb-1">{value}</p><p className="text-xs text-gray-500">{change}</p></div></div>);
 }
 
 export default function AdminDashboardHome() {
   const [activeModal, setActiveModal] = useState(null);
+  const { students, teachers, addStudent, addTeacher } = useData();
 
-  // --- Expanded Data and Styling Helpers ---
   const allPendingTasks = [
     { title: 'Review Exam Results', description: 'Math final exam results need review', priority: 'high', dueDate: 'Today' }, { title: 'Approve New Teachers', description: '3 new teacher registrations pending', priority: 'medium', dueDate: 'Tomorrow' }, { title: 'Update Class Schedule', description: 'Schedule changes for next semester', priority: 'medium', dueDate: 'Dec 15' }, { title: 'Parent Portal Maintenance', description: 'System maintenance scheduled', priority: 'low', dueDate: 'Dec 20' }, { title: 'Finalize Event Budget', description: 'Budget for Annual Day needs approval', priority: 'high', dueDate: 'Dec 22' }, { title: 'Order Library Books', description: 'New curriculum books are pending order', priority: 'low', dueDate: 'Dec 28' },
   ];
@@ -102,20 +225,14 @@ export default function AdminDashboardHome() {
   return (
     <>
       <div className='space-y-6'>
-        {/* Header */}
         <div><h1 className='text-3xl font-bold text-gray-800'>Welcome Back, Admin!</h1><p className='text-gray-500 mt-1'>Manage your school operations efficiently</p></div>
-
-        {/* Stats Cards */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-          <StatCard title="Total Students" value="1,234" change="+12% from last month" icon={FiUsers} iconBgColor="bg-blue-500" />
-          <StatCard title="Active Teachers" value="89" change="+5% from last month" icon={FiActivity} iconBgColor="bg-teal-500" />
-          <StatCard title="Attendance Rate" value="94%" change="+2% from last month" icon={FiTrendingUp} iconBgColor="bg-purple-500" />
-          <StatCard title="Active Classes" value="45" change="Across 8 grades" icon={FiGrid} iconBgColor="bg-green-500" />
+          <StatCard title="Total Students" value={students.length} change="+12% from last month" icon={FiUsers} iconBgColor="bg-blue-100" iconColor="text-blue-600" decorColor="bg-blue-50" />
+          <StatCard title="Active Teachers" value={teachers.length} change="+5% from last month" icon={FiActivity} iconBgColor="bg-teal-100" iconColor="text-teal-600" decorColor="bg-teal-50" />
+          <StatCard title="Attendance Rate" value="94%" change="+2% from last month" icon={FiTrendingUp} iconBgColor="bg-purple-100" iconColor="text-purple-600" decorColor="bg-purple-50" />
+          <StatCard title="Active Classes" value="45" change="Across 8 grades" icon={FiGrid} iconBgColor="bg-green-100" iconColor="text-green-600" decorColor="bg-green-50" />
         </div>
-
-        {/* Main Content */}
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-          {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex justify-between items-center mb-2"><h3 className="text-xl font-semibold text-gray-800">Pending Tasks</h3><button onClick={() => setActiveModal('viewAllTasks')} className="text-sm font-medium text-purple-600 hover:underline">View All &rarr;</button></div>
@@ -126,7 +243,6 @@ export default function AdminDashboardHome() {
               <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="text-sm text-gray-500 font-medium border-b"><th className="py-2 px-4">Class</th><th className="py-2 px-4">Students</th><th className="py-2 px-4">Avg Score</th><th className="py-2 px-4">Status</th></tr></thead><tbody>{detailedClassPerformance.slice(0, 4).map((cls, index) => (<tr key={index} className="border-b last:border-none"><td className="py-4 px-4 font-medium text-gray-800">{cls.name}</td><td className="py-4 px-4 text-gray-600">{cls.students}</td><td className="py-4 px-4 font-semibold text-gray-800">{cls.avgScore}</td><td className="py-4 px-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[cls.status]}`}>{cls.status}</span></td></tr>))}</tbody></table></div>
             </div>
           </div>
-          {/* Right Column */}
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
@@ -149,12 +265,10 @@ export default function AdminDashboardHome() {
         </div>
       </div>
 
-      {/* --- MODAL RENDERING LOGIC --- */}
-      {activeModal === 'addStudent' && <Modal onClose={() => setActiveModal(null)}><AddStudentForm onClose={() => setActiveModal(null)} /></Modal>}
-      {activeModal === 'addTeacher' && <Modal onClose={() => setActiveModal(null)}><AddTeacherForm onClose={() => setActiveModal(null)} /></Modal>}
+      {activeModal === 'addStudent' && <Modal onClose={() => setActiveModal(null)}><AddStudentForm onClose={() => setActiveModal(null)} onAddStudent={addStudent} /></Modal>}
+      {activeModal === 'addTeacher' && <Modal onClose={() => setActiveModal(null)}><AddTeacherForm onClose={() => setActiveModal(null)} onAddTeacher={addTeacher} /></Modal>}
       {activeModal === 'scheduleEvent' && <Modal onClose={() => setActiveModal(null)}><ScheduleEventForm onClose={() => setActiveModal(null)} /></Modal>}
       {activeModal === 'createAssignment' && <Modal onClose={() => setActiveModal(null)}><CreateAssignmentForm onClose={() => setActiveModal(null)} /></Modal>}
-
       {activeModal === 'viewAllTasks' && <Modal onClose={() => setActiveModal(null)}><AllTasksModal tasks={allPendingTasks} priorityStyles={priorityStyles} /></Modal>}
       {activeModal === 'classPerformanceDetails' && <Modal onClose={() => setActiveModal(null)} size="2xl"><ClassPerformanceDetailsModal performanceData={detailedClassPerformance} statusStyles={statusStyles} /></Modal>}
     </>

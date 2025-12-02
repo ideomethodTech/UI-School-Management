@@ -6,6 +6,7 @@ import SimpleSidebar from '@/components/SimpleSidebar';
 import ParentSidebar from '@/components/ParentSidebar';
 import Topbar from '@/components/Topbar';
 import { UserProvider, useUser } from '@/contexts/UserContext';
+import { DataProvider } from '@/contexts/DataContext';
 
 function DashboardLayoutContent({ children }) {
   const { currentUserRole } = useUser();
@@ -40,8 +41,10 @@ function DashboardLayoutContent({ children }) {
 
 export default function DashboardLayout({ children }) {
   return (
-    <UserProvider>
-      <DashboardLayoutContent>{children}</DashboardLayoutContent>
-    </UserProvider>
+    <DataProvider>
+      <UserProvider>
+        <DashboardLayoutContent>{children}</DashboardLayoutContent>
+      </UserProvider>
+    </DataProvider>
   );
 }

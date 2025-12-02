@@ -1,6 +1,6 @@
 // src/components/StudentDashboardHome.js
 import { useState } from 'react';
-import { CalendarDays, X, ArrowRight, BookOpen, FileText, Download, Clock, MapPin, Calendar } from 'lucide-react';
+import { CalendarDays, X, ArrowRight, BookOpen, FileText, Download, Clock, MapPin, Calendar, GraduationCap, UserCheck, CalendarClock } from 'lucide-react';
 
 // --- MODAL & DATA for ASSIGNMENTS ---
 
@@ -87,11 +87,19 @@ const AllExamsModal = ({ isOpen, onClose }) => {
 
 // --- DASHBOARD CARD COMPONENTS ---
 
-const StatCard = ({ title, value, subtitle, colorClass }) => (
-  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-    <p className="text-sm text-gray-500">{title}</p>
-    <p className="text-3xl font-bold mt-1 text-gray-800">{value}</p>
-    <p className={`text-xs font-medium mt-1 ${colorClass}`}>{subtitle}</p>
+const StatCard = ({ title, value, subtitle, icon: Icon, iconBgColor, iconColor, decorColor }) => (
+  <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+    <div className={`absolute top-0 right-0 w-24 h-24 ${decorColor} rounded-bl-full opacity-50`}></div>
+    <div className="relative z-10">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-sm font-medium text-gray-600">{title}</p>
+        <div className={`p-2 ${iconBgColor} rounded-lg`}>
+          <Icon className={`h-5 w-5 ${iconColor}`} size={18} />
+        </div>
+      </div>
+      <p className="text-4xl font-bold text-gray-800 mb-1">{value}</p>
+      <p className="text-xs text-gray-500">{subtitle}</p>
+    </div>
   </div>
 );
 
@@ -192,10 +200,10 @@ export default function StudentDashboardHome() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Overall Grade" value="A" subtitle="Based on assessments" colorClass="text-green-600" />
-        <StatCard title="Attendance" value="94%" subtitle="This month" colorClass="text-green-600" />
-        <StatCard title="Assignments" value="3" subtitle="Pending" colorClass="text-yellow-600" />
-        <StatCard title="Upcoming Exams" value="3" subtitle="This month" colorClass="text-blue-600" />
+        <StatCard title="Overall Grade" value="A" subtitle="Based on assessments" icon={GraduationCap} iconBgColor="bg-purple-100" iconColor="text-purple-600" decorColor="bg-purple-50" />
+        <StatCard title="Attendance" value="94%" subtitle="This month" icon={UserCheck} iconBgColor="bg-green-100" iconColor="text-green-600" decorColor="bg-green-50" />
+        <StatCard title="Assignments" value="3" subtitle="Pending" icon={FileText} iconBgColor="bg-yellow-100" iconColor="text-yellow-600" decorColor="bg-yellow-50" />
+        <StatCard title="Upcoming Exams" value="3" subtitle="This month" icon={CalendarClock} iconBgColor="bg-blue-100" iconColor="text-blue-600" decorColor="bg-blue-50" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

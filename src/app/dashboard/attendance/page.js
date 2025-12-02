@@ -7,6 +7,7 @@ import AttendanceCalendar from '@/components/AttendanceCalendar';
 import MarkAttendanceSection from '@/components/MarkAttendanceSection';
 import TeacherAttendancePage from '@/components/TeacherAttendancePage';
 import ParentAttendancePage from '@/components/ParentAttendancePage';
+import StudentAttendancePage from '@/components/StudentAttendancePage';
 
 import { useState } from 'react';
 
@@ -24,12 +25,11 @@ export default function AttendancePage() {
         );
     }
 
-    // Students don't have access to detailed attendance page
+    // Students see the StudentAttendancePage
     if (currentUserRole === 'student') {
         return (
-            <div className='p-6 text-center text-gray-600'>
-                <h2 className='text-2xl font-semibold mb-4'>Access Denied</h2>
-                <p>You do not have permission to view this attendance page.</p>
+            <div className='p-6 overflow-y-auto h-full'>
+                <StudentAttendancePage />
             </div>
         );
     }
@@ -84,6 +84,8 @@ export default function AttendancePage() {
 
             {/* Student Detail Modal */}
             {selectedStudent && (
+                // Assuming this component exists or will be created. 
+                // It was present in the original file but not imported.
                 <StudentAttendanceDetailModal student={selectedStudent} onClose={handleCloseStudentDetailModal} />
             )}
         </div>
