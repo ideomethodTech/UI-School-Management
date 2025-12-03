@@ -16,7 +16,7 @@ export default function TeachersPage() {
         subjects: "",
         classes: "",
         phone: "",
-        address: "",
+        email: "",
         avatar: "",
     });
 
@@ -45,7 +45,7 @@ export default function TeachersPage() {
             subjects: "",
             classes: "",
             phone: "",
-            address: "",
+            email: "",
             avatar: "",
         });
         setPhotoPreview("");
@@ -112,7 +112,7 @@ export default function TeachersPage() {
                                 <th className="py-3 px-4 font-medium">Subjects</th>
                                 <th className="py-3 px-4 font-medium">Classes</th>
                                 <th className="py-3 px-4 font-medium">Phone</th>
-                                <th className="py-3 px-4 font-medium">Address</th>
+                                <th className="py-3 px-4 font-medium">Email</th>
                                 <th className="py-3 px-4 font-medium">Actions</th>
                             </tr>
                         </thead>
@@ -151,7 +151,7 @@ export default function TeachersPage() {
                                         {teacher.phone}
                                     </td>
                                     <td className="py-3 px-4 text-sm text-gray-600">
-                                        {teacher.address}
+                                        {teacher.email}
                                     </td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-2">
@@ -258,12 +258,12 @@ export default function TeachersPage() {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Address
+                                    Email
                                 </label>
                                 <input
-                                    name="address"
-                                    type="text"
-                                    value={formState.address}
+                                    name="email"
+                                    type="email"
+                                    value={formState.email}
                                     onChange={handleInputChange}
                                     className="w-full p-2 border rounded-md"
                                 />

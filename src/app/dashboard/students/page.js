@@ -9,7 +9,7 @@ import { useData } from '../../../contexts/DataContext';
 export default function StudentsPage() {
     const { students, addStudent, deleteStudent } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', address: '', avatar: '' });
+    const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', email: '', avatar: '' });
     const [photoPreview, setPhotoPreview] = useState('');
 
     const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -27,7 +27,7 @@ export default function StudentsPage() {
     };
 
     const openModal = () => {
-        setFormState({ name: '', id: '', grade: '', phone: '', address: '', avatar: '' });
+        setFormState({ name: '', id: '', grade: '', phone: '', email: '', avatar: '' });
         setPhotoPreview('');
         setIsModalOpen(true);
     };
@@ -70,12 +70,12 @@ export default function StudentsPage() {
                 </div>
                 <div className="mt-4 overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b bg-gray-50 text-xs text-gray-500 uppercase"><th className="py-3 px-4 font-medium">Info</th><th className="py-3 px-4 font-medium">Student ID</th><th className="py-3 px-4 font-medium">Grade</th><th className="py-3 px-4 font-medium">Phone</th><th className="py-3 px-4 font-medium">Address</th><th className="py-3 px-4 font-medium">Actions</th></tr></thead>
+                        <thead><tr className="border-b bg-gray-50 text-xs text-gray-500 uppercase"><th className="py-3 px-4 font-medium">Info</th><th className="py-3 px-4 font-medium">Student ID</th><th className="py-3 px-4 font-medium">Grade</th><th className="py-3 px-4 font-medium">Phone</th><th className="py-3 px-4 font-medium">Email</th><th className="py-3 px-4 font-medium">Actions</th></tr></thead>
                         <tbody className="divide-y">
                             {students.map((student) => (
                                 <tr key={student.id} className="hover:bg-gray-50">
                                     <td className="py-3 px-4"><div className="flex items-center gap-3"><Image src={student.avatar} alt={student.name} width={40} height={40} className="rounded-full object-cover" /><div><div className="font-semibold text-gray-800">{student.name}</div><div className="text-sm text-gray-500">Grade {student.grade}</div></div></div></td>
-                                    <td className="py-3 px-4 text-sm text-gray-600 font-mono">{student.id}</td><td className="py-3 px-4 text-sm text-gray-600">{student.grade}</td><td className="py-3 px-4 text-sm text-gray-600">{student.phone}</td><td className="py-3 px-4 text-sm text-gray-600">{student.address}</td>
+                                    <td className="py-3 px-4 text-sm text-gray-600 font-mono">{student.id}</td><td className="py-3 px-4 text-sm text-gray-600">{student.grade}</td><td className="py-3 px-4 text-sm text-gray-600">{student.phone}</td><td className="py-3 px-4 text-sm text-gray-600">{student.email}</td>
                                     <td className="py-3 px-4"><div className="flex items-center gap-2"><Link href={`/dashboard/students/${student.id}`} className="p-2 rounded-full bg-blue-100 hover:bg-blue-200"><Eye size={16} className="text-blue-600" /></Link><button onClick={() => handleDeleteStudent(student.id)} className="p-2 rounded-full bg-red-100 hover:bg-red-200"><Trash2 size={16} className="text-red-600" /></button></div></td>
                                 </tr>
                             ))}
@@ -92,7 +92,7 @@ export default function StudentsPage() {
                             <div><label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label><input name="id" type="text" value={formState.id} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
                             <div><label className="block text-sm font-medium text-gray-700 mb-1">Grade</label><input name="grade" type="text" value={formState.grade} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
                             <div><label className="block text-sm font-medium text-gray-700 mb-1">Phone</label><input name="phone" type="tel" value={formState.phone} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="address" type="text" value={formState.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700 mb-1">Email</label><input name="email" type="email" value={formState.email} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photo (optional)</label>
                                 <div className="flex items-center gap-4">

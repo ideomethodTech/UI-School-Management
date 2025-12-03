@@ -2,6 +2,7 @@ export const teachersData = [
     {
         id: "T1001",
         name: "Alice Johnson",
+        email: "alice.johnson@school.com",
         subjects: ["Mathematics", "Physics"],
         classes: ["10A", "10B", "11A"],
         phone: "555-0101",
@@ -11,6 +12,7 @@ export const teachersData = [
     {
         id: "T1002",
         name: "Bob Smith",
+        email: "bob.smith@school.com",
         subjects: ["English", "History"],
         classes: ["9A", "9B"],
         phone: "555-0102",
@@ -20,6 +22,7 @@ export const teachersData = [
     {
         id: "T1003",
         name: "Carol Williams",
+        email: "carol.williams@school.com",
         subjects: ["Biology", "Chemistry"],
         classes: ["11B", "12A"],
         phone: "555-0103",
@@ -29,6 +32,7 @@ export const teachersData = [
     {
         id: "T1004",
         name: "David Brown",
+        email: "david.brown@school.com",
         subjects: ["Computer Science"],
         classes: ["10A", "11A", "12A"],
         phone: "555-0104",
@@ -38,6 +42,7 @@ export const teachersData = [
     {
         id: "T1005",
         name: "Eva Davis",
+        email: "eva.davis@school.com",
         subjects: ["Art", "Design"],
         classes: ["9A", "10B"],
         phone: "555-0105",
@@ -47,6 +52,7 @@ export const teachersData = [
     {
         id: "T1006",
         name: "Frank Miller",
+        email: "frank.miller@school.com",
         subjects: ["Physical Education"],
         classes: ["All"],
         phone: "555-0106",
@@ -56,6 +62,7 @@ export const teachersData = [
     {
         id: "T1007",
         name: "Grace Wilson",
+        email: "grace.wilson@school.com",
         subjects: ["Geography"],
         classes: ["9B", "10A"],
         phone: "555-0107",
@@ -65,6 +72,7 @@ export const teachersData = [
     {
         id: "T1008",
         name: "Henry Moore",
+        email: "henry.moore@school.com",
         subjects: ["Music"],
         classes: ["All"],
         phone: "555-0108",
@@ -74,6 +82,7 @@ export const teachersData = [
     {
         id: "T1009",
         name: "Isabel Taylor",
+        email: "isabel.taylor@school.com",
         subjects: ["Spanish", "French"],
         classes: ["11A", "12B"],
         phone: "555-0109",
@@ -83,6 +92,7 @@ export const teachersData = [
     {
         id: "T1010",
         name: "Jack Anderson",
+        email: "jack.anderson@school.com",
         subjects: ["Economics"],
         classes: ["12A", "12B"],
         phone: "555-0110",

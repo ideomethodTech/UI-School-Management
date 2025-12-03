@@ -97,7 +97,7 @@ const SingleStudentPage = ({ params }) => {
                                 </div>
                                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                                     <Mail size={14} />
-                                    <span>{student.address || 'N/A'}</span>
+                                    <span>{student.email || 'N/A'}</span>
                                 </div>
                             </div>
                         </div>
