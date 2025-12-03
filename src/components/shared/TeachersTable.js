@@ -1,7 +1,7 @@
 ﻿// src/components/TeachersTable.js
 "use client"; // Important for interactive elements like buttons and Link
 
-import Avatar from './Avatar';
+import Avatar from '@/components/shared/Avatar';
 import { Eye, Trash2, Pencil } from 'lucide-react';
 import Link from 'next/link'; // Import Link for navigation
 
@@ -43,7 +43,7 @@ export default function TeachersTable({ rows = [], onDelete }) { // Accept onDel
               <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-700'>{r.address}</td>
               <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-700'>
                 <div className='flex items-center gap-2'>
-                   {/* View Button */}
+                  {/* View Button */}
                   <Link href={`/dashboard/teachers/${r.teacherId}`} legacyBehavior>
                     <a className='inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 transition-colors'>
                       <Eye size={16} />

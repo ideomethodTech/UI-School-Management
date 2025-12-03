@@ -119,10 +119,10 @@ export default function ParentsPage() {
                                     <td className="py-3 px-4 text-sm text-gray-600">{parent.address}</td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-2">
-                                            <button onClick={() => openModal('edit', parent)} className="p-2 rounded-md bg-blue-100 hover:bg-blue-200">
+                                            <button onClick={() => openModal('edit', parent)} className="p-2 rounded-full bg-blue-100 hover:bg-blue-200">
                                                 <Pencil size={16} className="text-blue-600" />
                                             </button>
-                                            <button onClick={() => handleDelete(parent.id)} className="p-2 rounded-md bg-red-100 hover:bg-red-200">
+                                            <button onClick={() => handleDelete(parent.id)} className="p-2 rounded-full bg-red-100 hover:bg-red-200">
                                                 <Trash2 size={16} className="text-red-600" />
                                             </button>
                                         </div>

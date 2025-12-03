@@ -1,5 +1,5 @@
 // src/app/dashboard/lessons/page.js
-import LessonsTable from '@/components/LessonsTable';
+import LessonsTable from '@/components/shared/LessonsTable';
 import { Search, SlidersHorizontal, Plus } from 'lucide-react';
 
 export const metadata = {

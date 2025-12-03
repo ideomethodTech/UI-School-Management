@@ -1,9 +1,9 @@
 // src/app/dashboard/results/page.js
 "use client";
 
-import ResultsTable from '@/components/ResultsTable';
-import TeacherResultsPage from '@/components/TeacherResultsPage';
-import StudentResultsPage from '@/components/StudentResultsPage';
+import ResultsTable from '@/components/shared/ResultsTable';
+import TeacherResultsPage from '@/components/teacher/TeacherResultsPage';
+import StudentResultsPage from '@/components/student/StudentResultsPage';
 import { Search, SlidersHorizontal, Plus } from 'lucide-react';
 import { useUser } from '@/contexts/UserContext';
 

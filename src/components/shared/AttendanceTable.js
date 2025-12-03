@@ -1,6 +1,6 @@
 // src/components/AttendanceTable.js
 import { CheckCircle, XCircle, MinusCircle, User, CalendarDays, Pencil } from 'lucide-react'; // ADD PENCIL HERE
-import Avatar from './Avatar';
+import Avatar from '@/components/shared/Avatar';
 
 export default function AttendanceTable({ role, studentId, teacherId, rows = [] }) {
   let data = rows.length ? rows : [];

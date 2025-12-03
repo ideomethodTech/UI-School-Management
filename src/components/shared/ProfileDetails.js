@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from '@/contexts/UserContext';
-import Avatar from './Avatar';
+import Avatar from '@/components/shared/Avatar';
 // ADD Users HERE
 import { Mail, Phone, MapPin, Briefcase, CalendarDays, BookOpen, Users } from 'lucide-react';
 import { useState } from 'react';

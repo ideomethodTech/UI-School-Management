@@ -2,12 +2,12 @@
 "use client";
 
 import { useUser } from '@/contexts/UserContext';
-import AttendanceCourseFilter from '@/components/AttendanceCourseFilter';
-import AttendanceCalendar from '@/components/AttendanceCalendar';
-import MarkAttendanceSection from '@/components/MarkAttendanceSection';
-import TeacherAttendancePage from '@/components/TeacherAttendancePage';
-import ParentAttendancePage from '@/components/ParentAttendancePage';
-import StudentAttendancePage from '@/components/StudentAttendancePage';
+import AttendanceCourseFilter from '@/components/shared/AttendanceCourseFilter';
+import AttendanceCalendar from '@/components/shared/AttendanceCalendar';
+import MarkAttendanceSection from '@/components/admin/MarkAttendanceSection';
+import TeacherAttendancePage from '@/components/teacher/TeacherAttendancePage';
+import ParentAttendancePage from '@/components/parent/ParentAttendancePage';
+import StudentAttendancePage from '@/components/student/StudentAttendancePage';
 
 import { useState } from 'react';
 

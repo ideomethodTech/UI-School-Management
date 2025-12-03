@@ -157,13 +157,13 @@ export default function TeachersPage() {
                                         <div className="flex items-center gap-2">
                                             <Link
                                                 href={`/dashboard/teachers/${teacher.id}`}
-                                                className="p-2 rounded-md bg-blue-100 hover:bg-blue-200"
+                                                className="p-2 rounded-full bg-blue-100 hover:bg-blue-200"
                                             >
                                                 <Eye size={16} className="text-blue-600" />
                                             </Link>
                                             <button
                                                 onClick={() => handleDeleteTeacher(teacher.id)}
-                                                className="p-2 rounded-md bg-red-100 hover:bg-red-200"
+                                                className="p-2 rounded-full bg-red-100 hover:bg-red-200"
                                             >
                                                 <Trash2 size={16} className="text-red-600" />
                                             </button>

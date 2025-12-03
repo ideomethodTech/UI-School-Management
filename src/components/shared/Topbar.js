@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { Search, MessageSquare, Bell, ChevronDown, School, X } from 'lucide-react';
-import Avatar from './Avatar';
+import Avatar from '@/components/shared/Avatar';
 import { useUser } from '@/contexts/UserContext';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

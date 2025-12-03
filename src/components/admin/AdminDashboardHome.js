@@ -7,7 +7,7 @@ import {
   FiPlus, FiCalendar, FiFileText, FiAlertCircle, FiUsers as FiUserGroup,
   FiX, FiClock, FiUpload
 } from 'react-icons/fi';
-import { useData } from '../contexts/DataContext';
+import { useData } from '@/contexts/DataContext';
 
 // --- Reusable Generic Modal Component ---
 const Modal = ({ children, onClose, size = 'lg' }) => {

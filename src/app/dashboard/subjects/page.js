@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, SlidersHorizontal, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Pencil, Trash2, X } from 'lucide-react';
 
 // Initial mock data for subjects
 const initialSubjectsData = [
@@ -30,24 +30,52 @@ export default function SubjectsPage() {
     const [subjects, setSubjects] = useState(initialSubjectsData);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newSubjectName, setNewSubjectName] = useState('');
-    const [newTeachers, setNewTeachers] = useState('');
+    const [modalType, setModalType] = useState('create');
+    const [currentSubject, setCurrentSubject] = useState(null);
+    const [formState, setFormState] = useState({
+        name: '', teachers: ''
+    });
 
-    const handleCreateSubject = (e) => {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState(prevState => ({ ...prevState, [name]: value }));
+    };
+
+    const openModal = (type, subject = null) => {
+        setModalType(type);
+        if (type === 'edit' && subject) {
+            setCurrentSubject(subject);
+            setFormState({
+                name: subject.name,
+                teachers: subject.teachers.join(', ')
+            });
+        } else {
+            setCurrentSubject(null);
+            setFormState({ name: '', teachers: '' });
+        }
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => setIsModalOpen(false);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if (!newSubjectName.trim()) {
+        if (!formState.name.trim()) {
             alert('Please enter a subject name.');
             return;
         }
-        const newSubject = {
-            id: `sub${Date.now()}`,
-            name: newSubjectName.trim(),
-            teachers: newTeachers.split(',').map(name => name.trim()).filter(Boolean),
+
+        const subjectData = {
+            name: formState.name.trim(),
+            teachers: formState.teachers.split(',').map(name => name.trim()).filter(Boolean),
         };
-        setSubjects(prev => [...prev, newSubject]);
-        setNewSubjectName('');
-        setNewTeachers('');
-        setIsModalOpen(false);
+
+        if (modalType === 'create') {
+            setSubjects([...subjects, { id: `sub${Date.now()}`, ...subjectData }]);
+        } else {
+            setSubjects(subjects.map(s => s.id === currentSubject.id ? { ...s, ...subjectData } : s));
+        }
+        closeModal();
     };
 
     const handleDeleteSubject = (subjectIdToDelete) => {
@@ -81,7 +109,7 @@ export default function SubjectsPage() {
                     <button className='p-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'>
                         <SlidersHorizontal size={20} />
                     </button>
-                    <button onClick={() => setIsModalOpen(true)} className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'>
+                    <button onClick={() => openModal('create')} className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'>
                         <Plus size={20} />
                     </button>
                 </div>
@@ -106,8 +134,10 @@ export default function SubjectsPage() {
                                 </td>
                                 <td className='px-6 py-4'>
                                     <div className='flex items-center justify-end gap-2'>
-                                        {/* UPDATED: Edit button is now blue */}
-                                        <button className='p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200'>
+                                        <button
+                                            onClick={() => openModal('edit', subject)}
+                                            className='p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                        >
                                             <Pencil size={16} />
                                         </button>
                                         <button
@@ -124,55 +154,49 @@ export default function SubjectsPage() {
                 </table>
             </div>
 
-            {/* ====================================================== */}
-            {/* VVVVVVVVVVVVVVVVVV  START OF MODAL JSX VVVVVVVVVVVVVVVVV */}
-            {/* ====================================================== */}
+            {/* Modal */}
             {isModalOpen && (
-                <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50' onClick={() => setIsModalOpen(false)}>
-                    <div className='bg-white rounded-lg shadow-xl p-8 w-full max-w-md' onClick={(e) => e.stopPropagation()}>
-                        <form onSubmit={handleCreateSubject}>
-                            <h2 className='text-2xl font-semibold text-gray-800 mb-6'>New Subject</h2>
-
-                            <div className='space-y-4'>
-                                <div>
-                                    <label htmlFor='subjectName' className='block mb-2 text-sm font-medium text-gray-700'>Subject Name</label>
-                                    <input
-                                        type='text'
-                                        id='subjectName'
-                                        value={newSubjectName}
-                                        onChange={(e) => setNewSubjectName(e.target.value)}
-                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300'
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor='teachers' className='block mb-2 text-sm font-medium text-gray-700'>Teachers (comma-separated)</label>
-                                    <input
-                                        type='text'
-                                        id='teachers'
-                                        value={newTeachers}
-                                        onChange={(e) => setNewTeachers(e.target.value)}
-                                        className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300'
-                                        placeholder='e.g., John Doe, Jane Smith'
-                                    />
-                                </div>
+                <div className='fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4' onClick={closeModal}>
+                    <div className='bg-white rounded-lg shadow-2xl p-8 w-full max-w-md' onClick={(e) => e.stopPropagation()}>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold text-gray-800">{modalType === 'create' ? 'Create New Subject' : 'Edit Subject'}</h2>
+                            <button onClick={closeModal} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className='block mb-2 text-sm font-medium text-gray-700'>Subject Name</label>
+                                <input
+                                    name='name'
+                                    type='text'
+                                    value={formState.name}
+                                    onChange={handleInputChange}
+                                    className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300'
+                                    required
+                                />
                             </div>
-
-                            <div className='flex justify-end gap-4 mt-8'>
-                                <button type='button' onClick={() => setIsModalOpen(false)} className='px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border'>
+                            <div>
+                                <label className='block mb-2 text-sm font-medium text-gray-700'>Teachers (comma-separated)</label>
+                                <input
+                                    name='teachers'
+                                    type='text'
+                                    value={formState.teachers}
+                                    onChange={handleInputChange}
+                                    className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300'
+                                    placeholder='e.g., John Doe, Jane Smith'
+                                />
+                            </div>
+                            <div className='flex justify-end gap-4 pt-4'>
+                                <button type='button' onClick={closeModal} className='px-6 py-2 border rounded-lg text-gray-700 font-semibold hover:bg-gray-100'>
                                     Cancel
                                 </button>
-                                <button type='submit' className='px-5 py-2.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 shadow-sm'>
-                                    Create Subject
+                                <button type='submit' className='px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700'>
+                                    {modalType === 'create' ? 'Create' : 'Save Changes'}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
             )}
-            {/* ====================================================== */}
-            {/* ^^^^^^^^^^^^^^^^  END OF MODAL JSX ^^^^^^^^^^^^^^^^^^^^^ */}
-            {/* ====================================================== */}
         </div>
     );
 }

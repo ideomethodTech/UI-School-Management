@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 
 // Import existing components
-import BigCalendar from "@/components/EventCalendar";
-import Announcements from "@/components/Announcements";
-import Performance from "@/components/Performance";
+import BigCalendar from "@/components/shared/EventCalendar";
+import Announcements from "@/components/shared/Announcements";
+import Performance from "@/components/shared/Performance";
 import { useData } from "@/contexts/DataContext";
 
 const SingleStudentPage = ({ params }) => {

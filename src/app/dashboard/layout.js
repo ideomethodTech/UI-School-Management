@@ -1,10 +1,10 @@
 ﻿// src/app/dashboard/layout.js
 "use client";
 
-import Sidebar from '@/components/Sidebar';
-import SimpleSidebar from '@/components/SimpleSidebar';
-import ParentSidebar from '@/components/ParentSidebar';
-import Topbar from '@/components/Topbar';
+import Sidebar from '@/components/shared/Sidebar';
+import SimpleSidebar from '@/components/shared/SimpleSidebar';
+import ParentSidebar from '@/components/parent/ParentSidebar';
+import Topbar from '@/components/shared/Topbar';
 import { UserProvider, useUser } from '@/contexts/UserContext';
 import { DataProvider } from '@/contexts/DataContext';
 

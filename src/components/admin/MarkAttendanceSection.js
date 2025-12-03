@@ -2,7 +2,7 @@
 "use client";
 
 import { Download, Pencil, Trash2, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
-import Avatar from './Avatar';
+import Avatar from '@/components/shared/Avatar';
 import { useState } from 'react';
 
 export default function MarkAttendanceSection({

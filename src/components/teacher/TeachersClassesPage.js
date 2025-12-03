@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Users, Calendar, MapPin, ClipboardList, GraduationCap, Settings } from 'lucide-react';
-import ManageClassModal from './ManageClassModal';
-import AttendanceModal from './AttendanceModal';
-import GradesModal from './GradesModal';
-import StudentsListModal from './StudentsListModal';
+import ManageClassModal from '@/components/modals/ManageClassModal';
+import AttendanceModal from '@/components/modals/AttendanceModal';
+import GradesModal from '@/components/modals/GradesModal';
+import StudentsListModal from '@/components/modals/StudentsListModal';
 
 // Mock Data for Teacher
 const teacherClassesData = [
@@ -62,8 +62,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('manage', classInfo)}
                 className={`flex justify-center items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg shadow-sm transition-colors ${activeButton === 'manage'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <Settings size={16} />
@@ -72,8 +72,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('attendance', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${activeButton === 'attendance'
-                        ? 'bg-purple-600 text-white border-purple-600'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <ClipboardList size={16} />
@@ -82,8 +82,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('grades', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${activeButton === 'grades'
-                        ? 'bg-purple-600 text-white border-purple-600'
-                        : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'text-gray-700 bg-white border border-gray-200 hover:bg-purple-50 hover:border-purple-300'
                     }`}
             >
                 <GraduationCap size={16} />
@@ -92,8 +92,8 @@ const ClassItem = ({ classInfo, onAction, activeButton }) => (
             <button
                 onClick={() => onAction('students', classInfo)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg ml-auto transition-colors ${activeButton === 'students'
-                        ? 'bg-purple-600 text-white'
-                        : 'text-gray-700 hover:bg-purple-100'
+                    ? 'bg-purple-600 text-white'
+                    : 'text-gray-700 hover:bg-purple-100'
                     }`}
             >
                 <Users size={16} />

@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, CalendarDays, Clock } from 'lucide-react';
 import { useUser } from '@/contexts/UserContext';
-import ParentEventPage from '@/components/ParentEventPage';
+import ParentEventPage from '@/components/parent/ParentEventPage';
 
 // Mock data for the initial list of events
 const initialEventsData = [

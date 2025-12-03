@@ -1,5 +1,5 @@
 "use client";
-import Modal from './Modal';
+import Modal from '@/components/modals/Modal';
 import { Mail, Phone } from 'lucide-react';
 
 // Mock student data
