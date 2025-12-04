@@ -70,3 +70,41 @@ export const sampleStudentsAttendance = [
     { id: '00010004', name: 'Alba Schulz', status: 'absent', totalHeldHours: '12 Hours', marks: 'Enrolled' },
     { id: '00010005', name: 'Mao Chu', status: 'late', totalHeldHours: '12 Hours', marks: 'Enrolled' },
 ];
+
+// Events data
+export const initialEventsData = [
+    { id: 1, title: 'Lake Trip', class: '1A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 2, title: 'Picnic', class: '2A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 3, title: 'Beach Trip', class: '3A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 4, title: 'Museum Trip', class: '4A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 5, title: 'Music Concert', class: '5A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 6, title: 'Magician Show', class: '1B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 7, title: 'Lake Trip', class: '2B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+    { id: 8, title: 'Cycling Race', class: '3B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
+];
+
+// Lessons data
+export const sampleLessons = [
+    { subjectName: 'Math', class: '1A', teacher: 'Tommy Wise' },
+    { subjectName: 'English', class: '2A', teacher: 'Rhoda Frank' },
+    { subjectName: 'Science', class: '3A', teacher: 'Della Dunn' },
+    { subjectName: 'Social Studies', class: '1B', teacher: 'Bruce Rodriguez' },
+    { subjectName: 'Art', class: '4A', teacher: 'Birdie Butler' },
+    { subjectName: 'Music', class: '5A', teacher: 'Bettie Oliver' },
+    { subjectName: 'History', class: '6A', teacher: 'Herman Howard' },
+    { subjectName: 'Geography', class: '6B', teacher: 'Lucinda Thomas' },
+    { subjectName: 'Physics', class: '6C', teacher: 'Ronald Roberts' },
+    { subjectName: 'Chemistry', class: '4B', teacher: 'Julia Pittman' }
+];
+
+// Subjects data
+export const initialSubjectsData = [
+    { id: 'sub001', name: 'Math', teachers: ['Alice Phelps', 'Russell Davidson', 'John Doe', 'Jane Smith'] },
+    { id: 'sub002', name: 'English', teachers: ['Martha B. English', 'William T. Shakespeare'] },
+    { id: 'sub003', name: 'Physics', teachers: ['Louis de Broglie'] },
+    { id: 'sub004', name: 'Chemistry', teachers: ['Nathan Kelly', 'Benjamin Snyder'] },
+    { id: 'sub005', name: 'Biology', teachers: ['Alma Benson', 'Lina Collier'] },
+    { id: 'sub006', name: 'History', teachers: ['Hannah Bowman', 'Betty Obrien'] },
+    { id: 'sub007', name: 'Geography', teachers: ['Lora French', 'Sue Brady'] },
+    { id: 'sub008', name: 'Art', teachers: ['Harriet Alvarado', 'Mayme Keller'] },
+];

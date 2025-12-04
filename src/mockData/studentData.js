@@ -1,8 +1,8 @@
 export const allAssignmentsData = [
-    { id: 1, title: 'Mathematics Chapter 5 Exercise', subject: 'Mathematics', dueDate: 'Due: Dec 15, 2024', status: 'Pending' },
-    { id: 2, title: 'English Essay on Climate Change', subject: 'English', dueDate: 'Due: Dec 18, 2024', status: 'Pending' },
-    { id: 3, title: 'Science Project - Solar System', subject: 'Science', dueDate: 'Due: Dec 20, 2024', status: 'Pending' },
-    { id: 4, title: 'History Assignment - Indian Independence', subject: 'History', dueDate: 'Due: Dec 12, 2024', status: 'Urgent' },
+    { id: 1, title: 'Mathematics Chapter 5 Exercise', subject: 'Mathematics', dueDate: 'Due: Dec 6, 2025', status: 'Pending' },
+    { id: 2, title: 'English Essay on Climate Change', subject: 'English', dueDate: 'Due: Dec 9, 2025', status: 'Pending' },
+    { id: 3, title: 'Science Project - Solar System', subject: 'Science', dueDate: 'Due: Dec 11, 2025', status: 'Pending' },
+    { id: 4, title: 'History Assignment - Indian Independence', subject: 'History', dueDate: 'Due: Dec 2, 2025', status: 'Urgent' },
 ];
 
 export const allExamsData = [
@@ -30,7 +30,7 @@ export const assignmentsPageData = [
         title: 'Chapter 5 Quadratic Equations',
         subject: 'Mathematics',
         description: 'Solve practice problems from page 45-50',
-        dueDate: 'Dec 15, 2024',
+        dueDate: 'Dec 6, 2025',
         status: 'Pending',
         timeLeft: '2 days left',
     },
@@ -39,7 +39,7 @@ export const assignmentsPageData = [
         title: 'English Essay on Climate Change',
         subject: 'English',
         description: 'Write a 500-word essay with references',
-        dueDate: 'Dec 18, 2024',
+        dueDate: 'Dec 9, 2025',
         status: 'Pending',
         timeLeft: '5 days left',
     },
@@ -48,7 +48,7 @@ export const assignmentsPageData = [
         title: 'Science Project - Solar System',
         subject: 'Science',
         description: 'Create a model and presentation',
-        dueDate: 'Dec 20, 2024',
+        dueDate: 'Dec 11, 2025',
         status: 'Pending',
         timeLeft: '7 days left',
     },
@@ -57,7 +57,7 @@ export const assignmentsPageData = [
         title: 'History Assignment - Indian Independence',
         subject: 'History',
         description: 'Research and summarize key events',
-        dueDate: 'Dec 12, 2024',
+        dueDate: 'Dec 2, 2025',
         status: 'Overdue',
         timeLeft: 'Overdue',
     },

@@ -1,7 +1,10 @@
-
 "use client";
 
-import { Users, BookOpen, ClipboardCheck, CalendarClock, PlusSquare, GraduationCap, Calendar, UserCheck } from 'lucide-react';
+import { useState } from 'react';
+import { Users, BookOpen, ClipboardCheck, CalendarClock, PlusSquare, GraduationCap, Calendar, CheckCircle } from 'lucide-react';
+import GradeSubmissionsModal from '../modals/GradeSubmissionsModal';
+import CreateAssignmentModal from '../modals/CreateAssignmentModal';
+import ScheduleClassModal from '../modals/ScheduleClassModal';
 import {
   dashboardStats,
   dashboardMyClasses,
@@ -89,14 +92,28 @@ const UpcomingClasses = () => (
 );
 
 // Quick Actions Card
-const QuickActions = () => (
+const QuickActions = ({ onCreateAssignment, onGradeSubmissions, onScheduleClass }) => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
     <h3 className="font-bold text-lg text-gray-800 mb-4">Quick Actions</h3>
     <div className="space-y-3">
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><PlusSquare size={16} /> Create Assignment</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><GraduationCap size={16} /> Grade Submissions</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><Calendar size={16} /> Schedule Class</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><UserCheck size={16} /> Take Attendance</button>
+      <button
+        onClick={onCreateAssignment}
+        className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"
+      >
+        <PlusSquare size={16} /> Create Assignment
+      </button>
+      <button
+        onClick={onGradeSubmissions}
+        className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"
+      >
+        <GraduationCap size={16} /> Grade Submissions
+      </button>
+      <button
+        onClick={onScheduleClass}
+        className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"
+      >
+        <Calendar size={16} /> Schedule Class
+      </button>
     </div>
   </div>
 );
@@ -113,12 +130,49 @@ const PerformanceInsights = () => (
   </div>
 );
 
+// Toast Notification Component
+const Toast = ({ message, onClose }) => (
+  <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50 animate-fade-in-up">
+    <CheckCircle size={20} className="text-green-400" />
+    <p className="text-sm font-medium">{message}</p>
+  </div>
+);
 
 export default function TeacherDashboardHome() {
   const icons = [Users, BookOpen, ClipboardCheck, CalendarClock];
+  const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
+  const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (message) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handleCreateAssignment = (newAssignment) => {
+    // Save to localStorage so it appears in the Assignments page
+    const existingStored = JSON.parse(localStorage.getItem('teacher_assignments') || '[]');
+    const updatedStored = [newAssignment, ...existingStored];
+    localStorage.setItem('teacher_assignments', JSON.stringify(updatedStored));
+
+    showToast('Assignment created successfully!');
+  };
+
+  const handleScheduleClass = (scheduledClass) => {
+    // Save to localStorage so it appears in the Classes page
+    const existingStored = JSON.parse(localStorage.getItem('teacher_scheduled_classes') || '[]');
+    const updatedStored = [scheduledClass, ...existingStored];
+    localStorage.setItem('teacher_scheduled_classes', JSON.stringify(updatedStored));
+
+    showToast('Class scheduled successfully!');
+  };
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 relative'>
+      {/* Toast Notification */}
+      {toastMessage && <Toast message={toastMessage} />}
+
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Welcome Back, Priya Sharma!</h1>
@@ -152,10 +206,34 @@ export default function TeacherDashboardHome() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          <QuickActions />
+          <QuickActions
+            onCreateAssignment={() => setIsAssignmentModalOpen(true)}
+            onGradeSubmissions={() => setIsGradeModalOpen(true)}
+            onScheduleClass={() => setIsScheduleModalOpen(true)}
+          />
           <PerformanceInsights />
         </div>
       </div>
+
+      {/* Grade Submissions Modal */}
+      <GradeSubmissionsModal
+        isOpen={isGradeModalOpen}
+        onClose={() => setIsGradeModalOpen(false)}
+      />
+
+      {/* Create Assignment Modal */}
+      <CreateAssignmentModal
+        isOpen={isAssignmentModalOpen}
+        onClose={() => setIsAssignmentModalOpen(false)}
+        onCreate={handleCreateAssignment}
+      />
+
+      {/* Schedule Class Modal */}
+      <ScheduleClassModal
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        onSchedule={handleScheduleClass}
+      />
     </div>
   );
 }

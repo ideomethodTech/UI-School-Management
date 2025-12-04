@@ -1,65 +1,10 @@
 // src/components/TeacherAssignmentsPage.js
 "use client";
 
-import { useState } from 'react';
-import { Plus, X, Eye, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, Eye } from 'lucide-react';
 import { mockAssignments, mockAssignmentStats } from '../../mockData/teacherData';
-
-// --- CREATE ASSIGNMENT MODAL COMPONENT ---
-
-const CreateAssignmentModal = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-                {/* Modal Header */}
-                <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-800">Create New Assignment</h2>
-                        <p className="text-sm text-gray-500">Add a new assignment for your class</p>
-                    </div>
-                    <button onClick={onClose} className="p-2 rounded-full text-gray-500 hover:bg-gray-100"><X size={24} /></button>
-                </div>
-                {/* Modal Body - Form */}
-                <form className="p-6 space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Assignment Title</label>
-                        <input type="text" placeholder="e.g., Chapter 5: Practice Problems" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea placeholder="Assignment details and instructions" rows="3" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300"></textarea>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                            <input type="text" defaultValue="Mathematics" className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
-                            <input type="text" defaultValue="10-A" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-                        </div>
-                        <div className="relative">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                            <input type="text" placeholder="dd-mm-yyyy" className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300" />
-                            <Calendar className="absolute right-3 top-9 w-5 h-5 text-gray-400" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Total Marks</label>
-                            <input type="number" defaultValue="100" className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
-                        </div>
-                    </div>
-                </form>
-                {/* Modal Footer */}
-                <div className="flex justify-end gap-4 p-6 border-t border-gray-200">
-                    <button onClick={onClose} className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border">Cancel</button>
-                    <button type="submit" className="px-5 py-2.5 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 shadow-sm">Create Assignment</button>
-                </div>
-            </div>
-        </div>
-    );
-};
+import CreateAssignmentModal from '../modals/CreateAssignmentModal';
 
 
 // --- TEACHER ASSIGNMENTS PAGE COMPONENTS ---
@@ -72,7 +17,7 @@ const StatCard = ({ label, value }) => (
 );
 
 const AssignmentItem = ({ title, description, meta, dueDate, submitted, total }) => {
-    const submissionRate = Math.round((submitted / total) * 100);
+    const submissionRate = total > 0 ? Math.round((submitted / total) * 100) : 0;
     return (
         <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
             <div className="flex justify-between items-start">
@@ -101,6 +46,33 @@ const AssignmentItem = ({ title, description, meta, dueDate, submitted, total })
 
 export default function TeacherAssignmentsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [assignments, setAssignments] = useState(mockAssignments);
+
+    // Load assignments from localStorage on mount
+    useEffect(() => {
+        const storedAssignments = localStorage.getItem('teacher_assignments');
+        if (storedAssignments) {
+            const parsed = JSON.parse(storedAssignments);
+            // Merge stored assignments with mock assignments, avoiding duplicates if needed
+            // For simplicity, we'll just prepend stored ones to mock ones if they aren't already there
+            // Or better, just use stored ones if available, else mock. 
+            // But since mock data is static, let's just combine: stored (newly created) + mock
+            setAssignments([...parsed, ...mockAssignments]);
+        }
+    }, []);
+
+    const handleCreateAssignment = (newAssignment) => {
+        // Add to state
+        const updatedAssignments = [newAssignment, ...assignments];
+        setAssignments(updatedAssignments);
+
+        // Save new assignment to localStorage (only the new ones usually, but here we can store the list of *created* ones)
+        // To avoid storing the mock data repeatedly, let's just store the "custom" assignments separately in a real app.
+        // For this prototype, let's just get the current "custom" list from LS and add to it.
+        const existingStored = JSON.parse(localStorage.getItem('teacher_assignments') || '[]');
+        const updatedStored = [newAssignment, ...existingStored];
+        localStorage.setItem('teacher_assignments', JSON.stringify(updatedStored));
+    };
 
     return (
         <>
@@ -122,7 +94,7 @@ export default function TeacherAssignmentsPage() {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <StatCard label="Total Assignments" value={mockAssignmentStats.totalAssignments} />
+                    <StatCard label="Total Assignments" value={assignments.length} />
                     <StatCard label="Total Submissions" value={mockAssignmentStats.totalSubmissions} />
                     <StatCard label="Avg Submission Rate" value={mockAssignmentStats.avgSubmissionRate} />
                 </div>
@@ -130,7 +102,7 @@ export default function TeacherAssignmentsPage() {
                 {/* My Assignments List */}
                 <div className="space-y-4">
                     <h2 className="font-bold text-xl text-gray-800">My Assignments</h2>
-                    {mockAssignments.map((assignment) => (
+                    {assignments.map((assignment) => (
                         <AssignmentItem
                             key={assignment.id}
                             title={assignment.title}
@@ -145,7 +117,11 @@ export default function TeacherAssignmentsPage() {
             </div>
 
             {/* Render the Modal */}
-            <CreateAssignmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <CreateAssignmentModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onCreate={handleCreateAssignment}
+            />
         </>
     );
 }

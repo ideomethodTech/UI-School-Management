@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Users, Calendar, MapPin, ClipboardList, GraduationCap, Settings } from 'lucide-react';
+import { Users, Calendar, MapPin, ClipboardList, GraduationCap, Settings, Plus, Clock, X } from 'lucide-react';
 import ManageClassModal from '@/components/modals/ManageClassModal';
 import AttendanceModal from '@/components/modals/AttendanceModal';
 import GradesModal from '@/components/modals/GradesModal';
 import StudentsListModal from '@/components/modals/StudentsListModal';
+import ScheduleClassModal from '@/components/modals/ScheduleClassModal';
 
 import { teacherClassesData } from '../../mockData/teacherData';
 
@@ -14,6 +15,43 @@ const StatCard = ({ label, value, subValue = '', colorClass = 'text-gray-800' })
         <p className={`text-3xl font-bold ${colorClass}`}>
             {value} <span className="text-lg font-medium text-gray-500">{subValue}</span>
         </p>
+    </div>
+);
+
+// Scheduled Class Card Component
+const ScheduledClassCard = ({ scheduledClass, onRemove }) => (
+    <div className="bg-green-50 p-4 rounded-lg border border-green-200 shadow-sm">
+        <div className="flex justify-between items-start">
+            <div className="flex items-center gap-3">
+                <div className="bg-green-100 p-2 rounded-lg">
+                    <Calendar size={20} className="text-green-600" />
+                </div>
+                <div>
+                    <h4 className="font-semibold text-gray-800">{scheduledClass.name}</h4>
+                    <p className="text-sm text-gray-600">{scheduledClass.topic}</p>
+                </div>
+            </div>
+            <button
+                onClick={() => onRemove(scheduledClass.id)}
+                className="p-1 hover:bg-green-100 rounded-full text-gray-400 hover:text-red-500"
+            >
+                <X size={16} />
+            </button>
+        </div>
+        <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+                <Calendar size={14} />
+                <span>{scheduledClass.schedule}</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <Clock size={14} />
+                <span>{scheduledClass.time}</span>
+            </div>
+            <div className="flex items-center gap-1">
+                <MapPin size={14} />
+                <span>{scheduledClass.location}</span>
+            </div>
+        </div>
     </div>
 );
 
@@ -102,6 +140,16 @@ export default function TeachersClassesPage() {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedClass, setSelectedClass] = useState(null);
     const [activeButtons, setActiveButtons] = useState({});
+    const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+    const [scheduledClasses, setScheduledClasses] = useState([]);
+
+    // Load scheduled classes from localStorage on mount
+    useEffect(() => {
+        const storedClasses = localStorage.getItem('teacher_scheduled_classes');
+        if (storedClasses) {
+            setScheduledClasses(JSON.parse(storedClasses));
+        }
+    }, []);
 
     const handleAction = (action, classInfo) => {
         setSelectedClass(classInfo);
@@ -117,12 +165,33 @@ export default function TeachersClassesPage() {
         setSelectedClass(null);
     };
 
+    const handleScheduleClass = (scheduledClass) => {
+        const updatedClasses = [scheduledClass, ...scheduledClasses];
+        setScheduledClasses(updatedClasses);
+        localStorage.setItem('teacher_scheduled_classes', JSON.stringify(updatedClasses));
+    };
+
+    const handleRemoveScheduledClass = (id) => {
+        const updatedClasses = scheduledClasses.filter(c => c.id !== id);
+        setScheduledClasses(updatedClasses);
+        localStorage.setItem('teacher_scheduled_classes', JSON.stringify(updatedClasses));
+    };
+
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
-                <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
+                    <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
+                </div>
+                <button
+                    onClick={() => setIsScheduleModalOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 shadow-sm"
+                >
+                    <Plus size={18} />
+                    Schedule Class
+                </button>
             </div>
 
             {/* Stats Cards */}
@@ -132,8 +201,25 @@ export default function TeachersClassesPage() {
                 <StatCard label="Hours/Week" value="12" colorClass="text-green-600" />
             </div>
 
+            {/* Scheduled Classes Section */}
+            {scheduledClasses.length > 0 && (
+                <div className="space-y-4">
+                    <h2 className="font-bold text-xl text-gray-800">Scheduled Classes</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {scheduledClasses.map(scheduledClass => (
+                            <ScheduledClassCard
+                                key={scheduledClass.id}
+                                scheduledClass={scheduledClass}
+                                onRemove={handleRemoveScheduledClass}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {/* My Classes Section */}
             <div className="space-y-4">
+                <h2 className="font-bold text-xl text-gray-800">My Classes</h2>
                 {teacherClassesData.map(classInfo => (
                     <ClassItem
                         key={classInfo.id}
@@ -164,6 +250,11 @@ export default function TeachersClassesPage() {
                 isOpen={activeModal === 'students'}
                 onClose={closeModal}
                 classData={selectedClass}
+            />
+            <ScheduleClassModal
+                isOpen={isScheduleModalOpen}
+                onClose={() => setIsScheduleModalOpen(false)}
+                onSchedule={handleScheduleClass}
             />
         </div>
     );

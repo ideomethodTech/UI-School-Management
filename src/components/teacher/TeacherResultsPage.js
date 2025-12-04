@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, Filter, Download, TrendingUp, TrendingDown, Medal, Users, BookOpen, BarChart3 } from 'lucide-react';
+import { Search, Filter, Download, TrendingUp, TrendingDown, Medal, Users, BookOpen, BarChart3, CheckCircle } from 'lucide-react';
+import GradeSubmissionsModal from '../modals/GradeSubmissionsModal';
 
 import { mockClasses, mockStudentResults } from '../../mockData/teacherData';
 
@@ -86,6 +87,7 @@ export default function TeacherResultsPage() {
     const [selectedClass, setSelectedClass] = useState(mockClasses[0].id);
     const [searchQuery, setSearchQuery] = useState('');
     const [filterGrade, setFilterGrade] = useState('all');
+    const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
 
     // Calculate statistics
     const classAverage = Math.round(
@@ -142,6 +144,24 @@ export default function TeacherResultsPage() {
                         </option>
                     ))}
                 </select>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                <div className="flex flex-wrap gap-4">
+                    <button
+                        onClick={() => setIsGradeModalOpen(true)}
+                        className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors shadow-md"
+                    >
+                        <CheckCircle size={20} />
+                        Grade Submissions
+                    </button>
+                    <button className="flex items-center gap-2 px-6 py-3 bg-white text-purple-600 border-2 border-purple-600 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
+                        <Download size={20} />
+                        Download Grades
+                    </button>
+                </div>
             </div>
 
             {/* Statistics Cards */}
@@ -271,6 +291,13 @@ export default function TeacherResultsPage() {
                     </div>
                 )}
             </div>
+
+            {/* Grade Submissions Modal */}
+            <GradeSubmissionsModal
+                isOpen={isGradeModalOpen}
+                onClose={() => setIsGradeModalOpen(false)}
+                selectedClass={mockClasses.find(c => c.id === selectedClass)}
+            />
         </div>
     );
 }

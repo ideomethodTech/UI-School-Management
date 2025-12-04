@@ -1,25 +1,71 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Calendar, Clock, Eye, FileText, CheckCircle, AlertCircle } from 'lucide-react';
-import { examStats as stats, examClasses as classes, teacherExams as exams } from '../../mockData/teacherData';
+import { examStats as stats, examClasses as classes, teacherExams as mockExams } from '../../mockData/teacherData';
+import CreateExamModal from '../modals/CreateExamModal';
+
+// Toast Notification Component
+const Toast = ({ message, onClose }) => (
+    <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50 animate-fade-in-up">
+        <CheckCircle size={20} className="text-green-400" />
+        <p className="text-sm font-medium">{message}</p>
+    </div>
+);
 
 const TeacherExamsPage = () => {
     const [selectedClass, setSelectedClass] = useState('All Classes');
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [exams, setExams] = useState(mockExams);
+    const [toastMessage, setToastMessage] = useState(null);
+
+    // Load exams from localStorage on mount
+    useEffect(() => {
+        const storedExams = localStorage.getItem('teacher_exams');
+        if (storedExams) {
+            const parsed = JSON.parse(storedExams);
+            // Merge stored exams with mock exams
+            setExams([...parsed, ...mockExams]);
+        }
+    }, []);
+
+    const showToast = (message) => {
+        setToastMessage(message);
+        setTimeout(() => setToastMessage(null), 3000);
+    };
+
+    const handleCreateExam = (newExam) => {
+        // Add to state
+        const updatedExams = [newExam, ...exams];
+        setExams(updatedExams);
+
+        // Save new exam to localStorage
+        const existingStored = JSON.parse(localStorage.getItem('teacher_exams') || '[]');
+        const updatedStored = [newExam, ...existingStored];
+        localStorage.setItem('teacher_exams', JSON.stringify(updatedStored));
+
+        showToast('Exam created successfully!');
+    };
 
     const filteredExams = selectedClass === 'All Classes'
         ? exams
         : exams.filter(exam => exam.class === selectedClass);
 
     return (
-        <div className="space-y-6 p-1">
+        <div className="space-y-6 p-1 relative">
+            {/* Toast Notification */}
+            {toastMessage && <Toast message={toastMessage} />}
+
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Exams</h1>
                     <p className="text-sm text-gray-500 mt-1">Create and manage exams for your classes</p>
                 </div>
-                <button className="flex items-center gap-2 bg-purple-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
                     <Plus size={20} />
                     Create Exam
                 </button>
@@ -45,7 +91,7 @@ const TeacherExamsPage = () => {
                         <select
                             value={selectedClass}
                             onChange={(e) => setSelectedClass(e.target.value)}
-                            className="appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-sm font-medium cursor-pointer"
+                            className="appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-purple-500 text-sm font-medium cursor-pointer"
                         >
                             {classes.map((cls) => (
                                 <option key={cls} value={cls}>{cls}</option>
@@ -89,7 +135,7 @@ const TeacherExamsPage = () => {
                                     </div>
 
                                     <div className="flex flex-col items-end gap-3 w-full md:w-auto">
-                                        <button className="flex items-center gap-2 text-gray-600 hover:text-purple-600 border border-gray-200 hover:border-purple200 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white">
+                                        <button className="flex items-center gap-2 text-gray-600 hover:text-purple-600 border border-gray-200 hover:border-purple-200 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white">
                                             <Eye size={16} />
                                             View
                                         </button>
@@ -107,6 +153,13 @@ const TeacherExamsPage = () => {
                     )}
                 </div>
             </div>
+
+            {/* Create Exam Modal */}
+            <CreateExamModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                onCreate={handleCreateExam}
+            />
         </div>
     );
 };

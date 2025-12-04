@@ -3,18 +3,7 @@
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, X } from 'lucide-react';
-
-// Initial mock data for subjects
-const initialSubjectsData = [
-    { id: 'sub001', name: 'Math', teachers: ['Alice Phelps', 'Russell Davidson', 'John Doe', 'Jane Smith'] },
-    { id: 'sub002', name: 'English', teachers: ['Martha B. English', 'William T. Shakespeare'] },
-    { id: 'sub003', name: 'Physics', teachers: ['Louis de Broglie'] },
-    { id: 'sub004', name: 'Chemistry', teachers: ['Nathan Kelly', 'Benjamin Snyder'] },
-    { id: 'sub005', name: 'Biology', teachers: ['Alma Benson', 'Lina Collier'] },
-    { id: 'sub006', name: 'History', teachers: ['Hannah Bowman', 'Betty Obrien'] },
-    { id: 'sub007', name: 'Geography', teachers: ['Lora French', 'Sue Brady'] },
-    { id: 'sub008', name: 'Art', teachers: ['Harriet Alvarado', 'Mayme Keller'] },
-];
+import { initialSubjectsData } from '@/mockData/adminData';
 
 // Helper component to display teachers as a simple comma-separated string
 const TeachersList = ({ teachers }) => {

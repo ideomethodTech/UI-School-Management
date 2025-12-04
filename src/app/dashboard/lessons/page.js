@@ -4,19 +4,7 @@
 import { useState } from 'react';
 import LessonsTable from '@/components/shared/LessonsTable';
 import { Search, SlidersHorizontal, Plus, X } from 'lucide-react';
-
-const sampleLessons = [
-    { subjectName: 'Math', class: '1A', teacher: 'Tommy Wise' },
-    { subjectName: 'English', class: '2A', teacher: 'Rhoda Frank' },
-    { subjectName: 'Science', class: '3A', teacher: 'Della Dunn' },
-    { subjectName: 'Social Studies', class: '1B', teacher: 'Bruce Rodriguez' },
-    { subjectName: 'Art', class: '4A', teacher: 'Birdie Butler' },
-    { subjectName: 'Music', class: '5A', teacher: 'Bettie Oliver' },
-    { subjectName: 'History', class: '6A', teacher: 'Herman Howard' },
-    { subjectName: 'Geography', class: '6B', teacher: 'Lucinda Thomas' },
-    { subjectName: 'Physics', class: '6C', teacher: 'Ronald Roberts' },
-    { subjectName: 'Chemistry', class: '4B', teacher: 'Julia Pittman' }
-];
+import { sampleLessons } from '@/mockData/adminData';
 
 export default function LessonsPage() {
     const [data, setData] = useState(sampleLessons);
