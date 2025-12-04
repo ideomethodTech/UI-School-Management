@@ -5,13 +5,7 @@ import AttendanceModal from '@/components/modals/AttendanceModal';
 import GradesModal from '@/components/modals/GradesModal';
 import StudentsListModal from '@/components/modals/StudentsListModal';
 
-// Mock Data for Teacher
-const teacherClassesData = [
-    { id: 1, name: 'Mathematics', section: 'Class 10-A', students: 32, schedule: 'Mon, Wed, Fri - 10:00 AM', location: 'Room 101' },
-    { id: 2, name: 'Mathematics', section: 'Class 9-B', students: 28, schedule: 'Tue, Thu - 11:30 AM', location: 'Room 104' },
-    { id: 3, name: 'Advanced Algebra', section: 'Class 11-C', students: 25, schedule: 'Mon, Wed - 02:00 PM', location: 'Lab 201' },
-    { id: 4, name: 'Geometry', section: 'Class 9-A', students: 30, schedule: 'Fri - 09:00 AM', location: 'Room 102' },
-];
+import { teacherClassesData } from '../../mockData/teacherData';
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, subValue = '', colorClass = 'text-gray-800' }) => (

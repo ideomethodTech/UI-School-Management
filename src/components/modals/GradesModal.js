@@ -1,17 +1,9 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { mockStudents } from '../../mockData/modalData';
 
 export default function GradesModal({ isOpen, onClose, classData }) {
     const [grades, setGrades] = React.useState({});
-
-    // Mock students data
-    const mockStudents = [
-        { id: 1, name: 'Alice Johnson', rollNo: '101' },
-        { id: 2, name: 'Bob Smith', rollNo: '102' },
-        { id: 3, name: 'Charlie Brown', rollNo: '103' },
-        { id: 4, name: 'Diana Prince', rollNo: '104' },
-        { id: 5, name: 'Evan Wright', rollNo: '105' },
-    ];
 
     const handleGradeChange = (studentId, value) => {
         setGrades(prev => ({

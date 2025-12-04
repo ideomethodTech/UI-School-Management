@@ -1,77 +1,9 @@
-
+// src/components/ParentEventPage.js
 "use client";
 
 import React, { useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react';
-
-// Event categories with colors
-const EVENT_CATEGORIES = {
-    exam: { label: 'Exam', color: 'bg-red-100 text-red-600', dotColor: 'bg-red-500' },
-    sports: { label: 'Sports', color: 'bg-green-100 text-green-600', dotColor: 'bg-green-500' },
-    meeting: { label: 'Meeting', color: 'bg-purple-100 text-purple-600', dotColor: 'bg-purple-500' },
-    registration: { label: 'Registration', color: 'bg-blue-100 text-blue-600', dotColor: 'bg-blue-500' },
-    fair: { label: 'Fair', color: 'bg-yellow-100 text-yellow-600', dotColor: 'bg-yellow-500' },
-    holiday: { label: 'Holiday', color: 'bg-indigo-100 text-indigo-600', dotColor: 'bg-indigo-500' }
-};
-
-// Mock event data
-const mockEvents = [
-    {
-        id: 1,
-        title: 'Mid-Year Examination',
-        category: 'exam',
-        description: 'English, Mathematics, and Science exams',
-        date: '2024-07-05',
-        displayDate: 'Friday, July 5, 2024',
-        shortDate: 'Jul 5',
-        time: '10:00 AM - 1:00 PM',
-        location: 'School Campus'
-    },
-    {
-        id: 2,
-        title: 'Annual Sports Day',
-        category: 'sports',
-        description: 'Participate in various sports competitions and activities',
-        date: '2024-07-12',
-        displayDate: 'Friday, July 12, 2024',
-        shortDate: 'Jul 12',
-        time: '8:00 AM - 4:00 PM',
-        location: 'Sports Ground'
-    },
-    {
-        id: 3,
-        title: 'Parent-Teacher Meeting',
-        category: 'meeting',
-        description: "Discuss your child's progress and performance",
-        date: '2024-07-19',
-        displayDate: 'Friday, July 19, 2024',
-        shortDate: 'Jul 19',
-        time: '3:00 PM - 5:00 PM',
-        location: 'School Campus'
-    },
-    {
-        id: 4,
-        title: 'Science Fair',
-        category: 'fair',
-        description: 'Students showcase their science projects and experiments',
-        date: '2024-07-26',
-        displayDate: 'Friday, July 26, 2024',
-        shortDate: 'Jul 26',
-        time: '10:00 AM - 3:00 PM',
-        location: 'School Auditorium'
-    },
-    {
-        id: 5,
-        title: 'Summer Vacation Begins',
-        category: 'holiday',
-        description: 'School holidays begin. Enjoy your break!',
-        date: '2024-08-02',
-        displayDate: 'Friday, August 2, 2024',
-        shortDate: 'Aug 2',
-        time: 'All Day',
-        location: 'School'
-    }
-];
+import { EVENT_CATEGORIES, parentEventsData as mockEvents } from '../../mockData/parentData';
 
 export default function ParentEventPage() {
     const [currentMonth, setCurrentMonth] = useState('November 2025');

@@ -4,19 +4,7 @@
 import { useState } from 'react';
 import ClassesTable from '@/components/shared/ClassesTable';
 import { Search, SlidersHorizontal, Plus, X } from 'lucide-react';
-
-const sampleClasses = [
-    { className: '1A', capacity: 20, grade: 1, supervisor: 'Joseph Padilla' },
-    { className: '2B', capacity: 22, grade: 2, supervisor: 'Blake Joseph' },
-    { className: '3C', capacity: 20, grade: 3, supervisor: 'Tom Bennett' },
-    { className: '4B', capacity: 18, grade: 4, supervisor: 'Aaron Collins' },
-    { className: '5A', capacity: 16, grade: 5, supervisor: 'Iva Frank' },
-    { className: '5B', capacity: 20, grade: 5, supervisor: 'Leila Santos' },
-    { className: '7A', capacity: 18, grade: 7, supervisor: 'Carrie Walton' },
-    { className: '6B', capacity: 22, grade: 6, supervisor: 'Christopher Butler' },
-    { className: '6C', capacity: 18, grade: 6, supervisor: 'Marc Miller' },
-    { className: '6D', capacity: 20, grade: 6, supervisor: 'Ophella Marsh' }
-];
+import { sampleClasses } from '../../mockData/adminData';
 
 export default function AdminClassesPage() {
     const [data, setData] = useState(sampleClasses);

@@ -4,69 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { User, Calendar, DollarSign, Phone, ArrowRight } from 'lucide-react';
-
-// Mock Data for Parent Dashboard
-const mockParentData = {
-  parentName: 'Sarah Smith',
-  child: {
-    name: 'John Smith',
-    class: 'Class 10-A',
-    rollNumber: '045'
-  },
-  alerts: [
-    {
-      id: 1,
-      type: 'warning',
-      title: 'Fee Payment Overdue',
-      message: 'Term 3 fee payment is due. Please pay by Dec 30, 2024.',
-      borderColor: 'border-l-yellow-500',
-      bgColor: 'bg-yellow-50'
-    },
-    {
-      id: 2,
-      type: 'info',
-      title: 'Exam Schedule Released',
-      message: 'Final exams will be held from Dec 25 - Jan 10, 2025.',
-      borderColor: 'border-l-blue-500',
-      bgColor: 'bg-blue-50'
-    },
-    {
-      id: 3,
-      type: 'success',
-      title: 'Great Performance',
-      message: 'John scored 90 in Science - Outstanding!',
-      borderColor: 'border-l-green-500',
-      bgColor: 'bg-green-50'
-    }
-  ],
-  academicPerformance: [
-    { id: 1, subject: 'Mathematics', score: 87, previous: 82, change: 5 },
-    { id: 2, subject: 'English', score: 82, previous: 80, change: 2 },
-    { id: 3, subject: 'Science', score: 90, previous: 88, change: 2 },
-    { id: 4, subject: 'Social Studies', score: 85, previous: 83, change: 2 },
-    { id: 5, subject: 'Hindi', score: 88, previous: 86, change: 2 },
-    { id: 6, subject: 'Physical Education', score: 95, previous: 92, change: 3 }
-  ],
-  upcomingEvents: [
-    { id: 1, title: 'Parent-Teacher Meeting', date: 'Dec 20, 2024', time: '3:00 PM', location: 'School Hall' },
-    { id: 2, title: 'Annual Sports Day', date: 'Dec 28, 2024', time: '9:00 AM', location: 'School Ground' },
-    { id: 3, title: 'Annual Day Celebration', date: 'Jan 15, 2025', time: '6:00 PM', location: 'Auditorium' }
-  ],
-  feeStatus: [
-    { id: 1, term: 'Term 1 (Apr-Jun)', amount: '₹25,000', status: 'Paid', statusColor: 'bg-green-100 text-green-700' },
-    { id: 2, term: 'Term 2 (Jul-Sep)', amount: '₹25,000', status: 'Paid', statusColor: 'bg-green-100 text-green-700' },
-    { id: 3, term: 'Term 3 (Oct-Dec)', amount: '₹25,000', status: 'Due', statusColor: 'bg-yellow-100 text-yellow-700' }
-  ],
-  quickContacts: [
-    { id: 1, role: 'CLASS TEACHER', name: 'Priya Sharma', contact: 'priya@school.com' },
-    { id: 2, role: 'PRINCIPAL', name: 'Dr. Rajesh Kumar', contact: 'principal@school.com' }
-  ],
-  attendance: [
-    { id: 1, month: 'October', percentage: 88, days: '22 of 25 days present' },
-    { id: 2, month: 'November', percentage: 96, days: '24 of 25 days present' },
-    { id: 3, month: 'December', percentage: 83, days: '10 of 12 days present' }
-  ]
-};
+import { mockParentData } from '../../mockData/parentData';
 
 export default function ParentDashboardHome() {
   const { parentName, child, alerts, academicPerformance, upcomingEvents, feeStatus, quickContacts, attendance } = mockParentData;

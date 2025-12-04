@@ -4,13 +4,14 @@
 import { Download, Pencil, Trash2, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
 import Avatar from '@/components/shared/Avatar';
 import { useState } from 'react';
+import { sampleStudentsAttendance } from '../../mockData/adminData';
 
 export default function MarkAttendanceSection({
   selectedCourse = { name: 'Subject Banks of Blue Research (BMIS)', code: 'BMIS02' },
   selectedDate = new Date(),
   onStudentDetailView
 }) {
-  const [students, setStudents] = useState(sampleStudentsAttendance());
+  const [students, setStudents] = useState(sampleStudentsAttendance);
 
   const formattedDate = selectedDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   const timeSlot = 'Time: 09:00 AM to 10:45 AM';
@@ -98,15 +99,4 @@ export default function MarkAttendanceSection({
       </div>
     </div>
   );
-}
-
-function sampleStudentsAttendance() {
-  return [
-    { id: '00010000', name: 'Jeremy Schmidt', status: 'present', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-    { id: '00010001', name: 'Olivia Kigula', status: 'absent', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-    { id: '00010002', name: 'Lyndah Nagaba', status: 'present', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-    { id: '00010003', name: 'Anna Witte', status: 'present', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-    { id: '00010004', name: 'Alba Schulz', status: 'absent', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-    { id: '00010005', name: 'Mao Chu', status: 'late', totalHeldHours: '12 Hours', marks: 'Enrolled' },
-  ];
 }

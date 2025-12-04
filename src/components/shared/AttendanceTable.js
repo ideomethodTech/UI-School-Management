@@ -1,6 +1,7 @@
 // src/components/AttendanceTable.js
 import { CheckCircle, XCircle, MinusCircle, User, CalendarDays, Pencil } from 'lucide-react'; // ADD PENCIL HERE
 import Avatar from '@/components/shared/Avatar';
+import { sampleAdminAttendance, sampleTeacherAttendance, sampleStudentAttendance } from '../../mockData/sharedData';
 
 export default function AttendanceTable({ role, studentId, teacherId, rows = [] }) {
   let data = rows.length ? rows : [];
@@ -8,11 +9,11 @@ export default function AttendanceTable({ role, studentId, teacherId, rows = [] 
   // Simulate data based on role
   if (!rows.length) {
     if (role === 'admin') {
-      data = sampleAdminAttendance();
+      data = sampleAdminAttendance;
     } else if (role === 'teacher') {
-      data = sampleTeacherAttendance(teacherId);
+      data = sampleTeacherAttendance;
     } else if (role === 'student') {
-      data = sampleStudentAttendance(studentId);
+      data = sampleStudentAttendance;
     }
   }
 
@@ -135,36 +136,4 @@ export default function AttendanceTable({ role, studentId, teacherId, rows = [] 
     default:
       return <div className="p-6 text-gray-600 flex items-center gap-2"><CalendarDays size={20} /> Select a role to view attendance.</div>;
   }
-}
-
-
-// --- Sample Data Functions ---
-function sampleAdminAttendance() {
-  return [
-    { id: 1, studentName: 'John Doe', class: '1A', date: '2023-10-26', status: 'present', reportedBy: 'Mr. Smith' },
-    { id: 2, studentName: 'Jane Smith', class: '1A', date: '2023-10-26', status: 'absent', reportedBy: 'Mr. Smith' },
-    { id: 3, studentName: 'Mike Johnson', class: '2B', date: '2023-10-26', status: 'present', reportedBy: 'Ms. Davis' },
-    { id: 4, studentName: 'Emily Brown', class: '2B', date: '2023-10-26', status: 'late', reportedBy: 'Ms. Davis' },
-    { id: 5, studentName: 'Alice Green', class: '1A', date: '2023-10-25', status: 'present', reportedBy: 'Mr. Smith' },
-  ];
-}
-
-function sampleTeacherAttendance(teacherId) {
-  // Simulate attendance for classes taught by a specific teacher
-  return [
-    { id: 10, studentName: 'John Doe', class: '1A', date: '2023-10-26', status: 'present', reportedBy: 'You' },
-    { id: 11, studentName: 'Jane Smith', class: '1A', date: '2023-10-26', status: 'absent', reportedBy: 'You' },
-    { id: 12, studentName: 'Alice Green', class: '1A', date: '2023-10-25', status: 'present', reportedBy: 'You' },
-    { id: 13, studentName: 'Bob White', class: '1A', date: '2023-10-26', status: 'late', reportedBy: 'You' },
-  ];
-}
-
-function sampleStudentAttendance(studentId) {
-  // Simulate attendance for a specific student
-  return [
-    { id: 20, date: '2023-10-26', class: 'Math 101', status: 'present', reportedBy: 'Mr. Johnson' },
-    { id: 21, date: '2023-10-25', class: 'English Lit', status: 'present', reportedBy: 'Ms. Williams' },
-    { id: 22, date: '2023-10-24', class: 'Science Lab', status: 'absent', reportedBy: 'Mr. Davis' },
-    { id: 23, date: '2023-10-23', class: 'History 201', status: 'late', reportedBy: 'Ms. Brown' },
-  ];
 }

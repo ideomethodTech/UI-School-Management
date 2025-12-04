@@ -1,15 +1,9 @@
 // src/components/StudentDashboardHome.js
 import { useState } from 'react';
 import { CalendarDays, X, ArrowRight, BookOpen, FileText, Download, Clock, MapPin, Calendar, GraduationCap, UserCheck, CalendarClock } from 'lucide-react';
+import { allAssignmentsData, allExamsData, courseMaterialsData, attendanceData } from '../../mockData/studentData';
 
 // --- MODAL & DATA for ASSIGNMENTS ---
-
-const allAssignmentsData = [
-  { id: 1, title: 'Mathematics Chapter 5 Exercise', subject: 'Mathematics', dueDate: 'Due: Dec 15, 2024', status: 'Pending' },
-  { id: 2, title: 'English Essay on Climate Change', subject: 'English', dueDate: 'Due: Dec 18, 2024', status: 'Pending' },
-  { id: 3, title: 'Science Project - Solar System', subject: 'Science', dueDate: 'Due: Dec 20, 2024', status: 'Pending' },
-  { id: 4, title: 'History Assignment - Indian Independence', subject: 'History', dueDate: 'Due: Dec 12, 2024', status: 'Urgent' },
-];
 
 const AllAssignmentsModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -45,12 +39,6 @@ const AllAssignmentsModal = ({ isOpen, onClose }) => {
 };
 
 // --- MODAL & DATA for EXAMS ---
-
-const allExamsData = [
-  { id: 1, subject: 'Mathematics', date: 'Dec 25, 2024', time: '10:00 AM - 1:00 PM', room: 'Lab-5', duration: '3 hours' },
-  { id: 2, subject: 'English', date: 'Dec 27, 2024', time: '2:00 PM - 4:30 PM', room: 'Classroom-10', duration: '2.5 hours' },
-  { id: 3, subject: 'Science', date: 'Dec 29, 2024', time: '10:00 AM - 1:00 PM', room: 'Lab-3', duration: '3 hours' },
-];
 
 const AllExamsModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -165,22 +153,12 @@ const CourseMaterials = () => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm h-full">
     <div className="flex items-center gap-3 mb-4"><BookOpen className="text-gray-500" size={20} /><h3 className="font-semibold text-gray-800">Course Materials</h3></div>
     <div className="space-y-3">
-      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-        <div className="flex items-center gap-3"><FileText size={20} className="text-purple-600" /><div><p className="font-medium text-sm">Quadratic Equations PDF</p><p className="text-xs text-gray-500">Mathematics</p></div></div>
-        <button className="p-2 text-gray-500 hover:text-purple-600"><Download size={18} /></button>
-      </div>
-      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-        <div className="flex items-center gap-3"><FileText size={20} className="text-purple-600" /><div><p className="font-medium text-sm">Shakespeare Literature</p><p className="text-xs text-gray-500">English</p></div></div>
-        <button className="p-2 text-gray-500 hover:text-purple-600"><Download size={18} /></button>
-      </div>
-      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-        <div className="flex items-center gap-3"><FileText size={20} className="text-purple-600" /><div><p className="font-medium text-sm">Physics Practicals</p><p className="text-xs text-gray-500">Science</p></div></div>
-        <button className="p-2 text-gray-500 hover:text-purple-600"><Download size={18} /></button>
-      </div>
-      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
-        <div className="flex items-center gap-3"><FileText size={20} className="text-purple-600" /><div><p className="font-medium text-sm">Modern India Notes</p><p className="text-xs text-gray-500">History</p></div></div>
-        <button className="p-2 text-gray-500 hover:text-purple-600"><Download size={18} /></button>
-      </div>
+      {courseMaterialsData.map((material) => (
+        <div key={material.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+          <div className="flex items-center gap-3"><FileText size={20} className="text-purple-600" /><div><p className="font-medium text-sm">{material.title}</p><p className="text-xs text-gray-500">{material.subject}</p></div></div>
+          <button className="p-2 text-gray-500 hover:text-purple-600"><Download size={18} /></button>
+        </div>
+      ))}
     </div>
   </div>
 );
@@ -218,9 +196,9 @@ export default function StudentDashboardHome() {
           <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
             <div className="flex items-center gap-3 mb-4"><CalendarDays className="text-gray-500" size={20} /><h3 className="font-semibold text-gray-800">Attendance</h3></div>
             <div className="space-y-5">
-              <AttendanceBar month="October" days="22/25 days" percentage={88} />
-              <AttendanceBar month="November" days="24/25 days" percentage={96} />
-              <AttendanceBar month="December" days="10/12 days" percentage={83} />
+              {attendanceData.map((data, index) => (
+                <AttendanceBar key={index} month={data.month} days={data.days} percentage={data.percentage} />
+              ))}
             </div>
           </div>
           <CourseMaterials />

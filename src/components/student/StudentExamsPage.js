@@ -1,16 +1,6 @@
 // src/components/StudentExamsPage.js
 import { CalendarClock, TrendingUp } from 'lucide-react';
-
-// Mock Data
-const upcomingExamsData = [
-    { id: 1, title: 'Mid-Term Exam', subject: 'English', date: 'Dec 22, 2024', time: '02:00 PM', duration: '3 hours', totalMarks: 80 },
-    { id: 2, title: 'Science Practical', subject: 'Science', date: 'Dec 25, 2024', time: '11:00 AM', duration: '2 hours', totalMarks: 50 },
-];
-
-const completedExamsData = [
-    { id: 1, title: 'Mid-Term Exam', subject: 'Mathematics', date: 'Dec 20, 2024', score: 85, maxMarks: 100, grade: 'A+' },
-    { id: 2, title: 'Unit Test - Geometry', subject: 'Mathematics', date: 'Dec 18, 2024', score: 42, maxMarks: 50, grade: 'A' },
-];
+import { upcomingExamsPageData as upcomingExamsData, completedExamsPageData as completedExamsData } from '../../mockData/studentData';
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, colorClass = 'text-gray-800' }) => (

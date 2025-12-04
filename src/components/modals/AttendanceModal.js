@@ -1,17 +1,9 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { mockStudents } from '../../mockData/modalData';
 
 export default function AttendanceModal({ isOpen, onClose, classData }) {
     const [attendance, setAttendance] = React.useState({});
-
-    // Mock students data - in a real app this would come from props or API
-    const mockStudents = [
-        { id: 1, name: 'Alice Johnson', rollNo: '101' },
-        { id: 2, name: 'Bob Smith', rollNo: '102' },
-        { id: 3, name: 'Charlie Brown', rollNo: '103' },
-        { id: 4, name: 'Diana Prince', rollNo: '104' },
-        { id: 5, name: 'Evan Wright', rollNo: '105' },
-    ];
 
     const handleStatusChange = (studentId, status) => {
         setAttendance(prev => ({
@@ -71,7 +63,7 @@ export default function AttendanceModal({ isOpen, onClose, classData }) {
                                                         className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
                                                     />
                                                     <span className={`text-sm ${status === 'Present' ? 'text-green-600' :
-                                                            status === 'Absent' ? 'text-red-600' : 'text-yellow-600'
+                                                        status === 'Absent' ? 'text-red-600' : 'text-yellow-600'
                                                         }`}>{status}</span>
                                                 </label>
                                             ))}

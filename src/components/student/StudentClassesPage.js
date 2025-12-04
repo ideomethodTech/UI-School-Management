@@ -1,13 +1,6 @@
 // src/components/StudentClassesPage.js
-import { User, Calendar, MapPin, BookOpen, Users, Library } from 'lucide-react';
-
-// Mock Data
-const classesData = [
-    { id: 1, name: 'Mathematics', section: 'Class 10-A', credits: 4, teacher: 'Priya Sharma', schedule: 'Mon, Wed, Fri - 10:00 AM', location: 'Room 101' },
-    { id: 2, name: 'English', section: 'Class 10-A', credits: 3, teacher: 'Ramesh Kumar', schedule: 'Tue, Thu - 02:00 PM', location: 'Room 102' },
-    { id: 3, name: 'Science', section: 'Class 10-A', credits: 4, teacher: 'Dr. Anjali', schedule: 'Mon, Wed - 01:00 PM', location: 'Lab 201' },
-    { id: 4, name: 'Social Studies', section: 'Class 10-A', credits: 2, teacher: 'Vikram Singh', schedule: 'Thu, Fri - 11:00 AM', location: 'Room 103' },
-];
+import { User, Calendar, MapPin, BookOpen } from 'lucide-react';
+import { classesPageData as classesData } from '../../mockData/studentData';
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, subValue = '', colorClass = 'text-gray-800' }) => (
@@ -65,10 +58,6 @@ const ClassItem = ({ classInfo }) => (
             <button className=" flex justify-center items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-purple-600 text-white rounded-lg shadow-sm hover:bg-purple-700">
                 <BookOpen size={16} />
                 View Materials
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-lg">
-                <Users size={16} />
-                Classmates
             </button>
         </div>
     </div>

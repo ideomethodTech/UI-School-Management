@@ -1,46 +1,6 @@
 // src/components/StudentAssignmentsPage.js
 import { AlertCircle, Upload } from 'lucide-react';
-
-// Mock data for the assignments
-const assignmentsData = [
-    {
-        id: 1,
-        title: 'Chapter 5 Quadratic Equations',
-        subject: 'Mathematics',
-        description: 'Solve practice problems from page 45-50',
-        dueDate: 'Dec 15, 2024',
-        status: 'Pending',
-        timeLeft: '2 days left',
-    },
-    {
-        id: 2,
-        title: 'English Essay on Climate Change',
-        subject: 'English',
-        description: 'Write a 500-word essay with references',
-        dueDate: 'Dec 18, 2024',
-        status: 'Pending',
-        timeLeft: '5 days left',
-    },
-    // Add another pending assignment to match the count
-    {
-        id: 3,
-        title: 'Science Project - Solar System',
-        subject: 'Science',
-        description: 'Create a model and presentation',
-        dueDate: 'Dec 20, 2024',
-        status: 'Pending',
-        timeLeft: '7 days left',
-    },
-    {
-        id: 4,
-        title: 'History Assignment - Indian Independence',
-        subject: 'History',
-        description: 'Research and summarize key events',
-        dueDate: 'Dec 12, 2024',
-        status: 'Overdue',
-        timeLeft: 'Overdue',
-    },
-];
+import { assignmentsPageData as assignmentsData } from '../../mockData/studentData';
 
 // Reusable stat card for the summary section
 const StatCard = ({ label, value, colorClass }) => (

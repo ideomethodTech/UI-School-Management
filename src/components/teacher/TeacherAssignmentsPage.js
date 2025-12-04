@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import { Plus, X, Eye, Calendar } from 'lucide-react';
+import { mockAssignments, mockAssignmentStats } from '../../mockData/teacherData';
 
 // --- CREATE ASSIGNMENT MODAL COMPONENT ---
 
@@ -121,30 +122,25 @@ export default function TeacherAssignmentsPage() {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <StatCard label="Total Assignments" value="3" />
-                    <StatCard label="Total Submissions" value="115" />
-                    <StatCard label="Avg Submission Rate" value="85%" />
+                    <StatCard label="Total Assignments" value={mockAssignmentStats.totalAssignments} />
+                    <StatCard label="Total Submissions" value={mockAssignmentStats.totalSubmissions} />
+                    <StatCard label="Avg Submission Rate" value={mockAssignmentStats.avgSubmissionRate} />
                 </div>
 
                 {/* My Assignments List */}
                 <div className="space-y-4">
                     <h2 className="font-bold text-xl text-gray-800">My Assignments</h2>
-                    <AssignmentItem
-                        title="Chapter 5 - Quadratic Equations"
-                        description="Solve practice problems from page 45-50"
-                        meta="Mathematics • Class 10-A • Created Dec 8, 2024"
-                        dueDate="Dec 15, 2024"
-                        submitted={38}
-                        total={45}
-                    />
-                    <AssignmentItem
-                        title="Chapter 6 - Geometry Exercise"
-                        description="Complete all geometry proofs and constructions"
-                        meta="Mathematics • Class 10-B • Created Dec 10, 2024"
-                        dueDate="Dec 18, 2024"
-                        submitted={35}
-                        total={42}
-                    />
+                    {mockAssignments.map((assignment) => (
+                        <AssignmentItem
+                            key={assignment.id}
+                            title={assignment.title}
+                            description={assignment.description}
+                            meta={assignment.meta}
+                            dueDate={assignment.dueDate}
+                            submitted={assignment.submitted}
+                            total={assignment.total}
+                        />
+                    ))}
                 </div>
             </div>
 

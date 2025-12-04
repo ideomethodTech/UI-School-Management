@@ -3,31 +3,7 @@
 
 import React from 'react';
 import { Check, X } from 'lucide-react';
-
-// Mock Data
-const attendanceData = {
-    studentName: 'John Smith',
-    class: 'Class 10-A',
-    rollNo: '045',
-    stats: {
-        overall: 89,
-        attended: 56,
-        totalClasses: 62,
-        missed: 6
-    },
-    monthly: [
-        { month: 'September', attended: 20, total: 22, percentage: 91 },
-        { month: 'October', attended: 22, total: 25, percentage: 88 },
-        { month: 'November', attended: 24, total: 25, percentage: 96 }
-    ],
-    recent: [
-        { date: 'Nov 28, 2024', status: 'present' },
-        { date: 'Nov 27, 2024', status: 'present' },
-        { date: 'Nov 26, 2024', status: 'absent' },
-        { date: 'Nov 25, 2024', status: 'present' },
-        { date: 'Nov 24, 2024', status: 'present' }
-    ]
-};
+import { studentAttendancePageData as attendanceData } from '../../mockData/studentData';
 
 const StatCard = ({ title, value, subtext, valueColor = 'text-gray-800', subtextColor = 'text-gray-500' }) => (
     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">

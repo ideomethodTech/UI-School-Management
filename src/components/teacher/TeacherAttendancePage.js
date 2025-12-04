@@ -1,29 +1,7 @@
 import { useState } from 'react';
 import { Calendar, Users, Check, X, Save, Download, Filter, Search } from 'lucide-react';
 
-// Mock student data for a class
-const mockStudents = [
-    { id: 1, name: 'Aarav Sharma', rollNo: '001', photo: null },
-    { id: 2, name: 'Priya Patel', rollNo: '002', photo: null },
-    { id: 3, name: 'Rohan Kumar', rollNo: '003', photo: null },
-    { id: 4, name: 'Ananya Singh', rollNo: '004', photo: null },
-    { id: 5, name: 'Vikram Reddy', rollNo: '005', photo: null },
-    { id: 6, name: 'Ishita Gupta', rollNo: '006', photo: null },
-    { id: 7, name: 'Aditya Verma', rollNo: '007', photo: null },
-    { id: 8, name: 'Sneha Iyer', rollNo: '008', photo: null },
-    { id: 9, name: 'Arjun Nair', rollNo: '009', photo: null },
-    { id: 10, name: 'Kavya Menon', rollNo: '010', photo: null },
-    { id: 11, name: 'Siddharth Joshi', rollNo: '011', photo: null },
-    { id: 12, name: 'Meera Desai', rollNo: '012', photo: null },
-];
-
-// Mock class data
-const mockClasses = [
-    { id: 1, name: 'Mathematics - Class 10-A' },
-    { id: 2, name: 'Mathematics - Class 9-B' },
-    { id: 3, name: 'Advanced Algebra - Class 11-C' },
-    { id: 4, name: 'Geometry - Class 9-A' },
-];
+import { attendanceStudents as mockStudents, mockClasses } from '../../mockData/teacherData';
 
 const AttendanceButton = ({ status, isActive, onClick, icon: Icon, label, color }) => (
     <button

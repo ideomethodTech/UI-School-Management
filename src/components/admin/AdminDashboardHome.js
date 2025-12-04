@@ -8,6 +8,7 @@ import {
   FiX, FiClock, FiUpload
 } from 'react-icons/fi';
 import { useData } from '@/contexts/DataContext';
+import { allPendingTasks, detailedClassPerformance, recentNotices, systemStatusData } from '../../mockData/adminData';
 
 // --- Reusable Generic Modal Component ---
 const Modal = ({ children, onClose, size = 'lg' }) => {
@@ -203,22 +204,16 @@ function StatCard({ title, value, change, icon: Icon, iconBgColor, iconColor, de
   return (<div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"><div className={`absolute top-0 right-0 w-24 h-24 ${decorColor} rounded-bl-full opacity-50`}></div><div className="relative z-10"><div className="flex items-center justify-between mb-2"><p className="text-sm font-medium text-gray-600">{title}</p><div className={`p-2 ${iconBgColor} rounded-lg`}><Icon className={`h-5 w-5 ${iconColor}`} /></div></div><p className="text-4xl font-bold text-gray-800 mb-1">{value}</p><p className="text-xs text-gray-500">{change}</p></div></div>);
 }
 
+const iconMap = {
+  FiAlertCircle,
+  FiCalendar,
+  FiUserGroup
+};
+
 export default function AdminDashboardHome() {
   const [activeModal, setActiveModal] = useState(null);
   const { students, teachers, addStudent, addTeacher } = useData();
 
-  const allPendingTasks = [
-    { title: 'Review Exam Results', description: 'Math final exam results need review', priority: 'high', dueDate: 'Today' }, { title: 'Approve New Teachers', description: '3 new teacher registrations pending', priority: 'medium', dueDate: 'Tomorrow' }, { title: 'Update Class Schedule', description: 'Schedule changes for next semester', priority: 'medium', dueDate: 'Dec 15' }, { title: 'Parent Portal Maintenance', description: 'System maintenance scheduled', priority: 'low', dueDate: 'Dec 20' }, { title: 'Finalize Event Budget', description: 'Budget for Annual Day needs approval', priority: 'high', dueDate: 'Dec 22' }, { title: 'Order Library Books', description: 'New curriculum books are pending order', priority: 'low', dueDate: 'Dec 28' },
-  ];
-  const detailedClassPerformance = [
-    { name: 'Grade 10-A', students: 45, avgScore: '78.5%', status: 'Good', teacher: 'Mr. Smith', attendance: '95%' }, { name: 'Grade 10-B', students: 42, avgScore: '82.3%', status: 'Excellent', teacher: 'Ms. Jones', attendance: '97%' }, { name: 'Grade 9-A', students: 48, avgScore: '75.2%', status: 'Good', teacher: 'Mr. Davis', attendance: '92%' }, { name: 'Grade 9-B', students: 46, avgScore: '79.8%', status: 'Good', teacher: 'Mrs. Wilson', attendance: '94%' }, { name: 'Grade 8-A', students: 50, avgScore: '68.1%', status: 'Needs Improvement', teacher: 'Mr. Brown', attendance: '88%' },
-  ];
-  const recentNotices = [
-    { icon: FiAlertCircle, color: 'text-orange-500', title: 'Important Notice', description: 'Annual examination schedule released', time: '2 hours ago' }, { icon: FiCalendar, color: 'text-blue-500', title: 'Event Updated', description: 'Winter break dates have been modified', time: '5 hours ago' }, { icon: FiUserGroup, color: 'text-green-500', title: 'New Enrollment', description: '15 new students enrolled this week', time: '1 day ago' },
-  ];
-  const systemStatusData = [
-    { label: 'Server Status', status: 'Operational', color: 'bg-green-500' }, { label: 'Database', status: 'Connected', color: 'bg-green-500' }, { label: 'Backup Status', status: 'In Progress', color: 'bg-yellow-500' },
-  ];
   const priorityStyles = { high: 'bg-red-100 text-red-700', medium: 'bg-yellow-100 text-yellow-700', low: 'bg-green-100 text-green-700' };
   const statusStyles = { Good: 'bg-blue-100 text-blue-700', Excellent: 'bg-green-100 text-green-700', 'Needs Improvement': 'bg-red-100 text-red-700' };
 
@@ -255,7 +250,21 @@ export default function AdminDashboardHome() {
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Recent Notices</h3>
-              <div className="space-y-4">{recentNotices.map((notice, index) => (<div key={index} className="flex items-start"><notice.icon className={`h-5 w-5 mr-3 mt-1 shrink-0 ${notice.color}`} /><div><h4 className="font-semibold text-gray-700">{notice.title}</h4><p className="text-sm text-gray-500">{notice.description}</p><p className="text-xs text-gray-400 mt-1">{notice.time}</p></div></div>))}</div>
+              <div className="space-y-4">
+                {recentNotices.map((notice, index) => {
+                  const IconComponent = iconMap[notice.iconName] || FiAlertCircle;
+                  return (
+                    <div key={index} className="flex items-start">
+                      <IconComponent className={`h-5 w-5 mr-3 mt-1 shrink-0 ${notice.color}`} />
+                      <div>
+                        <h4 className="font-semibold text-gray-700">{notice.title}</h4>
+                        <p className="text-sm text-gray-500">{notice.description}</p>
+                        <p className="text-xs text-gray-400 mt-1">{notice.time}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow" style={{ backgroundColor: '#F8F7FF' }}>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">System Status</h3>

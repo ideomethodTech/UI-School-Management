@@ -1,27 +1,7 @@
 import { useState } from 'react';
 import { Search, Filter, Download, TrendingUp, TrendingDown, Medal, Users, BookOpen, BarChart3 } from 'lucide-react';
 
-// Mock class data
-const mockClasses = [
-    { id: 1, name: 'Mathematics - Class 10-A', students: 32 },
-    { id: 2, name: 'Mathematics - Class 9-B', students: 28 },
-    { id: 3, name: 'Advanced Algebra - Class 11-C', students: 25 },
-    { id: 4, name: 'Geometry - Class 9-A', students: 30 },
-];
-
-// Mock student results data
-const mockStudentResults = [
-    { id: 1, name: 'Aarav Sharma', rollNo: '001', midterm: 85, final: 92, assignments: 88, overall: 90, grade: 'A+', trend: 'up' },
-    { id: 2, name: 'Priya Patel', rollNo: '002', midterm: 78, final: 82, assignments: 85, overall: 82, grade: 'A', trend: 'up' },
-    { id: 3, name: 'Rohan Kumar', rollNo: '003', midterm: 92, final: 88, assignments: 90, overall: 89, grade: 'A', trend: 'down' },
-    { id: 4, name: 'Ananya Singh', rollNo: '004', midterm: 68, final: 75, assignments: 72, overall: 72, grade: 'B', trend: 'up' },
-    { id: 5, name: 'Vikram Reddy', rollNo: '005', midterm: 95, final: 98, assignments: 95, overall: 96, grade: 'A+', trend: 'up' },
-    { id: 6, name: 'Ishita Gupta', rollNo: '006', midterm: 82, final: 85, assignments: 88, overall: 85, grade: 'A', trend: 'up' },
-    { id: 7, name: 'Aditya Verma', rollNo: '007', midterm: 55, final: 62, assignments: 58, overall: 59, grade: 'C', trend: 'up' },
-    { id: 8, name: 'Sneha Iyer', rollNo: '008', midterm: 88, final: 90, assignments: 92, overall: 90, grade: 'A+', trend: 'up' },
-    { id: 9, name: 'Arjun Nair', rollNo: '009', midterm: 72, final: 78, assignments: 75, overall: 75, grade: 'B', trend: 'up' },
-    { id: 10, name: 'Kavya Menon', rollNo: '010', midterm: 65, final: 70, assignments: 68, overall: 68, grade: 'B', trend: 'up' },
-];
+import { mockClasses, mockStudentResults } from '../../mockData/teacherData';
 
 const StatCard = ({ icon: Icon, label, value, subtext, color, bgColor }) => (
     <div className={`${bgColor} p-5 rounded-lg border border-gray-200`}>

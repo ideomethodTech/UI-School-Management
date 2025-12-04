@@ -2,54 +2,10 @@
 
 import React, { useState } from 'react';
 import { Plus, Calendar, Clock, Eye, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { examStats as stats, examClasses as classes, teacherExams as exams } from '../../mockData/teacherData';
 
 const TeacherExamsPage = () => {
     const [selectedClass, setSelectedClass] = useState('All Classes');
-
-    // Mock Data
-    const stats = [
-        { label: 'Total Exams', value: '3', color: 'text-gray-900' },
-        { label: 'Upcoming', value: '1', color: 'text-purple-600' },
-        { label: 'Completed', value: '2', color: 'text-green-600' },
-    ];
-
-    const classes = ['All Classes', 'Class 10-A', 'Class 10-B', 'Class 11-A'];
-
-    const exams = [
-        {
-            id: 1,
-            title: 'Mid-Term Exam - Mathematics',
-            subject: 'Mathematics',
-            class: 'Class 10-A',
-            date: 'Dec 20, 2024',
-            duration: '3 hours',
-            marks: '100 marks',
-            status: 'Completed',
-            statusColor: 'bg-green-100 text-green-700',
-        },
-        {
-            id: 2,
-            title: 'Unit Test - Geometry',
-            subject: 'Mathematics',
-            class: 'Class 10-B',
-            date: 'Dec 18, 2024',
-            duration: '1.5 hours',
-            marks: '50 marks',
-            status: 'Completed',
-            statusColor: 'bg-green-100 text-green-700',
-        },
-        {
-            id: 3,
-            title: 'Algebra Quiz',
-            subject: 'Mathematics',
-            class: 'Class 11-A',
-            date: 'Dec 25, 2024',
-            duration: '1 hour',
-            marks: '30 marks',
-            status: 'Upcoming',
-            statusColor: 'bg-purple-100 text-purple-700',
-        },
-    ];
 
     const filteredExams = selectedClass === 'All Classes'
         ? exams

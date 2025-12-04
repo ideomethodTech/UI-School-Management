@@ -1,20 +1,9 @@
-// src/components/AdminExamsPage.js
+// src/components/admin/AdminExamsPage.js
 "use client";
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, X } from 'lucide-react';
-
-// Mock data for the exams list
-const initialExamsData = [
-    { id: 1, subject: 'Math', class: '1A', teacher: 'Tommy Wise', date: '2025-01-10' },
-    { id: 2, subject: 'English', class: '2A', teacher: 'Rhoda Frank', date: '2025-01-12' },
-    { id: 3, subject: 'Science', class: '3A', teacher: 'Della Dunn', date: '2025-01-15' },
-    { id: 4, subject: 'Social Studies', class: '1B', teacher: 'Bruce Rodriguez', date: '2025-01-18' },
-    { id: 5, subject: 'Art', class: '4A', teacher: 'Birdie Butler', date: '2025-01-20' },
-    { id: 6, subject: 'Music', class: '5A', teacher: 'Bettie Oliver', date: '2025-01-22' },
-    { id: 7, subject: 'History', class: '6A', teacher: 'Herman Howard', date: '2025-01-25' },
-    { id: 8, subject: 'Geography', class: '6B', teacher: 'Lucinda Thomas', date: '2025-01-28' },
-];
+import { initialExamsData } from '../../mockData/adminData';
 
 export default function AdminExamsPage() {
     const [exams, setExams] = useState(initialExamsData);

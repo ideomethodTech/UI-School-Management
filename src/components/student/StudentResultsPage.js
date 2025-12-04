@@ -3,60 +3,7 @@
 
 import React, { useState } from 'react';
 import { Download, TrendingUp, Trophy, Zap, ChevronDown } from 'lucide-react';
-
-// Mock student data
-const studentData = {
-    name: 'John Smith',
-    rollNo: '10001',
-    class: '10 A',
-    email: 'john.smith@school.com',
-    overallScore: 88,
-    classRank: 1,
-    totalStudents: 45,
-    totalSubjects: 4,
-    subjects: [
-        {
-            id: 1,
-            name: 'Mathematics',
-            teacher: 'Priya Sharma',
-            midterm: 85,
-            final: 92,
-            assignments: 88,
-            overall: 90,
-            grade: 'A+'
-        },
-        {
-            id: 2,
-            name: 'English',
-            teacher: 'Ramesh Kumar',
-            midterm: 78,
-            final: 82,
-            assignments: 85,
-            overall: 82,
-            grade: 'A'
-        },
-        {
-            id: 3,
-            name: 'Science',
-            teacher: 'Dr. Anjali',
-            midterm: 92,
-            final: 88,
-            assignments: 90,
-            overall: 89,
-            grade: 'A'
-        },
-        {
-            id: 4,
-            name: 'Social Studies',
-            teacher: 'Vikram Singh',
-            midterm: 88,
-            final: 90,
-            assignments: 92,
-            overall: 90,
-            grade: 'A+'
-        }
-    ]
-};
+import { studentResultsData as studentData } from '../../mockData/studentData';
 
 // Grade color mapping
 const gradeColors = {
