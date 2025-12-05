@@ -1,7 +1,27 @@
 
 "use client";
+import React from 'react';
 
 import { Users, BookOpen, ClipboardCheck, CalendarClock, PlusSquare, GraduationCap, Calendar, UserCheck } from 'lucide-react';
+import ManageClassModal from './ManageClassModal';
+import CreateAssignmentModal from './CreateAssignmentModal';
+import GradesModal from './GradesModal';
+import AttendanceModal from './AttendanceModal';
+
+const mockTeacherData = {
+  classes: [
+    { name: "10-A", students: 45, attendance: 92, avgScore: 78.5 },
+    { name: "10-B", students: 42, attendance: 94, avgScore: 82.3 },
+    { name: "11-A", students: 48, attendance: 89, avgScore: 75.2 },
+  ],
+  pendingEvaluations: 12,
+  upcomingClasses: [
+    { class: "10-A", topic: "Quadratic Equations", time: "Today" },
+    { class: "10-B", topic: "Geometry Review", time: "Tomorrow" },
+    { class: "11-A", topic: "Limits", time: "Dec 13" },
+  ],
+};
+
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, subtext, colorClass = 'text-gray-800' }) => (
@@ -131,14 +151,25 @@ const UpcomingClasses = () => (
 );
 
 // Quick Actions Card
-const QuickActions = () => (
+const QuickActions = ({ setSelectedClass, setActiveModal}) => (
   <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
     <h3 className="font-bold text-lg text-gray-800 mb-4">Quick Actions</h3>
     <div className="space-y-3">
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><PlusSquare size={16} /> Create Assignment</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><GraduationCap size={16} /> Grade Submissions</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><Calendar size={16} /> Schedule Class</button>
-      <button className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><UserCheck size={16} /> Take Attendance</button>
+      <button 
+      onClick={() => setActiveModal("createAssignment")}
+      className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><PlusSquare size={16} /> Create Assignment</button>
+      <button 
+      onClick={() => setActiveModal("grades")}
+      className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><GraduationCap size={16} /> Grade Submissions</button>
+      <button
+         onClick={() => {
+            setSelectedClass(null);
+            setActiveModal('manage');
+        }}
+      className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><Calendar size={16} /> Schedule Class</button>
+      <button
+        onClick={() => setActiveModal("attendance")}
+      className="w-full flex items-center gap-3 p-3 text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg border"><UserCheck size={16} /> Take Attendance</button>
     </div>
   </div>
 );
@@ -157,6 +188,24 @@ const PerformanceInsights = () => (
 
 
 export default function TeacherDashboardHome() {
+   const [activeModal, setActiveModal] = React.useState(null);
+  const [selectedClass, setSelectedClass] = React.useState(null);
+  const closeModal = () => setActiveModal(null);
+
+ 
+  const totalStudents = mockTeacherData.classes.reduce(
+    (sum, cls) => sum + cls.students,
+    0
+  );
+
+  const totalClasses = mockTeacherData.classes.length;
+
+  const pendingEvaluations = mockTeacherData.pendingEvaluations;
+
+  const upcomingCount = mockTeacherData.upcomingClasses.length;
+  
+
+  
   return (
     <div className='space-y-6'>
       {/* Header */}
@@ -167,10 +216,27 @@ export default function TeacherDashboardHome() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Total Students" value="135" subtext="Across all classes" />
-        <StatCard label="Classes" value="3" subtext="This semester" colorClass="text-green-600" />
-        <StatCard label="Pending Evaluations" value="12" subtext="To review" colorClass="text-yellow-600" />
-        <StatCard label="Upcoming Classes" value="3" subtext="This week" colorClass="text-blue-600" />
+        <StatCard 
+        label="Total Students"
+        value={totalStudents} 
+        subtext="Across all classes" 
+        />
+        <StatCard 
+        label="Classes" 
+        value={totalClasses} 
+        subtext="This semester" 
+        colorClass="text-green-600" 
+        />
+        <StatCard 
+        label="Pending Evaluations" 
+        value={pendingEvaluations} 
+        subtext="To review" 
+        colorClass="text-yellow-600" 
+        />
+        <StatCard label="Upcoming Classes" 
+        value={upcomingCount} 
+        subtext="This week" 
+        colorClass="text-blue-600" />
       </div>
 
       {/* Main Content Grid */}
@@ -184,10 +250,39 @@ export default function TeacherDashboardHome() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          <QuickActions />
+          <QuickActions
+           setSelectedClass={setSelectedClass}
+           setActiveModal={setActiveModal} />
           <PerformanceInsights />
         </div>
       </div>
+       {/*Manage Class Modal */}
+      <ManageClassModal
+        isOpen={activeModal === "manage"}
+        onClose={() => setActiveModal(null)}
+        classData={selectedClass}
+        onSave={(data) => {
+          console.log("Saved class:", data);
+          setActiveModal(null);
+        }}
+        />
+        <CreateAssignmentModal
+       isOpen={activeModal === "createAssignment"}
+        onClose={() => setActiveModal(null)}
+       />
+
+{/* Grades Modal */}
+<GradesModal
+  isOpen={activeModal === "grades"}
+  onClose={() => setActiveModal(null)}
+  classData={selectedClass}
+/>
+<AttendanceModal
+  isOpen={activeModal === 'attendance'}
+  onClose={closeModal}
+  classData={selectedClass}
+           
+/>
     </div>
   );
 }
