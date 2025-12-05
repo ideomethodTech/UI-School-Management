@@ -78,15 +78,44 @@ export const parentAttendancePageData = {
         { term: 'Term 1', present: 54, total: 59, percentage: 92 },
         { term: 'Term 2', present: 58, total: 60, percentage: 97 }
     ],
-    weeklyAttendance: [
-        { date: '2024-06-27', day: 'Thursday', status: 'Present', time: '8:30 AM', remarks: '-' },
-        { date: '2024-06-26', day: 'Wednesday', status: 'Present', time: '8:45 AM', remarks: 'Slight delay' },
-        { date: '2024-06-25', day: 'Tuesday', status: 'Present', time: '8:15 AM', remarks: '-' },
-        { date: '2024-06-24', day: 'Monday', status: 'Absent', time: '-', remarks: 'Medical leave' },
-        { date: '2024-06-21', day: 'Friday', status: 'Present', time: '8:30 AM', remarks: '-' },
-        { date: '2024-06-20', day: 'Thursday', status: 'Present', time: '8:20 AM', remarks: '-' },
-        { date: '2024-06-19', day: 'Wednesday', status: 'Absent', time: '-', remarks: 'Sick leave' }
-    ]
+    monthlyAttendance: {
+        september: [
+            { date: '2024-09-05', day: 'Thursday', status: 'Absent', time: '-', remarks: 'Sick leave' },
+            { date: '2024-09-12', day: 'Thursday', status: 'Absent', time: '-', remarks: 'Medical appointment' },
+            { date: '2024-09-18', day: 'Wednesday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-09-19', day: 'Thursday', status: 'Present', time: '8:15 AM', remarks: '-' },
+            { date: '2024-09-20', day: 'Friday', status: 'Present', time: '8:25 AM', remarks: '-' },
+            { date: '2024-09-23', day: 'Monday', status: 'Present', time: '8:20 AM', remarks: '-' },
+            { date: '2024-09-24', day: 'Tuesday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-09-25', day: 'Wednesday', status: 'Present', time: '8:10 AM', remarks: '-' },
+            { date: '2024-09-26', day: 'Thursday', status: 'Present', time: '8:35 AM', remarks: 'Slight delay' },
+            { date: '2024-09-27', day: 'Friday', status: 'Present', time: '8:15 AM', remarks: '-' }
+        ],
+        october: [
+            { date: '2024-10-03', day: 'Thursday', status: 'Absent', time: '-', remarks: 'Family event' },
+            { date: '2024-10-07', day: 'Monday', status: 'Present', time: '8:20 AM', remarks: '-' },
+            { date: '2024-10-08', day: 'Tuesday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-10-09', day: 'Wednesday', status: 'Present', time: '8:15 AM', remarks: '-' },
+            { date: '2024-10-10', day: 'Thursday', status: 'Present', time: '8:25 AM', remarks: '-' },
+            { date: '2024-10-14', day: 'Monday', status: 'Present', time: '8:10 AM', remarks: '-' },
+            { date: '2024-10-15', day: 'Tuesday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-10-16', day: 'Wednesday', status: 'Present', time: '8:20 AM', remarks: '-' },
+            { date: '2024-10-21', day: 'Monday', status: 'Present', time: '8:25 AM', remarks: '-' },
+            { date: '2024-10-22', day: 'Tuesday', status: 'Present', time: '8:15 AM', remarks: '-' }
+        ],
+        november: [
+            { date: '2024-11-04', day: 'Monday', status: 'Absent', time: '-', remarks: 'Fever' },
+            { date: '2024-11-05', day: 'Tuesday', status: 'Absent', time: '-', remarks: 'Still recovering' },
+            { date: '2024-11-11', day: 'Monday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-11-12', day: 'Tuesday', status: 'Present', time: '8:15 AM', remarks: '-' },
+            { date: '2024-11-13', day: 'Wednesday', status: 'Present', time: '8:20 AM', remarks: '-' },
+            { date: '2024-11-18', day: 'Monday', status: 'Present', time: '8:25 AM', remarks: '-' },
+            { date: '2024-11-19', day: 'Tuesday', status: 'Present', time: '8:30 AM', remarks: '-' },
+            { date: '2024-11-20', day: 'Wednesday', status: 'Absent', time: '-', remarks: 'Dentist appointment' },
+            { date: '2024-11-25', day: 'Monday', status: 'Present', time: '8:10 AM', remarks: '-' },
+            { date: '2024-11-26', day: 'Tuesday', status: 'Present', time: '8:20 AM', remarks: '-' }
+        ]
+    }
 };
 
 export const EVENT_CATEGORIES = {

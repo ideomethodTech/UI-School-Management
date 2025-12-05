@@ -1,7 +1,7 @@
 // src/components/StudentAttendancePage.js
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { studentAttendancePageData as attendanceData } from '../../mockData/studentData';
 
@@ -46,6 +46,12 @@ const AttendanceRow = ({ date, status }) => (
 
 export default function StudentAttendancePage() {
     const { stats, monthly, recent } = attendanceData;
+    const [selectedMonth, setSelectedMonth] = useState('past3');
+
+    // Filter monthly data based on selected month
+    const filteredMonthly = selectedMonth === 'past3'
+        ? monthly
+        : monthly.filter(m => m.month.toLowerCase() === selectedMonth.toLowerCase());
 
     return (
         <div className="space-y-6">
@@ -81,9 +87,30 @@ export default function StudentAttendancePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Monthly Breakdown */}
                 <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h2 className="text-lg font-bold text-gray-800 mb-6">Monthly Breakdown</h2>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-bold text-gray-800">Monthly Breakdown</h2>
+                        <select
+                            value={selectedMonth}
+                            onChange={(e) => setSelectedMonth(e.target.value)}
+                            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-300 hover:border-gray-400"
+                        >
+                            <option value="past3">Past 3 Months</option>
+                            <option value="january">January</option>
+                            <option value="february">February</option>
+                            <option value="march">March</option>
+                            <option value="april">April</option>
+                            <option value="may">May</option>
+                            <option value="june">June</option>
+                            <option value="july">July</option>
+                            <option value="august">August</option>
+                            <option value="september">September</option>
+                            <option value="october">October</option>
+                            <option value="november">November</option>
+                            <option value="december">December</option>
+                        </select>
+                    </div>
                     <div>
-                        {monthly.map((m, index) => (
+                        {filteredMonthly.map((m, index) => (
                             <MonthlyProgressBar key={index} {...m} />
                         ))}
                     </div>

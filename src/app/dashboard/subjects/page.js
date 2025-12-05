@@ -95,9 +95,7 @@ export default function SubjectsPage() {
                             className='rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400'
                         />
                     </div>
-                    <button className='p-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'>
-                        <SlidersHorizontal size={20} />
-                    </button>
+
                     <button onClick={() => openModal('create')} className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'>
                         <Plus size={20} />
                     </button>

@@ -21,8 +21,63 @@ export default function StudentResultsPage() {
     const [selectedTerm, setSelectedTerm] = useState('overall');
 
     const handleDownloadReport = () => {
-        // Handle report download logic here
-        console.log('Downloading report...');
+        // Generate report content
+        const reportContent = `
+========================================
+ACADEMIC PERFORMANCE REPORT
+========================================
+
+Student Information:
+-------------------
+Name: ${studentData.name}
+Roll No: ${studentData.rollNo}
+Class: ${studentData.class}
+Email: ${studentData.email}
+
+Overall Performance:
+-------------------
+Overall Score: ${studentData.overallScore}%
+Class Rank: ${studentData.classRank} out of ${studentData.totalStudents}
+Total Subjects: ${studentData.totalSubjects}
+
+Subject-wise Performance:
+------------------------
+${studentData.subjects.map((subject, index) => `
+${index + 1}. ${subject.name}
+   Teacher: ${subject.teacher}
+   Midterm: ${subject.midterm}%
+   Final: ${subject.final}%
+   Assignments: ${subject.assignments}%
+   Overall: ${subject.overall}%
+   Grade: ${subject.grade}
+`).join('\n')}
+
+Strengths:
+---------
+• Excellent performance in Mathematics and Social Studies
+• Consistent improvement across all subjects
+• Strong assignment completion rate
+
+Focus Areas:
+-----------
+• Practice more English comprehension exercises
+• Focus on Science practical applications
+• Maintain regular study schedule
+
+Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
+========================================
+        `.trim();
+
+        // Create blob and download
+        const blob = new Blob([reportContent], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Academic_Report_${studentData.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
     };
 
     return (

@@ -9,6 +9,7 @@ import { useData } from '../../../contexts/DataContext';
 export default function StudentsPage() {
     const { students, addStudent, deleteStudent } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', email: '', avatar: '' });
     const [photoPreview, setPhotoPreview] = useState('');
 
@@ -49,6 +50,18 @@ export default function StudentsPage() {
         if (window.confirm('Are you sure?')) deleteStudent(id);
     };
 
+    // Filter students based on search term
+    const filteredStudents = students.filter(student => {
+        const search = searchTerm.toLowerCase();
+        return (
+            student.name?.toLowerCase().includes(search) ||
+            student.id?.toLowerCase().includes(search) ||
+            student.grade?.toString().toLowerCase().includes(search) ||
+            student.phone?.toLowerCase().includes(search) ||
+            student.email?.toLowerCase().includes(search)
+        );
+    });
+
     return (
         <>
             <div className="bg-white p-4 rounded-lg m-4 flex-1 flex flex-col">
@@ -60,6 +73,8 @@ export default function StudentsPage() {
                             <input
                                 type="text"
                                 placeholder="Search students..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 className="rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
                             />
                         </div>
@@ -72,7 +87,7 @@ export default function StudentsPage() {
                     <table className="w-full text-left">
                         <thead><tr className="border-b bg-gray-50 text-xs text-gray-500 uppercase"><th className="py-3 px-4 font-medium">Info</th><th className="py-3 px-4 font-medium">Student ID</th><th className="py-3 px-4 font-medium">Grade</th><th className="py-3 px-4 font-medium">Phone</th><th className="py-3 px-4 font-medium">Email</th><th className="py-3 px-4 font-medium">Actions</th></tr></thead>
                         <tbody className="divide-y">
-                            {students.map((student) => (
+                            {filteredStudents.map((student) => (
                                 <tr key={student.id} className="hover:bg-gray-50">
                                     <td className="py-3 px-4"><div className="flex items-center gap-3"><Image src={student.avatar} alt={student.name} width={40} height={40} className="rounded-full object-cover" /><div><div className="font-semibold text-gray-800">{student.name}</div><div className="text-sm text-gray-500">Grade {student.grade}</div></div></div></td>
                                     <td className="py-3 px-4 text-sm text-gray-600 font-mono">{student.id}</td><td className="py-3 px-4 text-sm text-gray-600">{student.grade}</td><td className="py-3 px-4 text-sm text-gray-600">{student.phone}</td><td className="py-3 px-4 text-sm text-gray-600">{student.email}</td>

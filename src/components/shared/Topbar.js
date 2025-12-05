@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { Search, MessageSquare, Bell, ChevronDown, School, X } from 'lucide-react';
+import { Search, Bell, ChevronDown, School, X } from 'lucide-react';
 import Avatar from '@/components/shared/Avatar';
 import { useUser } from '@/contexts/UserContext';
 import { useState, useRef, useEffect } from 'react';
@@ -101,9 +101,7 @@ export default function Topbar() {
         </div>
 
         <div className='flex items-center gap-4'>
-          <button className='p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'>
-            <MessageSquare size={20} />
-          </button>
+
           <div className='relative'>
             {/* Bell button now opens the modal */}
             <button

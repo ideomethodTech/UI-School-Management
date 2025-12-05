@@ -2,12 +2,13 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, SlidersHorizontal, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
 import { initialExamsData } from '../../mockData/adminData';
 
 export default function AdminExamsPage() {
     const [exams, setExams] = useState(initialExamsData);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [modalType, setModalType] = useState('create');
     const [currentExam, setCurrentExam] = useState(null);
     const [formState, setFormState] = useState({
@@ -61,6 +62,17 @@ export default function AdminExamsPage() {
         }
     };
 
+    // Filter exams based on search term
+    const filteredExams = exams.filter(exam => {
+        const search = searchTerm.toLowerCase();
+        return (
+            exam.subject?.toLowerCase().includes(search) ||
+            exam.class?.toLowerCase().includes(search) ||
+            exam.teacher?.toLowerCase().includes(search) ||
+            exam.date?.toLowerCase().includes(search)
+        );
+    });
+
     return (
         <div className="space-y-6">
             {/* Header Toolbar */}
@@ -72,12 +84,11 @@ export default function AdminExamsPage() {
                         <input
                             type="text"
                             placeholder="Search exams..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-64 pl-11 pr-4 py-2.5 bg-white border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
                         />
                     </div>
-                    <button className="p-2.5 bg-white border border-gray-300 text-gray-600 rounded-full hover:bg-gray-50 shadow-sm">
-                        <SlidersHorizontal size={16} />
-                    </button>
                     <button onClick={() => openModal('create')} className="p-2.5 bg-purple-600 text-white rounded-full hover:bg-purple-700 shadow-sm">
                         <Plus size={16} />
                     </button>
@@ -98,7 +109,7 @@ export default function AdminExamsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {exams.map((exam) => (
+                            {filteredExams.map((exam) => (
                                 <tr key={exam.id}>
                                     <td className="px-6 py-5 font-medium text-gray-900">{exam.subject}</td>
                                     <td className="px-6 py-5 text-gray-600">{exam.class}</td>

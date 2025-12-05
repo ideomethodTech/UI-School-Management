@@ -9,6 +9,7 @@ import { useData } from "../../../contexts/DataContext";
 export default function TeachersPage() {
     const { teachers, addTeacher, deleteTeacher } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
     const [photoPreview, setPhotoPreview] = useState("");
     const [formState, setFormState] = useState({
         name: "",
@@ -79,6 +80,19 @@ export default function TeachersPage() {
             deleteTeacher(id);
     };
 
+    // Filter teachers based on search term
+    const filteredTeachers = teachers.filter(teacher => {
+        const search = searchTerm.toLowerCase();
+        return (
+            teacher.name?.toLowerCase().includes(search) ||
+            teacher.id?.toLowerCase().includes(search) ||
+            teacher.subjects?.some(s => s.toLowerCase().includes(search)) ||
+            teacher.classes?.some(c => c.toLowerCase().includes(search)) ||
+            teacher.phone?.toLowerCase().includes(search) ||
+            teacher.email?.toLowerCase().includes(search)
+        );
+    });
+
     return (
         <>
             <div className="bg-white p-4 rounded-lg m-4 flex-1 flex flex-col">
@@ -92,6 +106,8 @@ export default function TeachersPage() {
                             <input
                                 type="text"
                                 placeholder="Search teachers..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 className="rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
                             />
                         </div>
@@ -117,7 +133,7 @@ export default function TeachersPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y">
-                            {teachers.map((teacher) => (
+                            {filteredTeachers.map((teacher) => (
                                 <tr key={teacher.id} className="hover:bg-gray-50">
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-3">

@@ -25,7 +25,7 @@ const Modal = ({ children, onClose, size = 'lg' }) => {
 
 // --- Form Components ---
 const AddStudentForm = ({ onClose, onAddStudent }) => {
-  const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', address: '', avatar: '' });
+  const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', email: '', avatar: '' });
   const [photoPreview, setPhotoPreview] = useState('');
 
   const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -57,7 +57,7 @@ const AddStudentForm = ({ onClose, onAddStudent }) => {
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label><input name="id" type="text" value={formState.id} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Grade</label><input name="grade" type="text" value={formState.grade} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Phone</label><input name="phone" type="tel" value={formState.phone} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
-      <div><label className="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="address" type="text" value={formState.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Email</label><input name="email" type="email" value={formState.email} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photo (optional)</label>
         <div className="flex items-center gap-4">
@@ -77,7 +77,7 @@ const AddStudentForm = ({ onClose, onAddStudent }) => {
 };
 
 const AddTeacherForm = ({ onClose, onAddTeacher }) => {
-  const [formState, setFormState] = useState({ name: '', id: '', subjects: '', classes: '', phone: '', address: '', avatar: '' });
+  const [formState, setFormState] = useState({ name: '', id: '', subjects: '', classes: '', phone: '', email: '', avatar: '' });
   const [photoPreview, setPhotoPreview] = useState('');
 
   const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -115,7 +115,7 @@ const AddTeacherForm = ({ onClose, onAddTeacher }) => {
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Subjects (comma separated)</label><input name="subjects" type="text" value={formState.subjects} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Classes (comma separated)</label><input name="classes" type="text" value={formState.classes} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div><label className="block text-sm font-medium text-gray-700 mb-1">Phone</label><input name="phone" type="tel" value={formState.phone} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
-      <div><label className="block text-sm font-medium text-gray-700 mb-1">Address</label><input name="address" type="text" value={formState.address} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
+      <div><label className="block text-sm font-medium text-gray-700 mb-1">Email</label><input name="email" type="email" value={formState.email} onChange={handleInputChange} className="w-full p-2 border rounded-md" /></div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Upload Photo (optional)</label>
         <div className="flex items-center gap-4">
@@ -134,34 +134,88 @@ const AddTeacherForm = ({ onClose, onAddTeacher }) => {
   );
 };
 
-const ScheduleEventForm = ({ onClose }) => (
-  <form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6">
-    <div><h2 className="text-2xl font-bold text-gray-800">Schedule Event</h2><p className="text-gray-500 mt-1">Create a new event for your school.</p></div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Event Name</label><input type="text" placeholder="Annual Sports Day" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Brief description of the event" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
-      <div className="relative"><label className="block text-sm font-medium text-gray-700">Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div>
-      <div className="relative"><label className="block text-sm font-medium text-gray-700">Time</label><input type="text" placeholder="--:--" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiClock className="absolute right-3 top-9 text-gray-400" /></div>
-      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Location</label><input type="text" placeholder="Main ground" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-    </div>
-    <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Schedule Event</button></div>
-  </form>
-);
+const ScheduleEventForm = ({ onClose, onAddEvent }) => {
+  const [formState, setFormState] = useState({
+    title: '',
+    description: '',
+    date: new Date().toISOString().split('T')[0],
+    startTime: '10:00',
+    endTime: '11:00',
+    location: '',
+    class: 'All Classes'
+  });
 
-const CreateAssignmentForm = ({ onClose }) => (
-  <form onSubmit={(e) => { e.preventDefault(); onClose(); }} className="space-y-6">
-    <div><h2 className="text-2xl font-bold text-gray-800">Create Assignment</h2><p className="text-gray-500 mt-1">Create a new assignment for your students.</p></div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Assignment Title</label><input type="text" placeholder="Chapter 5: Practice Problems" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-      <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea placeholder="Assignment details" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
-      <div><label className="block text-sm font-medium text-gray-700">Class</label><input type="text" placeholder="10-A" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-      <div><label className="block text-sm font-medium text-gray-700">Subject</label><input type="text" placeholder="Mathematics" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-      <div className="relative"><label className="block text-sm font-medium text-gray-700">Due Date</label><input type="text" placeholder="dd-mm-yyyy" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiCalendar className="absolute right-3 top-9 text-gray-400" /></div>
-      <div><label className="block text-sm font-medium text-gray-700">Total Marks</label><input type="number" placeholder="100" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
-    </div>
-    <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create Assignment</button></div>
-  </form>
-);
+  const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formState.title.trim()) return alert('Event Name is required.');
+
+    const newEvent = {
+      id: Date.now(),
+      ...formState
+    };
+    onAddEvent(newEvent);
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div><h2 className="text-2xl font-bold text-gray-800">Schedule Event</h2><p className="text-gray-500 mt-1">Create a new event for your school.</p></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Event Name</label><input name="title" type="text" value={formState.title} onChange={handleInputChange} placeholder="Annual Sports Day" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /></div>
+        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea name="description" value={formState.description} onChange={handleInputChange} placeholder="Brief description of the event" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
+        <div className="relative"><label className="block text-sm font-medium text-gray-700">Date</label><input name="date" type="date" value={formState.date} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /><FiCalendar className="absolute right-3 top-9 text-gray-400 pointer-events-none" /></div>
+        <div className="relative"><label className="block text-sm font-medium text-gray-700">Time</label><input name="startTime" type="time" value={formState.startTime} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /><FiClock className="absolute right-3 top-9 text-gray-400 pointer-events-none" /></div>
+        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Location</label><input name="location" type="text" value={formState.location} onChange={handleInputChange} placeholder="Main ground" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      </div>
+      <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Schedule Event</button></div>
+    </form>
+  );
+};
+
+const CreateAssignmentForm = ({ onClose, onAddAssignment }) => {
+  const [formState, setFormState] = useState({
+    title: '',
+    description: '',
+    class: '',
+    subject: '',
+    dueDate: new Date().toISOString().split('T')[0],
+    totalMarks: '100'
+  });
+
+  const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formState.title.trim() || !formState.class.trim() || !formState.subject.trim()) {
+      return alert('Assignment Title, Class, and Subject are required.');
+    }
+
+    const newAssignment = {
+      id: Date.now(),
+      ...formState,
+      teacher: 'Admin'
+    };
+    onAddAssignment(newAssignment);
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div><h2 className="text-2xl font-bold text-gray-800">Create Assignment</h2><p className="text-gray-500 mt-1">Create a new assignment for your students.</p></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Assignment Title</label><input name="title" type="text" value={formState.title} onChange={handleInputChange} placeholder="Chapter 5: Practice Problems" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /></div>
+        <div className="md:col-span-2"><label className="block text-sm font-medium text-gray-700">Description</label><textarea name="description" value={formState.description} onChange={handleInputChange} placeholder="Assignment details" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" rows="2"></textarea></div>
+        <div><label className="block text-sm font-medium text-gray-700">Class</label><input name="class" type="text" value={formState.class} onChange={handleInputChange} placeholder="10-A" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /></div>
+        <div><label className="block text-sm font-medium text-gray-700">Subject</label><input name="subject" type="text" value={formState.subject} onChange={handleInputChange} placeholder="Mathematics" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /></div>
+        <div className="relative"><label className="block text-sm font-medium text-gray-700">Due Date</label><input name="dueDate" type="date" value={formState.dueDate} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required /><FiCalendar className="absolute right-3 top-9 text-gray-400 pointer-events-none" /></div>
+        <div><label className="block text-sm font-medium text-gray-700">Total Marks</label><input name="totalMarks" type="number" value={formState.totalMarks} onChange={handleInputChange} placeholder="100" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" /></div>
+      </div>
+      <div className="flex justify-end gap-4"><button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50">Cancel</button><button type="submit" className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700">Create Assignment</button></div>
+    </form>
+  );
+};
 
 // --- Modal Content Components ---
 const AllTasksModal = ({ tasks, priorityStyles }) => (
@@ -212,10 +266,16 @@ const iconMap = {
 
 export default function AdminDashboardHome() {
   const [activeModal, setActiveModal] = useState(null);
-  const { students, teachers, addStudent, addTeacher } = useData();
+  const [selectedGrade, setSelectedGrade] = useState('all');
+  const { students, teachers, addStudent, addTeacher, addEvent, addAssignment } = useData();
 
   const priorityStyles = { high: 'bg-red-100 text-red-700', medium: 'bg-yellow-100 text-yellow-700', low: 'bg-green-100 text-green-700' };
   const statusStyles = { Good: 'bg-blue-100 text-blue-700', Excellent: 'bg-green-100 text-green-700', 'Needs Improvement': 'bg-red-100 text-red-700' };
+
+  // Filter class performance based on selected grade
+  const filteredClassPerformance = selectedGrade === 'all'
+    ? detailedClassPerformance
+    : detailedClassPerformance.filter(cls => cls.name.startsWith(`Grade ${selectedGrade}`));
 
   return (
     <>
@@ -234,8 +294,23 @@ export default function AdminDashboardHome() {
               <div className="space-y-4 pt-2">{allPendingTasks.slice(0, 4).map((task, index) => (<div key={index} className="flex justify-between items-center border-t pt-4"><div><h4 className="font-semibold text-gray-700 flex items-center">{task.title}<span className={`ml-2 px-2 py-0.5 text-xs font-medium rounded-full ${priorityStyles[task.priority]}`}>{task.priority}</span></h4><p className="text-sm text-gray-500">{task.description}</p></div><p className="text-sm text-gray-500 text-right shrink-0">{task.dueDate}</p></div>))}</div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex justify-between items-center mb-4"><h3 className="text-xl font-semibold text-gray-800">Class Performance Overview</h3><button onClick={() => setActiveModal('classPerformanceDetails')} className="text-sm font-medium text-purple-600 hover:underline flex items-center">More Details &rarr;</button></div>
-              <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="text-sm text-gray-500 font-medium border-b"><th className="py-2 px-4">Class</th><th className="py-2 px-4">Students</th><th className="py-2 px-4">Avg Score</th><th className="py-2 px-4">Status</th></tr></thead><tbody>{detailedClassPerformance.slice(0, 4).map((cls, index) => (<tr key={index} className="border-b last:border-none"><td className="py-4 px-4 font-medium text-gray-800">{cls.name}</td><td className="py-4 px-4 text-gray-600">{cls.students}</td><td className="py-4 px-4 font-semibold text-gray-800">{cls.avgScore}</td><td className="py-4 px-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[cls.status]}`}>{cls.status}</span></td></tr>))}</tbody></table></div>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-xl font-semibold text-gray-800">Class Performance Overview</h3>
+                  <select
+                    value={selectedGrade}
+                    onChange={(e) => setSelectedGrade(e.target.value)}
+                    className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-purple-500 w-32"
+                  >
+                    <option value="all">All Grades</option>
+                    <option value="10">Grade 10</option>
+                    <option value="9">Grade 9</option>
+                    <option value="8">Grade 8</option>
+                  </select>
+                </div>
+                <button onClick={() => setActiveModal('classPerformanceDetails')} className="text-sm font-medium text-purple-600 hover:underline flex items-center">More Details &rarr;</button>
+              </div>
+              <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="text-sm text-gray-500 font-medium border-b"><th className="py-2 px-4">Class</th><th className="py-2 px-4">Students</th><th className="py-2 px-4">Avg Score</th><th className="py-2 px-4">Status</th></tr></thead><tbody>{filteredClassPerformance.slice(0, 4).map((cls, index) => (<tr key={index} className="border-b last:border-none"><td className="py-4 px-4 font-medium text-gray-800">{cls.name}</td><td className="py-4 px-4 text-gray-600">{cls.students}</td><td className="py-4 px-4 font-semibold text-gray-800">{cls.avgScore}</td><td className="py-4 px-4"><span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusStyles[cls.status]}`}>{cls.status}</span></td></tr>))}</tbody></table></div>
             </div>
           </div>
           <div className="lg:col-span-1 space-y-6">
@@ -276,8 +351,8 @@ export default function AdminDashboardHome() {
 
       {activeModal === 'addStudent' && <Modal onClose={() => setActiveModal(null)}><AddStudentForm onClose={() => setActiveModal(null)} onAddStudent={addStudent} /></Modal>}
       {activeModal === 'addTeacher' && <Modal onClose={() => setActiveModal(null)}><AddTeacherForm onClose={() => setActiveModal(null)} onAddTeacher={addTeacher} /></Modal>}
-      {activeModal === 'scheduleEvent' && <Modal onClose={() => setActiveModal(null)}><ScheduleEventForm onClose={() => setActiveModal(null)} /></Modal>}
-      {activeModal === 'createAssignment' && <Modal onClose={() => setActiveModal(null)}><CreateAssignmentForm onClose={() => setActiveModal(null)} /></Modal>}
+      {activeModal === 'scheduleEvent' && <Modal onClose={() => setActiveModal(null)}><ScheduleEventForm onClose={() => setActiveModal(null)} onAddEvent={addEvent} /></Modal>}
+      {activeModal === 'createAssignment' && <Modal onClose={() => setActiveModal(null)}><CreateAssignmentForm onClose={() => setActiveModal(null)} onAddAssignment={addAssignment} /></Modal>}
       {activeModal === 'viewAllTasks' && <Modal onClose={() => setActiveModal(null)}><AllTasksModal tasks={allPendingTasks} priorityStyles={priorityStyles} /></Modal>}
       {activeModal === 'classPerformanceDetails' && <Modal onClose={() => setActiveModal(null)} size="2xl"><ClassPerformanceDetailsModal performanceData={detailedClassPerformance} statusStyles={statusStyles} /></Modal>}
     </>

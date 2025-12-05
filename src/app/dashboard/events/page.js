@@ -4,15 +4,15 @@
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, CalendarDays, Clock } from 'lucide-react';
 import { useUser } from '@/contexts/UserContext';
+import { useData } from '@/contexts/DataContext';
 import ParentEventPage from '@/components/parent/ParentEventPage';
-import { initialEventsData } from '@/mockData/adminData';
 
 // Main page component
 export default function EventsPage() {
     const { currentUserRole } = useUser();
+    const { events, addEvent } = useData();
 
     // All hooks must be called before any conditional returns (to maintain hook order)
-    const [events, setEvents] = useState(initialEventsData);
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState('create');
@@ -55,7 +55,7 @@ export default function EventsPage() {
         }
 
         if (modalType === 'create') {
-            setEvents(prev => [...prev, { id: Date.now(), ...formState }]);
+            addEvent({ id: Date.now(), ...formState });
         } else {
             setEvents(prev => prev.map(evt => (evt.id === currentEvent.id ? { ...evt, ...formState } : evt)));
         }

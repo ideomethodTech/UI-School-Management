@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Users, Calendar, MapPin, ClipboardList, GraduationCap, Settings, Plus, Clock, X } from 'lucide-react';
 import ManageClassModal from '@/components/modals/ManageClassModal';
 import AttendanceModal from '@/components/modals/AttendanceModal';

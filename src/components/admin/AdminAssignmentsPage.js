@@ -3,11 +3,12 @@
 
 import { useState } from 'react';
 import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
-import { initialAssignmentsData } from '../../mockData/adminData';
+import { useData } from '@/contexts/DataContext';
 
 export default function AdminAssignmentsPage() {
-    const [assignments, setAssignments] = useState(initialAssignmentsData);
+    const { assignments, addAssignment, updateAssignment, deleteAssignment } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [modalType, setModalType] = useState('create');
     const [currentAssignment, setCurrentAssignment] = useState(null);
     const [formState, setFormState] = useState({
@@ -47,18 +48,28 @@ export default function AdminAssignmentsPage() {
         const assignmentData = { ...formState };
 
         if (modalType === 'create') {
-            setAssignments([...assignments, { id: Date.now(), ...assignmentData }]);
+            addAssignment({ id: Date.now(), ...assignmentData });
         } else {
-            setAssignments(assignments.map(a => a.id === currentAssignment.id ? { ...a, ...assignmentData } : a));
+            updateAssignment(currentAssignment.id, assignmentData);
         }
         closeModal();
     };
 
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete this assignment?')) {
-            setAssignments(assignments.filter(assignment => assignment.id !== id));
+            deleteAssignment(id);
         }
     };
+
+    // Filter assignments based on search term
+    const filteredAssignments = assignments.filter(assignment => {
+        const search = searchTerm.toLowerCase();
+        return (
+            assignment.subject?.toLowerCase().includes(search) ||
+            assignment.class?.toLowerCase().includes(search) ||
+            assignment.teacher?.toLowerCase().includes(search)
+        );
+    });
 
     return (
         <div className="p-1 space-y-6">
@@ -71,6 +82,8 @@ export default function AdminAssignmentsPage() {
                         <input
                             type="text"
                             placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-64 pl-11 pr-4 py-2.5 bg-white border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
                         />
                     </div>
@@ -93,7 +106,7 @@ export default function AdminAssignmentsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {assignments.map((assignment) => (
+                            {filteredAssignments.map((assignment) => (
                                 <tr key={assignment.id}>
                                     <td className="px-6 py-5 font-medium text-gray-900">{assignment.subject}</td>
                                     <td className="px-6 py-5 text-gray-600">{assignment.class}</td>
