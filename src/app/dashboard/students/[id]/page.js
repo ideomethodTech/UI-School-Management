@@ -1,274 +1,222 @@
-'use client';
-import React from 'react';
-import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import styles from './page.module.css';
+"use client";
+
+import { use } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
-    FaCheckCircle, FaBookOpen, FaSchool, FaMapMarkerAlt, FaArrowLeft, FaPen, FaTint, FaBirthdayCake, FaEnvelope, FaPhone,
-    FaTimes, FaUpload, FaCalendarCheck, FaCodeBranch
-} from 'react-icons/fa';
+    Calendar,
+    Mail,
+    Phone,
+    Droplets,
+    GraduationCap,
+    FileText,
+    TrendingUp,
+    Users,
+    Trophy,
+    HeartPulse,
+    BookOpen,
+    ClipboardList,
+    CalendarCheck
+} from "lucide-react";
 
-export const studentsData = [
-    { id: '1234567890', name: 'John Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=11' },
-    { id: '1234567891', name: 'Jane Doe', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=12' },
-    { id: '1234567892', name: 'Mike Geller', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=13' },
-    { id: '1234567893', name: 'Jay French', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=14' },
-    { id: '1234567894', name: 'Jane Smith', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=15' },
-    { id: '1234567895', name: 'Anna Santiago', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=16' },
-    { id: '1234567896', name: 'Allen Black', grade: 5, phone: '1234567890', address: '123 Main St, Anytown, USA', avatar: 'https://i.pravatar.cc/100?img=17' },
-];
+// Import existing components
+import BigCalendar from "@/components/shared/EventCalendar";
+import Announcements from "@/components/shared/Announcements";
+import Performance from "@/components/shared/Performance";
+import { useData } from "@/contexts/DataContext";
 
-export default function StudentDetailPage({ params }) {
+const SingleStudentPage = ({ params }) => {
+    const { id } = use(params);
+    const { students } = useData();
 
+    // Find the specific student by ID
+    const student = students.find(s => s.id === id);
 
-    const resolvedParams = React.use(params);
-    const student = studentsData.find(s => String(s.id) === resolvedParams.id);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    //  we'll use the basic info and add placeholders.
-    const [formState, setFormState] = useState({
-        username: student?.name.toLowerCase().replace(' ', '') || '',
-        email: `user@gmail.com`,
-        password: '••••••••',
-        firstName: student?.name.split(' ')[0] || '',
-        lastName: student?.name.split(' ')[1] || '',
-        phone: student?.phone || '',
-        address: student?.address || '',
-        bloodType: 'A+',
-        birthday: 'dd-mm-yyyy',
-        sex: 'Male',
-    });
-
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormState(prevState => ({ ...prevState, [name]: value }));
-    };
-
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        console.log("Updated data:", formState);
-        closeModal();
-    };
-
-
-    const [activeTab, setActiveTab] = useState('workWeek'); // 'workWeek' or 'day'
-
-    // Dummy data for the schedule
-    const scheduleData = {
-        workWeek: [
-            { time: '8:00 AM', events: [null, { name: 'Math' }, null, { name: 'History' }, null] },
-            { time: '9:00 AM', events: [null, { name: 'Math' }, { name: 'English' }, { name: 'History' }, null] },
-            { time: '10:00 AM', events: [{ name: 'Science' }, null, { name: 'English' }, null, { name: 'Art' }] },
-            { time: '11:00 AM', events: [{ name: 'Science' }, null, null, null, { name: 'Art' }] },
-            { time: '12:00 PM', events: [null, null, null, null, null] },
-            { time: '1:00 PM', events: [{ name: 'Music' }, null, { name: 'P.E.' }, null, null] },
-            { time: '2:00 PM', events: [{ name: 'Music' }, { name: 'Geography' }, { name: 'P.E.' }, null, null] },
-        ],
-        day: [
-            { time: '8:00 AM', events: [{ name: 'Math Class' }] },
-            { time: '9:00 AM', events: [null] },
-            { time: '10:00 AM', events: [{ name: 'Assembly' }] },
-            { time: '11:00 AM', events: [null] },
-            { time: '12:00 PM', events: [{ name: 'Lunch Break' }] },
-        ]
-
-
-    };
-
-    // Handle case where student is not found
+    // If student not found, show error message
     if (!student) {
         return (
-            <div className={styles.container}>
-                <h1>Student not found.</h1>
-                <Link href="/students">Back to All Students</Link>
+            <div className="flex-1 p-4 flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold text-gray-800">Student Not Found</h1>
+                    <p className="text-gray-600 mt-2">The student with ID "{id}" does not exist.</p>
+                    <Link href="/dashboard/students" className="mt-4 inline-block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                        Back to Students
+                    </Link>
+                </div>
             </div>
         );
     }
 
-    const performanceValue = 9.2;
-    const performancePercentage = (performanceValue / 10) * 100;
-
     return (
+        <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
 
-        <div className={styles.container}>
+            {/* LEFT COLUMN (2/3 Width) */}
+            <div className="w-full xl:w-2/3">
 
-            <Link href="/students" className={styles.backLink}>
-                <FaArrowLeft /> Back to All Students
-            </Link>
+                {/* TOP SECTION: Student Info Card + Small Stats */}
+                <div className="flex flex-col lg:flex-row gap-4">
 
-            <div className={styles.dashboardGrid}>
-                {/* -- ROW 1 -- */}
-                <div className={`${styles.card} ${styles.profileCard}`}>
-                    <div className={styles.profileHeader}>
-                        <h2>{student.name}</h2>
-
-                        <button onClick={openModal} className={styles.editButton}><FaPen /></button>
-                    </div>
-                    <Image src={student.avatar} alt={student.name} width={80} height={80} className={styles.profileAvatar} />
-                    <p>Grade {student.grade}</p>
-                    <p className={styles.address}>{student.address}</p>
-
-                    <div className={styles.profileContactGrid}>
-                        <span><FaTint /> A+</span>
-                        <span><FaBirthdayCake /> January 2025</span>
-                        <span><FaEnvelope /> user@gmail.com</span>
-                        <span><FaPhone /> +1 234 567</span>
-                    </div>
-                </div>
-
-
-                <div className={`${styles.card} ${styles.overviewCard}`}>
-                    <h4 className={styles.cardTitle}>Overview</h4>
-                    <div className={styles.statsGrid}>
-                        {/* Item 1: Attendance */}
-                        <div className={styles.statItem}>
-                            <div className={`${styles.statIconWrapper} ${styles.attendance}`}>
-                                <FaCalendarCheck />
-                            </div>
-                            <div className={styles.statText}>
-                                <strong>90%</strong>
-                                <span>Attendance</span>
-                            </div>
+                    {/* STUDENT INFO CARD */}
+                    <div className="bg-purple-100 py-6 px-4 rounded-md flex-1 flex gap-4">
+                        <div className="w-1/3">
+                            <Image
+                                src={student.avatar || `https://i.pravatar.cc/150?u=${student.id}`}
+                                alt={student.name}
+                                width={144}
+                                height={144}
+                                className="w-36 h-36 rounded-full object-cover"
+                            />
                         </div>
-                        {/* Item 2: Lessons */}
-                        <div className={styles.statItem}>
-                            <div className={`${styles.statIconWrapper} ${styles.lessons}`}>
-                                <FaBookOpen />
+                        <div className="w-2/3 flex flex-col justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                                <h1 className="text-xl font-semibold">{student.name}</h1>
+                                <Link href={`/dashboard/students/${id}/edit`} className="bg-white p-2 rounded-full hover:bg-purple-50 transition-colors">
+                                    <div className="w-4 h-4 text-gray-500">✎</div>
+                                </Link>
                             </div>
-                            <div className={styles.statText}>
-                                <strong>6</strong>
-                                <span>Lessons</span>
-                            </div>
-                        </div>
-                        {/* Item 3: Classes */}
-                        <div className={styles.statItem}>
-                            <div className={`${styles.statIconWrapper} ${styles.classes}`}>
-                                <FaSchool />
-                            </div>
-                            <div className={styles.statText}>
-                                <strong>6</strong>
-                                <span>Classes</span>
-                            </div>
-                        </div>
-                        {/* Item 4: Branches */}
-                        <div className={styles.statItem}>
-                            <div className={`${styles.statIconWrapper} ${styles.branches}`}>
-                                <FaCodeBranch /> {/* Using FaCodeBranch as a stand-in */}
-                            </div>
-                            <div className={styles.statText}>
-                                <strong>2</strong>
-                                <span>Branches</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <p className="text-sm text-gray-500">
+                                Student ID: {student.id}
+                            </p>
 
-                <div className={`${styles.card} ${styles.performanceCard}`}>
-                    <h4 className={styles.cardTitle}>Performance</h4>
-                    <p className={styles.performanceScore}><strong>{performanceValue} of 10</strong></p>
-                    <div className={styles.progressCircle} style={{ '--p': performancePercentage }}>
-                        <div className={styles.progressValue}>{performanceValue}</div>
-                    </div>
-                    <p className={styles.progressLabel}>of 10 max LTS</p>
-                </div>
-
-                {/* -- ROW 2 -- */}
-                <div className={`${styles.card} ${styles.scheduleCard}`}>
-                    <div className={styles.cardHeader}>
-                        <h3>Schedule</h3>
-                        <div className={styles.tabs}>
-                            <button
-                                className={activeTab === 'workWeek' ? styles.activeTab : ''}
-                                onClick={() => setActiveTab('workWeek')}
-                            >
-                                Work Week
-                            </button>
-                            <button
-                                className={activeTab === 'day' ? styles.activeTab : ''}
-                                onClick={() => setActiveTab('day')}
-                            >
-                                Day
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <div className={styles.scheduleGrid}>
-                        <div className={styles.timeColumn}>
-                            {scheduleData[activeTab].map(({ time }) => (
-                                <div key={time} className={styles.timeLabel}>{time}</div>
-                            ))}
-                        </div>
-                        <div className={styles.daysContainer}>
-
-                            {Array.from({ length: scheduleData[activeTab][0].events.length }).map((_, i) => (
-                                <div key={i} className={styles.dayColumn}></div>
-                            ))}
-
-                            <div className={styles.currentTimeIndicator}></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={`${styles.card} ${styles.announcementsCard}`}>
-                    <div className={styles.cardHeader}>
-                        <h3>Announcements</h3>
-                        <Link href="#" className={styles.viewAll}>View All</Link>
-                    </div>
-                    <div className={styles.announcementList}>
-                        <div className={styles.announcementItem} id={styles.announcement1}>
-                            <div className={styles.announcementHeader}><strong>Lorem ipsum dolor sit</strong><span>2025-01-01</span></div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpatum, expedita.</p>
-                        </div>
-                        <div className={styles.announcementItem} id={styles.announcement2}>
-                            <div className={styles.announcementHeader}><strong>Lorem ipsum dolor sit</strong><span>2025-01-01</span></div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Volutpatum, expedita.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {isModalOpen && (
-                    <div className={styles.overlay} onClick={closeModal}>
-                        <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                            <div className={styles.modalHeader}>
-                                <h2>Create a new teacher</h2>
-                                <button onClick={closeModal} className={styles.closeButton}><FaTimes /></button>
-                            </div>
-                            <form onSubmit={handleUpdate}>
-                                <div className={styles.formSection}>
-                                    <p className={styles.sectionTitle}>Authentication Information</p>
-                                    <div className={styles.formGrid}>
-                                        <div className={styles.formGroup}><label>Username</label><input type="text" name="username" value={formState.username} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Email</label><input type="email" name="email" value={formState.email} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Password</label><input type="password" name="password" value={formState.password} onChange={handleInputChange} /></div>
-                                    </div>
+                            <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium">
+                                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                                    <Droplets size={14} />
+                                    <span>A+</span>
                                 </div>
-                                <div className={styles.formSection}>
-                                    <p className={styles.sectionTitle}>Personal Information</p>
-                                    <div className={styles.formGrid}>
-                                        <div className={styles.formGroup}><label>First Name</label><input type="text" name="firstName" value={formState.firstName} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Last Name</label><input type="text" name="lastName" value={formState.lastName} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Phone</label><input type="tel" name="phone" value={formState.phone} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup} style={{ gridColumn: 'span 2' }}><label>Address</label><input type="text" name="address" value={formState.address} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Blood Type</label><input type="text" name="bloodType" value={formState.bloodType} onChange={handleInputChange} /></div>
-                                        <div className={styles.formGroup}><label>Birthday</label><div className={styles.dateInputWrapper}><input type="text" name="birthday" value={formState.birthday} onChange={handleInputChange} /><FaBirthdayCake /></div></div>
-                                        <div className={styles.formGroup}><label>Sex</label><select name="sex" value={formState.sex} onChange={handleInputChange}><option>Male</option><option>Female</option></select></div>
-                                        <div className={styles.formGroup}><label>&nbsp;</label><button type="button" className={styles.uploadBtn}><FaUpload /> Upload a photo</button></div>
-                                    </div>
+                                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                                    <GraduationCap size={14} />
+                                    <span>Grade {student.grade}</span>
                                 </div>
-                                <button type="submit" className={styles.updateBtn}>Update</button>
-                            </form>
+                                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                                    <Calendar size={14} />
+                                    <span>Joined Jan 2025</span>
+                                </div>
+                                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                                    <Phone size={14} />
+                                    <span>{student.phone || 'N/A'}</span>
+                                </div>
+                                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                                    <Mail size={14} />
+                                    <span>{student.email || 'N/A'}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                )}
+
+                    {/* SMALL STAT CARDS */}
+                    <div className="flex-1 grid grid-cols-2 gap-4 mt-4 lg:mt-0">
+
+                        {/* Card 1: Attendance */}
+                        <div className="bg-white p-4 rounded-md flex gap-3 w-full">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <CalendarCheck size={24} className="text-sky-500" />
+                            </div>
+                            <div className="">
+                                <h1 className="text-xl font-semibold">94%</h1>
+                                <span className="text-sm text-gray-500">Attendance</span>
+                            </div>
+                        </div>
+
+                        {/* Card 2: Grade */}
+                        <div className="bg-white p-4 rounded-md flex gap-3 w-full">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <GraduationCap size={24} className="text-purple-500" />
+                            </div>
+                            <div className="">
+                                <h1 className="text-xl font-semibold">{student.grade}</h1>
+                                <span className="text-sm text-gray-500">Grade</span>
+                            </div>
+                        </div>
+
+                        {/* Card 3: Lessons */}
+                        <div className="bg-white p-4 rounded-md flex gap-3 w-full">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <BookOpen size={24} className="text-pink-500" />
+                            </div>
+                            <div className="">
+                                <h1 className="text-xl font-semibold">18</h1>
+                                <span className="text-sm text-gray-500">Lessons</span>
+                            </div>
+                        </div>
+
+                        {/* Card 4: Assignments */}
+                        <div className="bg-white p-4 rounded-md flex gap-3 w-full">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <FileText size={24} className="text-yellow-500" />
+                            </div>
+                            <div className="">
+                                <h1 className="text-xl font-semibold">6</h1>
+                                <span className="text-sm text-gray-500">Assignments</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* BOTTOM SECTION: SCHEDULE */}
+                <div className="mt-4 bg-white rounded-md p-4 h-[800px]">
+                    <h1 className="text-xl font-semibold">Student&apos;s Schedule</h1>
+                    <BigCalendar />
+                </div>
             </div>
 
+            {/* RIGHT COLUMN (1/3 Width) */}
+            <div className="w-full xl:w-1/3 flex flex-col gap-4">
 
+                {/* SHORTCUTS */}
+                <div className="bg-white p-4 rounded-md">
+                    <h1 className="text-xl font-semibold">Shortcuts</h1>
+                    <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
+
+                        {/* 1. Results */}
+                        <Link className="p-3 rounded-md bg-sky-50 hover:bg-sky-100 flex items-center gap-2" href={`/dashboard/students/${id}/results`}>
+                            <ClipboardList size={16} /> Student&apos;s Results
+                        </Link>
+
+                        {/* 2. Lessons */}
+                        <Link className="p-3 rounded-md bg-purple-50 hover:bg-purple-100 flex items-center gap-2" href={`/dashboard/students/${id}/lessons`}>
+                            <BookOpen size={16} /> Student&apos;s Lessons
+                        </Link>
+
+                        {/* 3. Assignments */}
+                        <Link className="p-3 rounded-md bg-yellow-50 hover:bg-yellow-100 flex items-center gap-2" href={`/dashboard/students/${id}/assignments`}>
+                            <FileText size={16} /> Student&apos;s Assignments
+                        </Link>
+
+                        {/* 4. Meetings */}
+                        <Link className="p-3 rounded-md bg-orange-50 hover:bg-orange-100 flex items-center gap-2" href={`/dashboard/students/${id}/meetings`}>
+                            <Users size={16} /> Parent-Teacher Meetings
+                        </Link>
+
+                        {/* 5. Progress */}
+                        <Link className="p-3 rounded-md bg-indigo-50 hover:bg-indigo-100 flex items-center gap-2" href={`/dashboard/students/${id}/progress`}>
+                            <TrendingUp size={16} /> Progress Report
+                        </Link>
+
+                        {/* 6. Activities */}
+                        <Link className="p-3 rounded-md bg-pink-50 hover:bg-pink-100 flex items-center gap-2" href={`/dashboard/students/${id}/activities`}>
+                            <Trophy size={16} /> Extracurricular Activities
+                        </Link>
+
+                        {/* 7. Health */}
+                        <Link className="p-3 rounded-md bg-emerald-50 hover:bg-emerald-100 flex items-center gap-2" href={`/dashboard/students/${id}/health`}>
+                            <HeartPulse size={16} /> Health Records
+                        </Link>
+
+                    </div>
+                </div>
+
+                {/* PERFORMANCE CHART */}
+                <div className="">
+                    <Performance />
+                </div>
+
+                {/* ANNOUNCEMENTS */}
+                <div className="">
+                    <Announcements />
+                </div>
+            </div>
         </div>
     );
-}
+};
+
+export default SingleStudentPage;

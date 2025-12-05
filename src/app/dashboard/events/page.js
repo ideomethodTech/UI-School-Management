@@ -4,31 +4,15 @@
 import { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, Pencil, Trash2, CalendarDays, Clock } from 'lucide-react';
 import { useUser } from '@/contexts/UserContext';
-import ParentEventPage from '@/components/ParentEventPage';
-
-// Mock data for the initial list of events
-const initialEventsData = [
-    { id: 1, title: 'Lake Trip', class: '1A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 2, title: 'Picnic', class: '2A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 3, title: 'Beach Trip', class: '3A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 4, title: 'Museum Trip', class: '4A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 5, title: 'Music Concert', class: '5A', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 6, title: 'Magician Show', class: '1B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 7, title: 'Lake Trip', class: '2B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-    { id: 8, title: 'Cycling Race', class: '3B', date: '2025-01-01', startTime: '10:00', endTime: '11:00' },
-];
+import { useData } from '@/contexts/DataContext';
+import ParentEventPage from '@/components/parent/ParentEventPage';
 
 // Main page component
 export default function EventsPage() {
     const { currentUserRole } = useUser();
+    const { events, addEvent } = useData();
 
-    // Parents see the ParentEventPage
-    if (currentUserRole === 'parent') {
-        return <ParentEventPage />;
-    }
-
-    // Admins and others see the original event management page
-    const [events, setEvents] = useState(initialEventsData);
+    // All hooks must be called before any conditional returns (to maintain hook order)
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState('create');
@@ -37,6 +21,12 @@ export default function EventsPage() {
         title: '', class: '', date: '', startTime: '10:00', endTime: '11:00'
     });
 
+    // Parents see the ParentEventPage (conditional render after all hooks)
+    if (currentUserRole === 'parent') {
+        return <ParentEventPage />;
+    }
+
+    // Admins and others see the original event management page
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormState(prevState => ({ ...prevState, [name]: value }));
@@ -65,7 +55,7 @@ export default function EventsPage() {
         }
 
         if (modalType === 'create') {
-            setEvents(prev => [...prev, { id: Date.now(), ...formState }]);
+            addEvent({ id: Date.now(), ...formState });
         } else {
             setEvents(prev => prev.map(evt => (evt.id === currentEvent.id ? { ...evt, ...formState } : evt)));
         }

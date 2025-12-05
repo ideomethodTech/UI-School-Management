@@ -1,11 +1,12 @@
 ﻿// src/app/dashboard/layout.js
 "use client";
 
-import Sidebar from '@/components/Sidebar';
-import SimpleSidebar from '@/components/SimpleSidebar';
-import ParentSidebar from '@/components/ParentSidebar';
-import Topbar from '@/components/Topbar';
+import Sidebar from '@/components/shared/Sidebar';
+import SimpleSidebar from '@/components/shared/SimpleSidebar';
+import ParentSidebar from '@/components/parent/ParentSidebar';
+import Topbar from '@/components/shared/Topbar';
 import { UserProvider, useUser } from '@/contexts/UserContext';
+import { DataProvider } from '@/contexts/DataContext';
 
 function DashboardLayoutContent({ children }) {
   const { currentUserRole } = useUser();
@@ -28,7 +29,7 @@ function DashboardLayoutContent({ children }) {
         <ParentSidebar userName="Mr./Mrs. Johnson" userRole="Parent" />
       )}
 
-      <div className={`flex-1 flex flex-col ${(currentUserRole === 'student' || currentUserRole === 'teacher' || currentUserRole === 'parent') ? 'lg:ml-64' : ''}`}>
+      <div className={`flex-1 flex flex-col ${currentUserRole === 'admin' ? 'lg:ml-72' : (currentUserRole === 'student' || currentUserRole === 'teacher' || currentUserRole === 'parent') ? 'lg:ml-64' : ''}`}>
         <Topbar />
         <main className='flex-1 overflow-auto p-6'>
           {children}
@@ -40,8 +41,10 @@ function DashboardLayoutContent({ children }) {
 
 export default function DashboardLayout({ children }) {
   return (
-    <UserProvider>
-      <DashboardLayoutContent>{children}</DashboardLayoutContent>
-    </UserProvider>
+    <DataProvider>
+      <UserProvider>
+        <DashboardLayoutContent>{children}</DashboardLayoutContent>
+      </UserProvider>
+    </DataProvider>
   );
 }

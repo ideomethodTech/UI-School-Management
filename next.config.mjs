@@ -8,6 +8,18 @@ const nextConfig = {
         port: '',
         pathname: '/**', // This allows any path on that hostname
       },
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 

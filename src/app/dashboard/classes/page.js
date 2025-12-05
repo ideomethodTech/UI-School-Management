@@ -2,9 +2,9 @@
 "use client";
 
 import { useUser } from '@/contexts/UserContext';
-import StudentClassesPage from '@/components/StudentClassesPage';
-import AdminClassesPage from '@/components/AdminClassesPage';
-import TeachersClassesPage from '@/components/TeachersClassesPage';
+import StudentClassesPage from '@/components/student/StudentClassesPage';
+import AdminClassesPage from '@/components/admin/AdminClassesPage';
+import TeachersClassesPage from '@/components/teacher/TeachersClassesPage';
 
 export default function ClassesPage() {
     const { currentUserRole } = useUser();
