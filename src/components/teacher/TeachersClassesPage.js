@@ -5,8 +5,8 @@ import AttendanceModal from '@/components/modals/AttendanceModal';
 import GradesModal from '@/components/modals/GradesModal';
 import StudentsListModal from '@/components/modals/StudentsListModal';
 import ScheduleClassModal from '@/components/modals/ScheduleClassModal';
-
 import { teacherClassesData } from '../../mockData/teacherData';
+import { mockClasses } from '../../mockData/teacherData';
 
 // Reusable Stat Card Component
 const StatCard = ({ label, value, subValue = '', colorClass = 'text-gray-800' }) => (
@@ -141,6 +141,20 @@ export default function TeachersClassesPage() {
     const [selectedClass, setSelectedClass] = useState(null);
     const [activeButtons, setActiveButtons] = useState({});
     const [classes, setClasses] = useState(teacherClassesData);
+    const [scheduledClasses, setScheduledClasses] = useState([]);
+    const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+
+    
+const handleScheduleClass = (newClass) => {
+    setScheduledClasses(prev => [...prev, newClass]);
+    setIsScheduleModalOpen(false);
+};
+
+const handleRemoveScheduledClass = (id) => {
+    setScheduledClasses(prev => prev.filter(cls => cls.id !== id));
+};
+
+
     
 
     const handleAction = (action, classInfo) => {
@@ -189,9 +203,18 @@ export default function TeachersClassesPage() {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <StatCard label="Total Classes" value="4" />
-                <StatCard label="Total Students" value="115" colorClass="text-purple-600" />
-                <StatCard label="Hours/Week" value="12" colorClass="text-green-600" />
+                <StatCard 
+                label="Total Classes" 
+                value={mockClasses.length} 
+                />
+                <StatCard 
+                label="Total Students" 
+                value={mockClasses.reduce((sum, cls) => sum + cls.students, 0)}
+                 />
+                <StatCard 
+                label="Hours/Week" 
+                value={mockClasses.length * 3} 
+                colorClass="text-green-600" />
             </div>
 
             {/* Scheduled Classes Section */}
