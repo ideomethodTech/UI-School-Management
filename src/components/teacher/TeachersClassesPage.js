@@ -140,16 +140,8 @@ export default function TeachersClassesPage() {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedClass, setSelectedClass] = useState(null);
     const [activeButtons, setActiveButtons] = useState({});
-    const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
-    const [scheduledClasses, setScheduledClasses] = useState([]);
-
-    // Load scheduled classes from localStorage on mount
-    useEffect(() => {
-        const storedClasses = localStorage.getItem('teacher_scheduled_classes');
-        if (storedClasses) {
-            setScheduledClasses(JSON.parse(storedClasses));
-        }
-    }, []);
+    const [classes, setClasses] = useState(teacherClassesData);
+    
 
     const handleAction = (action, classInfo) => {
         setSelectedClass(classInfo);
@@ -165,34 +157,35 @@ export default function TeachersClassesPage() {
         setSelectedClass(null);
     };
 
-    const handleScheduleClass = (scheduledClass) => {
-        const updatedClasses = [scheduledClass, ...scheduledClasses];
-        setScheduledClasses(updatedClasses);
-        localStorage.setItem('teacher_scheduled_classes', JSON.stringify(updatedClasses));
-    };
+    const handleSaveClass = (updatedClass) => {
+    setClasses(prev =>
+        prev.map(cls => cls.id === updatedClass.id ? updatedClass : cls)
+    );
+    closeModal();
+};
 
-    const handleRemoveScheduledClass = (id) => {
-        const updatedClasses = scheduledClasses.filter(c => c.id !== id);
-        setScheduledClasses(updatedClasses);
-        localStorage.setItem('teacher_scheduled_classes', JSON.stringify(updatedClasses));
-    };
 
     return (
         <div className="space-y-8">
             {/* Header */}
             <div className="flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
-                    <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
-                </div>
-                <button
-                    onClick={() => setIsScheduleModalOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 shadow-sm"
-                >
-                    <Plus size={18} />
-                    Schedule Class
-                </button>
-            </div>
+    <div>
+        <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
+        <p className="text-sm text-gray-500 mt-1">Academic Year 2024-2025 • 4 Classes Active</p>
+    </div>
+
+    <button
+        onClick={() => {
+            setSelectedClass(null);
+            setActiveModal('manage');
+        }}
+        className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg font-semibold text-sm hover:bg-purple-700 shadow-sm"
+    >
+        <Plus size={18} />
+        Schedule class
+    </button>
+</div>
+
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -219,8 +212,7 @@ export default function TeachersClassesPage() {
 
             {/* My Classes Section */}
             <div className="space-y-4">
-                <h2 className="font-bold text-xl text-gray-800">My Classes</h2>
-                {teacherClassesData.map(classInfo => (
+                {classes.map(classInfo => (
                     <ClassItem
                         key={classInfo.id}
                         classInfo={classInfo}
@@ -235,6 +227,7 @@ export default function TeachersClassesPage() {
                 isOpen={activeModal === 'manage'}
                 onClose={closeModal}
                 classData={selectedClass}
+                onSave={handleSaveClass}
             />
             <AttendanceModal
                 isOpen={activeModal === 'attendance'}
