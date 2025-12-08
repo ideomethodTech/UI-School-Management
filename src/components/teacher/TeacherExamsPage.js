@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Calendar, Clock, Eye, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { examStats as stats, examClasses as classes, teacherExams as mockExams } from '../../mockData/teacherData';
 import CreateExamModal from '../modals/CreateExamModal';
+import ExamAttendanceModal from '../modals/ExamAttendanceModal';
 
 // Toast Notification Component
 const Toast = ({ message, onClose }) => (
@@ -16,6 +17,8 @@ const Toast = ({ message, onClose }) => (
 const TeacherExamsPage = () => {
     const [selectedClass, setSelectedClass] = useState('All Classes');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
+    const [selectedExam, setSelectedExam] = useState(null);
     const [exams, setExams] = useState(mockExams);
     const [toastMessage, setToastMessage] = useState(null);
 
@@ -135,7 +138,20 @@ const TeacherExamsPage = () => {
                                     </div>
 
                                     <div className="flex flex-col items-end gap-3 w-full md:w-auto">
-                                        <button className="flex items-center gap-2 text-gray-600 hover:text-purple-600 border border-gray-200 hover:border-purple-200 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-white">
+                                        <button
+                                            onClick={() => {
+                                                if (exam.status === 'Completed') {
+                                                    setSelectedExam(exam);
+                                                    setIsAttendanceModalOpen(true);
+                                                }
+                                            }}
+                                            disabled={exam.status !== 'Completed'}
+                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${exam.status === 'Completed'
+                                                ? 'text-gray-600 hover:text-purple-600 border border-gray-200 hover:border-purple-200 bg-white cursor-pointer'
+                                                : 'text-gray-400 border border-gray-200 bg-gray-50 cursor-not-allowed'
+                                                }`}
+                                            title={exam.status === 'Completed' ? 'View attendance' : 'Available only for completed exams'}
+                                        >
                                             <Eye size={16} />
                                             View
                                         </button>
@@ -159,6 +175,16 @@ const TeacherExamsPage = () => {
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 onCreate={handleCreateExam}
+            />
+
+            {/* Exam Attendance Modal */}
+            <ExamAttendanceModal
+                isOpen={isAttendanceModalOpen}
+                onClose={() => {
+                    setIsAttendanceModalOpen(false);
+                    setSelectedExam(null);
+                }}
+                exam={selectedExam}
             />
         </div>
     );

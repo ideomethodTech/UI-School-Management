@@ -100,6 +100,11 @@ export default function GradeSubmissionsModal({ isOpen, onClose, selectedClass }
     const [isGradingOpen, setIsGradingOpen] = useState(false);
     const [checkedStudents, setCheckedStudents] = useState({});
     const [currentClass, setCurrentClass] = useState(selectedClass?.id || mockClasses[0].id);
+    const [students, setStudents] = useState(() => {
+        // Load from localStorage or use mock data
+        const stored = localStorage.getItem('student_grades');
+        return stored ? JSON.parse(stored) : mockStudentResults;
+    });
 
     if (!isOpen) return null;
 
@@ -116,8 +121,34 @@ export default function GradeSubmissionsModal({ isOpen, onClose, selectedClass }
     };
 
     const handleSaveGrade = (grades) => {
-        console.log('Saving grades for', selectedStudent?.name, grades);
-        // In a real app, this would update the backend
+        // Update the student's grades in state
+        const updatedStudents = students.map(student => {
+            if (student.id === selectedStudent.id) {
+                const updatedStudent = {
+                    ...student,
+                    midterm: grades.midterm,
+                    final: grades.final,
+                    assignments: grades.assignments,
+                    overall: grades.overall,
+                    // Calculate grade based on overall score
+                    grade: grades.overall >= 90 ? 'A+' :
+                        grades.overall >= 80 ? 'A' :
+                            grades.overall >= 70 ? 'B' :
+                                grades.overall >= 60 ? 'C' : 'D'
+                };
+                return updatedStudent;
+            }
+            return student;
+        });
+
+        // Update state
+        setStudents(updatedStudents);
+
+        // Save to localStorage
+        localStorage.setItem('student_grades', JSON.stringify(updatedStudents));
+
+        // Close the grading modal
+        setIsGradingOpen(false);
     };
 
     const currentClassName = mockClasses.find(c => c.id === currentClass)?.name || 'Class 10-A';
@@ -155,7 +186,7 @@ export default function GradeSubmissionsModal({ isOpen, onClose, selectedClass }
 
                     {/* Student List */}
                     <div className="p-6 overflow-y-auto flex-grow space-y-3">
-                        {mockStudentResults.map((student) => (
+                        {students.map((student) => (
                             <div
                                 key={student.id}
                                 className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-purple-200 hover:bg-purple-50 transition-all"
@@ -169,7 +200,7 @@ export default function GradeSubmissionsModal({ isOpen, onClose, selectedClass }
                                     />
                                     <div>
                                         <p className="font-semibold text-gray-800">{student.name}</p>
-                                        <p className="text-sm text-gray-500">Roll No: {student.rollNo}</p>
+                                        <p className="text-sm text-gray-500">Roll No: {student.rollNo} • Overall: {student.overall} ({student.grade})</p>
                                     </div>
                                 </div>
                                 <button

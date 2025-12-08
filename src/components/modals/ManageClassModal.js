@@ -1,7 +1,8 @@
 import React from 'react';
 import { X } from 'lucide-react';
 
-export default function ManageClassModal({ isOpen, onClose, classData }) {
+
+export default function ManageClassModal({ isOpen, onClose, classData, onSave }) {
     const [formData, setFormData] = React.useState({
         name: '',
         section: '',
@@ -27,11 +28,15 @@ export default function ManageClassModal({ isOpen, onClose, classData }) {
             [name]: value
         }));
     };
-
-    const handleSave = () => {
-        console.log('Saving class details:', formData);
-        onClose();
+const handleSave = () => {
+    const updatedClass = {
+        ...classData,
+        ...formData
     };
+
+    onSave(updatedClass);  
+    onClose();
+};
 
     if (!isOpen) return null;
 
