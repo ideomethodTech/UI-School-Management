@@ -3,19 +3,24 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, X } from 'lucide-react';
 import { useData } from '../../../contexts/DataContext';
+import { SearchBar, useSearch } from '../Search';
 
 // Main page component
 export default function ParentsPage() {
     const { parents, addParent, updateParent, deleteParent } = useData();
-    const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState('create');
     const [currentParent, setCurrentParent] = useState(null);
     const [formState, setFormState] = useState({
         name: '', email: '', students: '', phone: '', address: ''
     });
+
+    const { searchTerm, setSearchTerm, filteredData: filteredParents } = useSearch(
+        parents,
+        ['name', 'email', 'students', 'phone', 'address']
+    );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -66,28 +71,17 @@ export default function ParentsPage() {
         }
     };
 
-    const filteredParents = parents.filter(parent =>
-        parent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        parent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        parent.students.some(student => student.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-
     return (
         <>
             <div className="bg-white p-4 rounded-lg m-4 flex-1 flex flex-col">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <h1 className="text-2xl font-bold text-gray-800 self-start">All Parents</h1>
                     <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search parents..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
-                            />
-                        </div>
+                        <SearchBar
+                            value={searchTerm}
+                            onChange={setSearchTerm}
+                            placeholder="Search parents..."
+                        />
                         <button onClick={() => openModal('create')} className="p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md">
                             <Plus size={20} />
                         </button>

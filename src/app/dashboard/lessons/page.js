@@ -3,12 +3,12 @@
 
 import { useState } from 'react';
 import LessonsTable from '@/components/shared/LessonsTable';
-import { Search, SlidersHorizontal, Plus, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { sampleLessons } from '@/mockData/adminData';
+import { SearchableTable } from '../Search';
 
 export default function LessonsPage() {
     const [data, setData] = useState(sampleLessons);
-    const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalType, setModalType] = useState('create');
     const [currentLesson, setCurrentLesson] = useState(null);
@@ -60,48 +60,23 @@ export default function LessonsPage() {
         }
     };
 
-    // Filter lessons based on search term
-    const filteredData = data.filter(lesson => {
-        const search = searchTerm.toLowerCase();
-        return (
-            lesson.subjectName?.toLowerCase().includes(search) ||
-            lesson.class?.toLowerCase().includes(search) ||
-            lesson.teacher?.toLowerCase().includes(search)
-        );
-    });
-
     return (
-        <div className='p-6 space-y-6'>
-            <div className='flex items-center justify-between'>
-                <div>
-                    <h2 className='text-2xl font-semibold text-gray-800'>All Lessons</h2>
-                </div>
-                <div className='flex items-center gap-3'>
-                    <div className='relative'>
-                        <Search size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
-                        <input
-                            placeholder='Search...'
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className='rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400'
-                        />
-                    </div>
-                    <button
-                        onClick={() => openModal('create')}
-                        className='p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md'
-                    >
-                        <Plus size={20} />
-                    </button>
-                </div>
-            </div>
-
-            <div className='bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm'>
-                <LessonsTable
-                    data={filteredData}
-                    onEdit={(lesson) => openModal('edit', lesson)}
-                    onDelete={handleDelete}
-                />
-            </div>
+        <>
+            <SearchableTable
+                title="All Lessons"
+                data={data}
+                searchKeys={['subjectName', 'class', 'teacher']}
+                searchPlaceholder="Search lessons..."
+                onAdd={() => openModal('create')}
+            >
+                {(filteredData) => (
+                    <LessonsTable
+                        data={filteredData}
+                        onEdit={(lesson) => openModal('edit', lesson)}
+                        onDelete={handleDelete}
+                    />
+                )}
+            </SearchableTable>
 
             {/* Modal */}
             {isModalOpen && (
@@ -123,6 +98,6 @@ export default function LessonsPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

@@ -2,18 +2,23 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, X } from 'lucide-react';
 import { initialExamsData } from '../../mockData/adminData';
+import { SearchBar, useSearch } from '@/app/dashboard/Search';
 
 export default function AdminExamsPage() {
     const [exams, setExams] = useState(initialExamsData);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [modalType, setModalType] = useState('create');
     const [currentExam, setCurrentExam] = useState(null);
     const [formState, setFormState] = useState({
         subject: '', class: '', teacher: '', date: ''
     });
+
+    const { searchTerm, setSearchTerm, filteredData: filteredExams } = useSearch(
+        exams,
+        ['subject', 'class', 'teacher', 'date']
+    );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -62,33 +67,17 @@ export default function AdminExamsPage() {
         }
     };
 
-    // Filter exams based on search term
-    const filteredExams = exams.filter(exam => {
-        const search = searchTerm.toLowerCase();
-        return (
-            exam.subject?.toLowerCase().includes(search) ||
-            exam.class?.toLowerCase().includes(search) ||
-            exam.teacher?.toLowerCase().includes(search) ||
-            exam.date?.toLowerCase().includes(search)
-        );
-    });
-
     return (
         <div className="space-y-6">
             {/* Header Toolbar */}
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">All Exams</h1>
                 <div className="flex items-center gap-3">
-                    <div className="relative">
-                        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search exams..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-64 pl-11 pr-4 py-2.5 bg-white border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
-                        />
-                    </div>
+                    <SearchBar
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                        placeholder="Search exams..."
+                    />
                     <button onClick={() => openModal('create')} className="p-2.5 bg-purple-600 text-white rounded-full hover:bg-purple-700 shadow-sm">
                         <Plus size={16} />
                     </button>

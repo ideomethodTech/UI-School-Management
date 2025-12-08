@@ -2,18 +2,23 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, X } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
+import { SearchBar, useSearch } from '@/app/dashboard/Search';
 
 export default function AdminAssignmentsPage() {
     const { assignments, addAssignment, updateAssignment, deleteAssignment } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [modalType, setModalType] = useState('create');
     const [currentAssignment, setCurrentAssignment] = useState(null);
     const [formState, setFormState] = useState({
         subject: '', class: '', teacher: ''
     });
+
+    const { searchTerm, setSearchTerm, filteredData: filteredAssignments } = useSearch(
+        assignments,
+        ['subject', 'class', 'teacher']
+    );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -61,32 +66,17 @@ export default function AdminAssignmentsPage() {
         }
     };
 
-    // Filter assignments based on search term
-    const filteredAssignments = assignments.filter(assignment => {
-        const search = searchTerm.toLowerCase();
-        return (
-            assignment.subject?.toLowerCase().includes(search) ||
-            assignment.class?.toLowerCase().includes(search) ||
-            assignment.teacher?.toLowerCase().includes(search)
-        );
-    });
-
     return (
         <div className="p-1 space-y-6">
             {/* Header Toolbar */}
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">All Assignments</h1>
                 <div className="flex items-center gap-3">
-                    <div className="relative">
-                        <Search size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-64 pl-11 pr-4 py-2.5 bg-white border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
-                        />
-                    </div>
+                    <SearchBar
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                        placeholder="Search assignments..."
+                    />
                     <button onClick={() => openModal('create')} className="p-2.5 bg-purple-600 text-white rounded-full hover:bg-purple-700 shadow-sm">
                         <Plus size={20} />
                     </button>

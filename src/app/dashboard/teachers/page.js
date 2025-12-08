@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Plus, Eye, Trash2, X, Upload } from "lucide-react";
+import { Plus, Eye, Trash2, X, Upload } from "lucide-react";
 import { useData } from "../../../contexts/DataContext";
+import { SearchBar, useSearch } from '../Search';
 
 export default function TeachersPage() {
     const { teachers, addTeacher, deleteTeacher } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
     const [photoPreview, setPhotoPreview] = useState("");
     const [formState, setFormState] = useState({
         name: "",
@@ -20,6 +20,11 @@ export default function TeachersPage() {
         email: "",
         avatar: "",
     });
+
+    const { searchTerm, setSearchTerm, filteredData: filteredTeachers } = useSearch(
+        teachers,
+        ['name', 'id', 'subjects', 'classes', 'phone', 'email']
+    );
 
     const handleInputChange = (e) =>
         setFormState((prevState) => ({
@@ -80,19 +85,6 @@ export default function TeachersPage() {
             deleteTeacher(id);
     };
 
-    // Filter teachers based on search term
-    const filteredTeachers = teachers.filter(teacher => {
-        const search = searchTerm.toLowerCase();
-        return (
-            teacher.name?.toLowerCase().includes(search) ||
-            teacher.id?.toLowerCase().includes(search) ||
-            teacher.subjects?.some(s => s.toLowerCase().includes(search)) ||
-            teacher.classes?.some(c => c.toLowerCase().includes(search)) ||
-            teacher.phone?.toLowerCase().includes(search) ||
-            teacher.email?.toLowerCase().includes(search)
-        );
-    });
-
     return (
         <>
             <div className="bg-white p-4 rounded-lg m-4 flex-1 flex flex-col">
@@ -101,16 +93,11 @@ export default function TeachersPage() {
                         All Teachers
                     </h1>
                     <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search teachers..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
-                            />
-                        </div>
+                        <SearchBar
+                            value={searchTerm}
+                            onChange={setSearchTerm}
+                            placeholder="Search teachers..."
+                        />
                         <button
                             onClick={openModal}
                             className="p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md"

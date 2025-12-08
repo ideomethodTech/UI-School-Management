@@ -5,8 +5,9 @@ import { useState } from 'react';
 import ResultsTable from '@/components/shared/ResultsTable';
 import TeacherResultsPage from '@/components/teacher/TeacherResultsPage';
 import StudentResultsPage from '@/components/student/StudentResultsPage';
-import { Search, SlidersHorizontal, Plus, X } from 'lucide-react';
+import { SlidersHorizontal, Plus, X } from 'lucide-react';
 import { useUser } from '@/contexts/UserContext';
+import { SearchBar, useSearch } from '../Search';
 
 const sampleResults = [
     { id: 1, subject: 'Math', studentName: 'John Smith', studentId: 'STD001', score: 90, teacherName: 'Mr. Johnson', teacherId: 'TCH001', className: '1A', date: '2025-01-01' },
@@ -30,6 +31,12 @@ export default function ResultsPage() {
     const [formState, setFormState] = useState({
         subject: '', score: '', studentName: '', teacherName: '', className: '', date: ''
     });
+
+    // Add search functionality for admin
+    const { searchTerm, setSearchTerm, filteredData: filteredResults } = useSearch(
+        data,
+        ['subject', 'studentName', 'studentId', 'teacherName', 'className', 'score', 'date']
+    );
 
     // Teachers see the TeacherResultsPage
     if (currentUserRole === 'teacher') {
@@ -115,13 +122,11 @@ export default function ResultsPage() {
 
                 <div className='flex items-center gap-3'>
                     {/* Admin specific actions */}
-                    <div className='relative'>
-                        <Search size={16} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
-                        <input
-                            placeholder='Search...'
-                            className='rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400'
-                        />
-                    </div>
+                    <SearchBar
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                        placeholder='Search results...'
+                    />
                     <button className='p-2 rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'>
                         <SlidersHorizontal size={20} />
                     </button>
@@ -137,7 +142,7 @@ export default function ResultsPage() {
             <div className='bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm'>
                 <ResultsTable
                     role={currentUserRole}
-                    rows={data}
+                    rows={filteredResults}
                     onEdit={(result) => openModal('edit', result)}
                     onDelete={handleDelete}
                 />

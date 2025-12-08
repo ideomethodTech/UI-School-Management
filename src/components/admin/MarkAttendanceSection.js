@@ -1,10 +1,11 @@
 // src/components/MarkAttendanceSection.js
 "use client";
 
-import { Download, CheckCircle, XCircle, MinusCircle, Search, Users, UserCheck, UserX, Clock } from 'lucide-react';
+import { Download, CheckCircle, XCircle, MinusCircle, Users, UserCheck, UserX, Clock } from 'lucide-react';
 import Avatar from '@/components/shared/Avatar';
 import { useState } from 'react';
 import { sampleStudentsAttendance } from '../../mockData/adminData';
+import { SearchBar } from '@/app/dashboard/Search';
 
 export default function MarkAttendanceSection({
   selectedDate = new Date(),
@@ -179,14 +180,12 @@ export default function MarkAttendanceSection({
 
           {/* Search and Bulk Actions */}
           <div className="flex justify-between items-center gap-4">
-            <div className="flex-1 max-w-md relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name or student ID..."
+            <div className="flex-1 max-w-md">
+              <SearchBar
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300 text-sm"
+                onChange={setSearchTerm}
+                placeholder="Search by name or student ID..."
+                className="border-gray-300 rounded-lg focus:ring-purple-300"
               />
             </div>
             <div className="flex gap-2">

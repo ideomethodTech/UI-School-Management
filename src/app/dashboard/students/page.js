@@ -3,15 +3,20 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Plus, Eye, Trash2, X, Upload } from 'lucide-react';
+import { Plus, Eye, Trash2, X, Upload } from 'lucide-react';
 import { useData } from '../../../contexts/DataContext';
+import { SearchBar, useSearch } from '../Search';
 
 export default function StudentsPage() {
     const { students, addStudent, deleteStudent } = useData();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
     const [formState, setFormState] = useState({ name: '', id: '', grade: '', phone: '', email: '', avatar: '' });
     const [photoPreview, setPhotoPreview] = useState('');
+
+    const { searchTerm, setSearchTerm, filteredData: filteredStudents } = useSearch(
+        students,
+        ['name', 'id', 'grade', 'phone', 'email']
+    );
 
     const handleInputChange = (e) => setFormState(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
 
@@ -50,34 +55,17 @@ export default function StudentsPage() {
         if (window.confirm('Are you sure?')) deleteStudent(id);
     };
 
-    // Filter students based on search term
-    const filteredStudents = students.filter(student => {
-        const search = searchTerm.toLowerCase();
-        return (
-            student.name?.toLowerCase().includes(search) ||
-            student.id?.toLowerCase().includes(search) ||
-            student.grade?.toString().toLowerCase().includes(search) ||
-            student.phone?.toLowerCase().includes(search) ||
-            student.email?.toLowerCase().includes(search)
-        );
-    });
-
     return (
         <>
             <div className="bg-white p-4 rounded-lg m-4 flex-1 flex flex-col">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <h1 className="text-2xl font-bold text-gray-800 self-start">All Students</h1>
                     <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search students..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="rounded-full border border-gray-300 pl-10 pr-4 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
-                            />
-                        </div>
+                        <SearchBar
+                            value={searchTerm}
+                            onChange={setSearchTerm}
+                            placeholder="Search students..."
+                        />
                         <button onClick={openModal} className="p-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 shadow-md">
                             <Plus size={20} />
                         </button>
