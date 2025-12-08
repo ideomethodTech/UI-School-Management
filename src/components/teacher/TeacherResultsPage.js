@@ -88,26 +88,41 @@ export default function TeacherResultsPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterGrade, setFilterGrade] = useState('all');
     const [isGradeModalOpen, setIsGradeModalOpen] = useState(false);
+    const [students, setStudents] = useState(() => {
+        // Load from localStorage or use mock data
+        const stored = localStorage.getItem('student_grades');
+        return stored ? JSON.parse(stored) : mockStudentResults;
+    });
+
+    // Refresh students data when modal closes
+    const handleCloseModal = () => {
+        setIsGradeModalOpen(false);
+        // Reload students from localStorage
+        const stored = localStorage.getItem('student_grades');
+        if (stored) {
+            setStudents(JSON.parse(stored));
+        }
+    };
 
     // Calculate statistics
     const classAverage = Math.round(
-        mockStudentResults.reduce((sum, s) => sum + s.overall, 0) / mockStudentResults.length
+        students.reduce((sum, s) => sum + s.overall, 0) / students.length
     );
-    const topPerformer = mockStudentResults.reduce((max, s) => (s.overall > max.overall ? s : max));
-    const passingStudents = mockStudentResults.filter(s => s.overall >= 60).length;
-    const passingRate = Math.round((passingStudents / mockStudentResults.length) * 100);
+    const topPerformer = students.reduce((max, s) => (s.overall > max.overall ? s : max));
+    const passingStudents = students.filter(s => s.overall >= 60).length;
+    const passingRate = Math.round((passingStudents / students.length) * 100);
 
     // Grade distribution
     const gradeDistribution = {
-        'A+': mockStudentResults.filter(s => s.grade === 'A+').length,
-        'A': mockStudentResults.filter(s => s.grade === 'A').length,
-        'B': mockStudentResults.filter(s => s.grade === 'B').length,
-        'C': mockStudentResults.filter(s => s.grade === 'C').length,
-        'D': mockStudentResults.filter(s => s.grade === 'D').length,
+        'A+': students.filter(s => s.grade === 'A+').length,
+        'A': students.filter(s => s.grade === 'A').length,
+        'B': students.filter(s => s.grade === 'B').length,
+        'C': students.filter(s => s.grade === 'C').length,
+        'D': students.filter(s => s.grade === 'D').length,
     };
 
     // Filter students
-    const filteredStudents = mockStudentResults.filter(student => {
+    const filteredStudents = students.filter(student => {
         const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             student.rollNo.includes(searchQuery);
         const matchesGrade = filterGrade === 'all' || student.grade === filterGrade;
@@ -169,7 +184,7 @@ export default function TeacherResultsPage() {
                 <StatCard
                     icon={Users}
                     label="Total Students"
-                    value={mockStudentResults.length}
+                    value={students.length}
                     color="text-blue-600"
                     bgColor="bg-blue-50"
                 />
@@ -193,7 +208,7 @@ export default function TeacherResultsPage() {
                     icon={TrendingUp}
                     label="Passing Rate"
                     value={`${passingRate}%`}
-                    subtext={`${passingStudents}/${mockStudentResults.length} students`}
+                    subtext={`${passingStudents}/${students.length} students`}
                     color="text-green-600"
                     bgColor="bg-green-50"
                 />
@@ -209,25 +224,25 @@ export default function TeacherResultsPage() {
                     <GradeDistributionBar
                         grade="A+"
                         count={gradeDistribution['A+']}
-                        percentage={Math.round((gradeDistribution['A+'] / mockStudentResults.length) * 100)}
+                        percentage={Math.round((gradeDistribution['A+'] / students.length) * 100)}
                         color="bg-green-500"
                     />
                     <GradeDistributionBar
                         grade="A"
                         count={gradeDistribution['A']}
-                        percentage={Math.round((gradeDistribution['A'] / mockStudentResults.length) * 100)}
+                        percentage={Math.round((gradeDistribution['A'] / students.length) * 100)}
                         color="bg-gray-400"
                     />
                     <GradeDistributionBar
                         grade="B"
                         count={gradeDistribution['B']}
-                        percentage={Math.round((gradeDistribution['B'] / mockStudentResults.length) * 100)}
+                        percentage={Math.round((gradeDistribution['B'] / students.length) * 100)}
                         color="bg-gray-400"
                     />
                     <GradeDistributionBar
                         grade="C"
                         count={gradeDistribution['C']}
-                        percentage={Math.round((gradeDistribution['C'] / mockStudentResults.length) * 100)}
+                        percentage={Math.round((gradeDistribution['C'] / students.length) * 100)}
                         color="bg-red-500"
                     />
                 </div>
@@ -295,7 +310,7 @@ export default function TeacherResultsPage() {
             {/* Grade Submissions Modal */}
             <GradeSubmissionsModal
                 isOpen={isGradeModalOpen}
-                onClose={() => setIsGradeModalOpen(false)}
+                onClose={handleCloseModal}
                 selectedClass={mockClasses.find(c => c.id === selectedClass)}
             />
         </div>

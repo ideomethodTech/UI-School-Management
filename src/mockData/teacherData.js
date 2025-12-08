@@ -3,7 +3,7 @@ export const mockClasses = [
     { id: 2, name: 'Mathematics - Class 9-B', students: 28 },
     { id: 3, name: 'Advanced Algebra - Class 11-C', students: 25 },
     { id: 4, name: 'Geometry - Class 9-A', students: 30 },
-     { id: 5, name: 'Trig and Algebra - Class 7-A', students: 15 },
+    { id: 5, name: 'Trig and Algebra - Class 7-A', students: 15 },
 
 ];
 
@@ -111,7 +111,7 @@ export const teacherClassesData = [
     { id: 2, name: 'Mathematics', section: 'Class 9-B', students: 28, schedule: 'Tue, Thu - 11:30 AM', location: 'Room 104' },
     { id: 3, name: 'Advanced Algebra', section: 'Class 11-C', students: 25, schedule: 'Mon, Wed - 02:00 PM', location: 'Lab 201' },
     { id: 4, name: 'Geometry', section: 'Class 9-A', students: 30, schedule: 'Fri - 09:00 AM', location: 'Room 102' },
-     { id: 4, name: 'Trig and algebra', section: 'Class 9-A', students: 15, schedule: 'Tue, Fri - 12:00 AM', location: 'Room 201' },
+    { id: 5, name: 'Trig and algebra', section: 'Class 9-A', students: 15, schedule: 'Tue, Fri - 12:00 AM', location: 'Room 201' },
 ];
 
 export const dashboardStats = [
